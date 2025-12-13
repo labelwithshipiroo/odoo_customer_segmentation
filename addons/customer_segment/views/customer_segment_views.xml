@@ -35,7 +35,7 @@
             <list>
                 <field name="name"/>
                 <field name="email"/>
-                <field name="customer_segment"/>
+                <field name="segment_id"/>
             </list>
         </field>
     </record>
