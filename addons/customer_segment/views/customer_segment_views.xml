@@ -39,12 +39,29 @@
             </list>
         </field>
     </record>
+    <record id="view_res_partner_search_customer_accounts" model="ir.ui.view">
+        <field name="name">res.partner.search.customer.accounts</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="segment_id"/>
+                <filter name="customers" string="Customers" domain="[('customer_rank', '>', 0)]"/>
+                <filter name="suppliers" string="Suppliers" domain="[('supplier_rank', '>', 0)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_segment" string="Segment" context="{'group_by': 'segment_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
     <record id="action_customer_accounts" model="ir.actions.act_window">
         <field name="name">Customer Accounts</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">list,form</field>
         <field name="view_id" ref="view_res_partner_list_customer_accounts"/>
-        <field name="domain">[('customer_rank', '>', 0)]</field>
+        <field name="search_view_id" ref="view_res_partner_search_customer_accounts"/>
+        <field name="domain">[]</field>
         <field name="context">{'default_customer_rank': 1}</field>
     </record>
 </odoo>
