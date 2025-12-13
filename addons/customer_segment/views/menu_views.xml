@@ -1,0 +1,5 @@
+<odoo>
+    <menuitem id="menu_customer_segment" name="Customer Segments" web_icon="customer_segment,static/description/icon.png"/>
+    <menuitem id="menu_customer_segments" name="Segments" parent="menu_customer_segment" action="action_customer_segment"/>
+    <menuitem id="menu_customer_accounts" name="Customer Accounts" parent="menu_customer_segment" action="action_customer_accounts"/>
+</odoo>
