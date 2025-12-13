@@ -31,10 +31,10 @@ class DateRangeGenerator(models.TransientModel):
         comodel_name='res.company', string='Company',
         default=_default_company)
     unit_of_time = fields.Selection([
-        (YEARLY, 'years'),
-        (MONTHLY, 'months'),
-        (WEEKLY, 'weeks'),
-        (DAILY, 'days')], required=True)
+        ('yearly', 'years'),
+        ('monthly', 'months'),
+        ('weekly', 'weeks'),
+        ('daily', 'days')], required=True)
     duration_count = fields.Integer('Duration', required=True)
     count = fields.Integer(
         string="Number of ranges to generate", required=True)
@@ -43,7 +43,14 @@ class DateRangeGenerator(models.TransientModel):
 
     def _compute_date_ranges(self):
         self.ensure_one()
-        vals = rrule(freq=self.unit_of_time, interval=self.duration_count,
+        freq_map = {
+            'yearly': YEARLY,
+            'monthly': MONTHLY,
+            'weekly': WEEKLY,
+            'daily': DAILY,
+        }
+        freq = freq_map[self.unit_of_time]
+        vals = rrule(freq=freq, interval=self.duration_count,
                      dtstart=self.date_start,
                      count=self.count+1)
         vals = list(vals)
