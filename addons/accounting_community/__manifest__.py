@@ -5,7 +5,7 @@
     "summary": "Financial Reporting Standard Reports",
     "author": "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/account-financial-reporting",
-    "depends": ["account", "date_range"],
+    "depends": ["account", "date_range", "report_xlsx"],
     "data": [
         "security/ir.model.access.csv",
         "security/security.xml",
