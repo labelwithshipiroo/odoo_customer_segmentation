@@ -14,6 +14,7 @@
         "reports.xml",
         "view/balance_sheet.xml",
     ],
+    "images": ["static/description/icon.png"],
     "assets": {
         "web.assets_backend": [
             "accounting_community/static/src/js/*",
@@ -21,7 +22,7 @@
         ],
     },
     "installable": True,
-    "application": False,
+    "application": True,
     "auto_install": False,
     "license": "AGPL-3",
 }
