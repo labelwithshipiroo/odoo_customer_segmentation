@@ -17,7 +17,6 @@
     "data": [
         "security/ir.model.access.csv",
         "security/date_range_security.xml",
-        "views/assets.xml",
         "views/date_range_view.xml",
         "wizard/date_range_generator.xml",
     ],
