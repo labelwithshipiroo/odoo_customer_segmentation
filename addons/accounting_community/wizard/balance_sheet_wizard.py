@@ -22,10 +22,7 @@ class BalanceSheetReportWizard(models.TransientModel):
     def _print_report(self, report_type):
         self.ensure_one()
         data = self._prepare_report_data()
-        if report_type == "xlsx":
-            report_name = "accounting_community.report_balance_sheet_xlsx"
-        else:
-            report_name = "accounting_community.balance_sheet"
+        report_name = "accounting_community.balance_sheet"
         return (
             self.env["ir.actions.report"]
             .search(

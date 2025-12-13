@@ -14,7 +14,6 @@
                 <footer>
                     <button name="button_export_html" string="View" type="object" class="btn-primary"/>
                     <button name="button_export_pdf" string="PDF" type="object"/>
-                    <button name="button_export_xlsx" string="XLSX" type="object"/>
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>

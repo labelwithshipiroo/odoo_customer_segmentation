@@ -15,15 +15,4 @@
         <field name="binding_model_id" ref="model_balance_sheet_report_wizard"/>
         <field name="binding_type">report</field>
     </record>
-
-    <record id="balance_sheet_report_xlsx" model="ir.actions.report">
-        <field name="name">Balance Sheet XLSX</field>
-        <field name="model">balance.sheet.report.wizard</field>
-        <field name="report_type">xlsx</field>
-        <field name="report_name">accounting_community.report_balance_sheet_xlsx</field>
-        <field name="report_file">accounting_community.report_balance_sheet_xlsx</field>
-        <field name="print_report_name">'Balance Sheet'</field>
-        <field name="binding_model_id" ref="model_balance_sheet_report_wizard"/>
-        <field name="binding_type">report</field>
-    </record>
 </odoo>
