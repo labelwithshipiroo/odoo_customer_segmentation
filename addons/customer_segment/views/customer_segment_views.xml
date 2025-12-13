@@ -47,8 +47,6 @@
                 <field name="name"/>
                 <field name="email"/>
                 <field name="segment_id"/>
-                <filter name="customers" string="Customers" domain="[('customer_rank', '>', 0)]"/>
-                <filter name="suppliers" string="Suppliers" domain="[('supplier_rank', '>', 0)]"/>
                 <group expand="0" string="Group By">
                     <filter name="group_by_segment" string="Segment" context="{'group_by': 'segment_id'}"/>
                 </group>
