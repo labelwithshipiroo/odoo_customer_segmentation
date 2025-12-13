@@ -35,6 +35,10 @@
             <list editable="top">
                 <field name="name"/>
                 <field name="email"/>
+                <field name="phone" optional="hide"/>
+                <field name="mobile" optional="hide"/>
+                <field name="city" optional="hide"/>
+                <field name="country_id" optional="hide"/>
                 <field name="segment_id"/>
             </list>
         </field>
