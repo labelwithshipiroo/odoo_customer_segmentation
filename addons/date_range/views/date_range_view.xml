@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <record id="view_date_range_tree" model="ir.ui.view">
-        <field name="name">date.range.tree</field>
+    <record id="view_date_range_list" model="ir.ui.view">
+        <field name="name">date.range.list</field>
         <field name="model">date.range</field>
         <field name="arch" type="xml">
-            <tree editable="bottom" string="Date range">
+            <list editable="bottom" string="Date range">
                 <field name="name"/>
                 <field name="type_id"/>
                 <field name="date_start"/>
@@ -16,7 +16,7 @@
                     options="{'no_create': True}"
                     />
                 <field name="active"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record id="view_date_range_form_view" model="ir.ui.view">
@@ -40,17 +40,17 @@
             </form>
         </field>
     </record>
-    <record id="view_date_range_type_tree" model="ir.ui.view">
-        <field name="name">date.range.type.tree</field>
+    <record id="view_date_range_type_list" model="ir.ui.view">
+        <field name="name">date.range.type.list</field>
         <field name="model">date.range.type</field>
         <field name="arch" type="xml">
-            <tree editable="bottom" string="Date range type">
+            <list editable="bottom" string="Date range type">
                 <field name="name"/>
                 <field name="allow_overlap"/>
                 <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
                 <field name="parent_type_id"/>
                 <field name="active"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record id="view_date_range_type_form_view" model="ir.ui.view">
@@ -73,8 +73,8 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">date.range</field>
         <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="view_date_range_tree"/>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_date_range_list"/>
         <field name="domain">[]</field>
         <field name="context">{}</field>
     </record>
@@ -83,8 +83,8 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">date.range.type</field>
         <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="view_date_range_type_tree"/>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_date_range_type_list"/>
         <field name="domain">[]</field>
         <field name="context">{}</field>
     </record>
