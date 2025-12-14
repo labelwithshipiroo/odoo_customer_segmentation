@@ -178,6 +178,27 @@ External ID not found in the system: odoo_kpi.view_kpi_definition_search
 - Custom modules should reference their own models when possible.
 - Don't assume accounting models exist; check the target version's dependencies.
 
+## 10. XML Syntax Error in Domain Filters
+
+**Error:**
+```
+lxml.etree.XMLSyntaxError: Unescaped '<' not allowed in attributes values
+```
+
+**Cause:**
+- Domain filter strings contained unescaped `<` and `>` comparison operators within XML attributes.
+- XML requires these special characters to be escaped as `&lt;` and `&gt;` when used inside attribute values.
+
+**Fix Applied:**
+- Replaced `'>='` with `'&gt;='` and `'<='` with `'&lt;='` in domain filter attributes in:
+  - `kpi_value_views.xml`
+  - `kpi_budget_line_views.xml`
+
+**Lesson Learned:**
+- XML attributes containing domain filters must escape comparison operators.
+- Always validate XML syntax for special characters in attribute values.
+- Use entity references: `&lt;` for `<`, `&gt;` for `>`, `&amp;` for `&`, etc.
+
 ## General Lessons
 
 1. **Version Compatibility:** Always develop and test against the target Odoo version. API changes are frequent.
