@@ -150,6 +150,34 @@ External ID not found in the system: odoo_kpi.view_kpi_definition_search
 - When loading order conflicts occur, remove optional references like `search_view_id` to allow default behavior.
 - Actions can reference views that are loaded later, but not search views or other mandatory references.
 
+## 8. View Mode Inconsistency in Model Actions
+
+**Error:**
+- Action methods in models referenced `'tree'` in `view_mode` parameter, but view records used `type='list'`.
+- This inconsistency causes view loading failures.
+
+**Fix Applied:**
+- Updated `action_view_values()` and `action_view_budgets()` in `kpi_definition.py` to use `view_mode='list,form'` instead of `'tree,form'`.
+
+**Lesson Learned:**
+- Model action methods must use consistent view mode names with view record definitions.
+- Always use `'list'` instead of `'tree'` for Odoo 17+.
+
+## 9. Invalid Budget Model Reference
+
+**Error:**
+- `kpi_widget.py` referenced `'account.report.budget'` which doesn't exist in Odoo 18.
+- This caused errors when loading widget records.
+
+**Fix Applied:**
+- Changed `budget_ids = fields.Many2many('account.report.budget', ...)` to `fields.Many2many('kpi.budget', ...)`.
+- Uses the module's own budget model instead of a non-existent accounting model.
+
+**Lesson Learned:**
+- Verify that all model references exist in the target Odoo version.
+- Custom modules should reference their own models when possible.
+- Don't assume accounting models exist; check the target version's dependencies.
+
 ## General Lessons
 
 1. **Version Compatibility:** Always develop and test against the target Odoo version. API changes are frequent.
