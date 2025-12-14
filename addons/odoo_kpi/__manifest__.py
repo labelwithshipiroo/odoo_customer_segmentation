@@ -21,6 +21,7 @@
         'security/ir.model.access.csv',
         'views/kpi_actions.xml',
         'views/kpi_menu.xml',
+        'views/kpi_assignment_views.xml',
         'views/kpi_budget_views.xml',
         'views/kpi_definition_views.xml',
         'views/kpi_source_views.xml',

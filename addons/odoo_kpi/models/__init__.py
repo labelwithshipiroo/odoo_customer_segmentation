@@ -7,3 +7,4 @@ from . import kpi_formula_line
 from . import kpi_target
 from . import kpi_dashboard
 from . import kpi_widget
+from . import kpi_assignment
