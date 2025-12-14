@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- KPI Budget Tree View -->
+        <record id="kpi_budget_tree_view" model="ir.ui.view">
+            <field name="name">kpi.budget.tree</field>
+            <field name="model">kpi.budget</field>
+            <field name="arch" type="xml">
+                <tree string="KPI Budgets">
+                    <field name="name"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="period_type"/>
+                    <field name="state"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- KPI Budget Form View -->
+        <record id="kpi_budget_form_view" model="ir.ui.view">
+            <field name="name">kpi.budget.form</field>
+            <field name="model">kpi.budget</field>
+            <field name="arch" type="xml">
+                <form string="KPI Budget">
+                    <header>
+                        <button name="action_confirm" string="Confirm" type="object"
+                                class="btn-primary" states="draft"/>
+                        <button name="action_cancel" string="Cancel" type="object"
+                                class="btn-secondary" states="draft,confirmed"/>
+                        <button name="action_draft" string="Set to Draft" type="object"
+                                class="btn-secondary" states="cancelled"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Budget Name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                                <field name="period_type"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                            <group>
+                                <field name="user_id"/>
+                                <field name="state"/>
+                            </group>
+                        </group>
+                        <field name="description" placeholder="Budget description..."/>
+                        <notebook>
+                            <page string="Budget Lines" name="budget_lines">
+                                <field name="budget_line_ids">
+                                    <tree editable="bottom">
+                                        <field name="kpi_definition_id"/>
+                                        <field name="date_from"/>
+                                        <field name="date_to"/>
+                                        <field name="value"/>
+                                        <field name="currency_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- KPI Budget Search View -->
+        <record id="kpi_budget_search_view" model="ir.ui.view">
+            <field name="name">kpi.budget.search</field>
+            <field name="model">kpi.budget</field>
+            <field name="arch" type="xml">
+                <search string="KPI Budgets">
+                    <field name="name"/>
+                    <field name="user_id"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                    <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="State" name="group_by_state" context="{'group_by': 'state'}"/>
+                        <filter string="Responsible" name="group_by_user" context="{'group_by': 'user_id'}"/>
+                        <filter string="Company" name="group_by_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- KPI Budget Action -->
+        <record id="kpi_budget_action" model="ir.actions.act_window">
+            <field name="name">KPI Budgets</field>
+            <field name="res_model">kpi.budget</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="kpi_budget_search_view"/>
+            <field name="help">Create and manage KPI budgets for forecasting and planning.</field>
+        </record>
+
+        <!-- KPI Budget Menu -->
+        <menuitem id="kpi_budget_menu" name="Budgets" parent="kpi_main_menu"
+                  action="kpi_budget_action" sequence="30"/>
+    </data>
+</odoo>
