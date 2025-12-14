@@ -101,7 +101,7 @@
         </record>
 
         <!-- KPI Budget Menu -->
-        <menuitem id="kpi_budget_menu" name="Budgets" parent="kpi_main_menu"
+        <menuitem id="kpi_budget_menu" name="Budgets" parent="menu_kpi_operations"
                   action="kpi_budget_action" sequence="30"/>
     </data>
 </odoo>
