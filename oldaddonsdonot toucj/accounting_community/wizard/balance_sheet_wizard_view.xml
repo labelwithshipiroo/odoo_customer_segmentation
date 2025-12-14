@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="balance_sheet_wizard_form" model="ir.ui.view">
+        <field name="name">balance.sheet.wizard.form</field>
+        <field name="model">balance.sheet.report.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="target_move"/>
+                </group>
+                <footer>
+                    <button name="button_export_html" string="View" type="object" class="btn-primary"/>
+                    <button name="button_export_pdf" string="PDF" type="object"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_balance_sheet_wizard" model="ir.actions.act_window">
+        <field name="name">Balance Sheet</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">balance.sheet.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="balance_sheet_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>
