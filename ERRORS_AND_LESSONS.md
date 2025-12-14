@@ -104,6 +104,27 @@ External ID not found in the system: odoo_kpi.kpi_main_menu
 - Ensure all menu IDs match between definition and reference.
 - Use consistent naming conventions for menu IDs.
 
+## 6. Action Reference Before Definition
+
+**Error:**
+```
+External ID not found in the system: odoo_kpi.action_kpi_definition
+```
+
+**Cause:**
+- Menu items referenced actions that were defined in view files loaded after the menu.
+- Data loading order in `__manifest__.py` caused actions to be referenced before definition.
+
+**Fix Applied:**
+- Created a separate `kpi_actions.xml` file containing all actions.
+- Loaded `kpi_actions.xml` before `kpi_menu.xml` in the manifest.
+- Moved all action definitions to the actions file.
+
+**Lesson Learned:**
+- Data loading order is critical for dependencies.
+- Actions, views, and menus must be loaded in the correct sequence.
+- When dependencies are complex, separate files by type (actions, menus, views) and order them appropriately in the manifest.
+
 ## General Lessons
 
 1. **Version Compatibility:** Always develop and test against the target Odoo version. API changes are frequent.
