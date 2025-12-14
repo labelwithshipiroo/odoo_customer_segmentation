@@ -19,6 +19,10 @@
             <field name="model">x_hello_world</field>
             <field name="arch" type="xml">
                 <form>
+                    <header>
+                        <button string="Save" type="object" name="write" class="btn-primary"/>
+                        <button string="Discard" type="object" name="cancel" class="btn-secondary"/>
+                    </header>
                     <sheet>
                         <group>
                             <field name="x_name"/>
