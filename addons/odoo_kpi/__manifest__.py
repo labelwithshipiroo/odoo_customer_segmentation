@@ -30,7 +30,6 @@
         'views/kpi_target_views.xml',
         'views/kpi_dashboard_views.xml',
         'views/kpi_widget_views.xml',
-        'views/product_views.xml',
         'data/kpi_data.xml',
     ],
     'images': ['static/description/icon.png'],
