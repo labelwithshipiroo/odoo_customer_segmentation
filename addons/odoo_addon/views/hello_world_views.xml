@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Hello World Tree View -->
+        <record id="view_hello_world_tree" model="ir.ui.view">
+            <field name="name">hello.world.tree</field>
+            <field name="model">hello.world</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Hello World Form View -->
+        <record id="view_hello_world_form" model="ir.ui.view">
+            <field name="name">hello.world.form</field>
+            <field name="model">hello.world</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="description"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Hello World Action -->
+        <record id="action_hello_world" model="ir.actions.act_window">
+            <field name="name">Hello World</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hello.world</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_hello_world_tree"/>
+        </record>
+    </data>
+</odoo>

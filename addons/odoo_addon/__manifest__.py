@@ -1,7 +1,7 @@
 {
-    'name': 'Contacts KPI and Targets',
+    'name': 'KPI and Targets',
     'version': '1.0.0',
-    'category': 'CRM',
+    'category': 'Extra Tools',
     'author': 'YannickCuvelie',
     'license': 'LGPL-3',
     'depends': [
@@ -12,11 +12,14 @@
         'sale',
     ],
     'data': [
+        'security/ir.model.access.csv',
+        'views/hello_world_views.xml',
+        'views/hello_world_menu.xml',
         'views/res_partner_views.xml',
         'views/product_views.xml',
         'views/account_move_views.xml',
         'views/sale_order_views.xml',
     ],
     'installable': True,
-    'application': False,
+    'application': True,
 }
