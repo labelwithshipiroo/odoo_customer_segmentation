@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <!-- Define the x_hello_world model -->
+        <record id="model_x_hello_world" model="ir.model">
+            <field name="name">x_hello_world</field>
+            <field name="model">x_hello_world</field>
+            <field name="info">Hello World Model</field>
+        </record>
+
+        <!-- Define the fields for the model -->
+        <record id="field_x_hello_world_name" model="ir.model.fields">
+            <field name="model_id" ref="model_x_hello_world"/>
+            <field name="name">x_name</field>
+            <field name="field_description">Message</field>
+            <field name="ttype">char</field>
+        </record>
+
+        <record id="field_x_hello_world_description" model="ir.model.fields">
+            <field name="model_id" ref="model_x_hello_world"/>
+            <field name="name">x_description</field>
+            <field name="field_description">Description</field>
+            <field name="ttype">text</field>
+        </record>
+
         <!-- Hello World List View -->
         <record id="view_x_hello_world_list" model="ir.ui.view">
             <field name="name">x_hello_world.list</field>

@@ -4,7 +4,7 @@
     'category': 'Extra Tools',
     'summary': 'Manage KPI and Targets',
     'description': '',
-    'author': 'YannickCuvelie',
+    'author': 'Shipiroo',
     'license': 'LGPL-3',
     'depends': [
         'base',
@@ -14,8 +14,9 @@
         'sale',
     ],
     'data': [
-        'views/hello_world_views.xml',
-        'views/hello_world_menu.xml',
+        'security/ir.model.access.csv',
+        'views/menu_views.xml',
+        'views/odoo_addon_views.xml',
         'views/res_partner_views.xml',
         'views/product_views.xml',
         'views/account_move_views.xml',
