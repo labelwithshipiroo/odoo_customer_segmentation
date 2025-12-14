@@ -1,23 +1,22 @@
 odoo.define('odoo_addon.reports_table', [], function () {
     'use strict';
 
-    // Use a simple approach that doesn't depend on specific Odoo modules
-    // jQuery should be available globally in Odoo
-    $(document).ready(function() {
+    // Use vanilla JavaScript instead of jQuery to avoid dependency issues
+    function initializeReportsTable() {
         // Check if we're on the x_hello_world form by looking for the container
         var checkForContainer = function() {
-            var $container = $('.reports-table-container');
-            if ($container.length > 0 && $container.is(':visible')) {
-                loadReportsData($container);
+            var container = document.querySelector('.reports-table-container');
+            if (container && container.offsetParent !== null) { // Check if visible
+                loadReportsData(container);
             } else {
                 // Check again in a short delay
                 setTimeout(checkForContainer, 500);
             }
         };
 
-        var loadReportsData = function($container) {
+        var loadReportsData = function(container) {
             // Show loading state
-            $container.html('<div class="text-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div><p>Loading reports data...</p></div>');
+            container.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div><p>Loading reports data...</p></div>';
 
             fetch('https://192.168.0.212:3002/odoo/reports/list', {
                 method: 'GET',
@@ -32,17 +31,17 @@ odoo.define('odoo_addon.reports_table', [], function () {
                 return response.json();
             })
             .then(function (data) {
-                renderReportsTable(data, $container);
+                renderReportsTable(data, container);
             })
             .catch(function (error) {
                 console.error('Error fetching reports data:', error);
-                renderErrorMessage('Failed to load reports data. Please check the console for details.', $container);
+                renderErrorMessage('Failed to load reports data. Please check the console for details.', container);
             });
         };
 
-        var renderReportsTable = function(data, $container) {
+        var renderReportsTable = function(data, container) {
             if (!data.success || !data.reports) {
-                renderErrorMessage('Invalid data format received from API', $container);
+                renderErrorMessage('Invalid data format received from API', container);
                 return;
             }
 
@@ -75,14 +74,21 @@ odoo.define('odoo_addon.reports_table', [], function () {
             });
 
             html += '</tbody></table></div>';
-            $container.html(html);
+            container.innerHTML = html;
         };
 
-        var renderErrorMessage = function(message, $container) {
-            $container.html('<div class="alert alert-danger">' + message + '</div>');
+        var renderErrorMessage = function(message, container) {
+            container.innerHTML = '<div class="alert alert-danger">' + message + '</div>';
         };
 
         // Start checking for the container
         checkForContainer();
-    });
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeReportsTable);
+    } else {
+        initializeReportsTable();
+    }
 });
