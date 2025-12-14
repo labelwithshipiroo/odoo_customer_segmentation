@@ -9,8 +9,15 @@
             <xpath expr="//notebook" position="inside">
                 <page string="KPI" name="kpi">
                     <group>
+                        <field name="id" invisible="1"/>
+                    </group>
+                    <separator string="KPI Values for this Product"/>
+                    <group>
                         <button name="%(odoo_kpi.action_kpi_value)d" type="action"
-                                class="btn-primary" icon="fa-bar-chart">View KPI Values</button>
+                                class="btn btn-primary" icon="fa-bar-chart"
+                                context="{'default_source_model': 'product.product', 'default_source_id': id}">
+                            View KPI Values
+                        </button>
                     </group>
                 </page>
             </xpath>
