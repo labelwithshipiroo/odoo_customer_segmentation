@@ -1,4 +1,4 @@
-odoo.define('odoo_addon.reports_table', function (require) {
+odoo.define('odoo_addon.reports_table', [], function () {
     'use strict';
 
     // Use a simple approach that doesn't depend on specific Odoo modules
