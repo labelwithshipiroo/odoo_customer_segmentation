@@ -25,6 +25,7 @@
     'assets': {
         'web.assets_backend': [
             'odoo_addon/static/src/js/reports_table.js',
+            'odoo_addon/static/src/css/custom_styles.css',
         ],
     },
     'images': ['static/description/icon.png'],

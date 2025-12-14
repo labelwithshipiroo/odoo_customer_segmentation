@@ -1,0 +1,168 @@
+/* Custom CSS for Odoo Addon - Completely Different Styling */
+
+/* Custom color scheme - using a vibrant purple/blue theme */
+:root {
+    --custom-primary: #8B5CF6;
+    --custom-secondary: #06B6D4;
+    --custom-accent: #F59E0B;
+    --custom-dark: #1F2937;
+    --custom-light: #F9FAFB;
+}
+
+/* Override the reports table container with custom styling */
+.reports-table-container {
+    background: linear-gradient(135deg, var(--custom-primary), var(--custom-secondary));
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+    border: 3px solid var(--custom-accent);
+}
+
+/* Custom table styling - completely different from Bootstrap */
+.reports-table-container .table {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+    overflow: hidden;
+    border: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.reports-table-container .table thead th {
+    background: linear-gradient(90deg, var(--custom-primary), var(--custom-secondary));
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    padding: 15px;
+    font-size: 14px;
+}
+
+.reports-table-container .table tbody tr {
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.reports-table-container .table tbody tr:hover {
+    background: rgba(139, 92, 246, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(139, 92, 246, 0.2);
+}
+
+.reports-table-container .table tbody td {
+    padding: 12px 15px;
+    border: none;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+    color: var(--custom-dark);
+    font-weight: 500;
+}
+
+/* Custom loading spinner */
+.reports-table-container .spinner-border {
+    color: var(--custom-primary) !important;
+    width: 3rem;
+    height: 3rem;
+}
+
+/* Custom alert styling */
+.reports-table-container .alert-danger {
+    background: linear-gradient(45deg, #EF4444, #DC2626);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Custom form styling for the Hello World form */
+.o_form_view .o_form_sheet {
+    background: linear-gradient(135deg, var(--custom-light), rgba(139, 92, 246, 0.05));
+    border-radius: 15px;
+    padding: 30px;
+    margin: 20px;
+    box-shadow: 0 10px 40px rgba(139, 92, 246, 0.15);
+}
+
+/* Custom button styling */
+.o_form_view .btn-primary {
+    background: linear-gradient(45deg, var(--custom-primary), var(--custom-secondary));
+    border: none;
+    border-radius: 25px;
+    padding: 10px 30px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+}
+
+.o_form_view .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+}
+
+.o_form_view .btn-secondary {
+    background: linear-gradient(45deg, var(--custom-dark), #374151);
+    border: none;
+    border-radius: 25px;
+    padding: 10px 30px;
+    font-weight: bold;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.o_form_view .btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(31, 41, 55, 0.4);
+}
+
+/* Custom group styling */
+.o_form_view .o_group {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 15px 0;
+    border: 2px solid rgba(139, 92, 246, 0.2);
+}
+
+/* Custom field styling */
+.o_form_view .o_field_widget {
+    border-radius: 8px;
+    border: 2px solid rgba(139, 92, 246, 0.3);
+    padding: 10px;
+    transition: all 0.3s ease;
+}
+
+.o_form_view .o_field_widget:focus {
+    border-color: var(--custom-primary);
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+}
+
+/* Custom text for the reports section */
+.reports-table-container::before {
+    content: "🚀 Custom API Reports Dashboard";
+    display: block;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Animation for loading text */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.reports-table-container .text-center p {
+    animation: pulse 2s infinite;
+    color: white;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
