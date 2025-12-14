@@ -125,6 +125,27 @@ External ID not found in the system: odoo_kpi.action_kpi_definition
 - Actions, views, and menus must be loaded in the correct sequence.
 - When dependencies are complex, separate files by type (actions, menus, views) and order them appropriately in the manifest.
 
+## 7. Search View Reference Before Definition
+
+**Error:**
+```
+External ID not found in the system: odoo_kpi.view_kpi_definition_search
+```
+
+**Cause:**
+- Actions in `kpi_actions.xml` referenced search views defined in `kpi_definition_views.xml`.
+- Since actions are loaded before views in the manifest, the search views were not yet available.
+- Odoo requires referenced external IDs to exist at the time of loading.
+
+**Fix Applied:**
+- Removed all `search_view_id` fields from action records in `kpi_actions.xml`.
+- Odoo will automatically use the default search view for each model when no specific search view is specified.
+
+**Lesson Learned:**
+- Action references to views must be loaded after the views are defined.
+- When loading order conflicts occur, remove optional references like `search_view_id` to allow default behavior.
+- Actions can reference views that are loaded later, but not search views or other mandatory references.
+
 ## General Lessons
 
 1. **Version Compatibility:** Always develop and test against the target Odoo version. API changes are frequent.
