@@ -1,23 +1,34 @@
 odoo.define('odoo_addon.reports_table', function (require) {
     'use strict';
 
-    var FormController = require('web.FormController');
+    var core = require('web.core');
 
-    // Extend the FormController to add reports functionality for x_hello_world model
-    FormController.include({
+    // Extend the FormRenderer to add reports functionality for x_hello_world model
+    var FormRenderer = require('web.FormRenderer');
+    FormRenderer.include({
         /**
          * @override
          */
         start: function () {
-            this._super.apply(this, arguments);
-            // Only load reports data for x_hello_world model
-            if (this.modelName === 'x_hello_world') {
-                this._loadReportsData();
-            }
+            var self = this;
+            return this._super.apply(this, arguments).then(function () {
+                // Only load reports data for x_hello_world model
+                if (self.state && self.state.model === 'x_hello_world') {
+                    self._loadReportsData();
+                }
+            });
         },
 
         _loadReportsData: function () {
             var self = this;
+            var $container = this.$el.find('.reports-table-container');
+            if ($container.length === 0) {
+                return;
+            }
+
+            // Show loading state
+            $container.html('<div class="text-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div><p>Loading reports data...</p></div>');
+
             fetch('https://localhost:3002/odoo/reports/list', {
                 method: 'GET',
                 headers: {
@@ -31,22 +42,17 @@ odoo.define('odoo_addon.reports_table', function (require) {
                 return response.json();
             })
             .then(function (data) {
-                self._renderReportsTable(data);
+                self._renderReportsTable(data, $container);
             })
             .catch(function (error) {
                 console.error('Error fetching reports data:', error);
-                self._renderErrorMessage('Failed to load reports data. Please check the console for details.');
+                self._renderErrorMessage('Failed to load reports data. Please check the console for details.', $container);
             });
         },
 
-        _renderReportsTable: function (data) {
-            var $reportsContainer = this.$el.find('#reports-table-container');
-            if ($reportsContainer.length === 0) {
-                return;
-            }
-
+        _renderReportsTable: function (data, $container) {
             if (!data.success || !data.reports) {
-                this._renderErrorMessage('Invalid data format received from API');
+                this._renderErrorMessage('Invalid data format received from API', $container);
                 return;
             }
 
@@ -79,14 +85,11 @@ odoo.define('odoo_addon.reports_table', function (require) {
             });
 
             html += '</tbody></table></div>';
-            $reportsContainer.html(html);
+            $container.html(html);
         },
 
-        _renderErrorMessage: function (message) {
-            var $reportsContainer = this.$el.find('#reports-table-container');
-            if ($reportsContainer.length > 0) {
-                $reportsContainer.html('<div class="alert alert-danger">' + message + '</div>');
-            }
+        _renderErrorMessage: function (message, $container) {
+            $container.html('<div class="alert alert-danger">' + message + '</div>');
         },
     });
 });
