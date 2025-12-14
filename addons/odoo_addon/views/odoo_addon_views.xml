@@ -21,7 +21,7 @@
                 <form>
                     <sheet>
 
-                        <group string="Reports Data">
+                        <group>
                             <div class="reports-table-container"
                                 style="width: 100%; min-height: 200px;">
                                 <div class="text-center">
