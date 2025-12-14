@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Define the hello.world model -->
+        <record id="model_hello_world" model="ir.model">
+            <field name="name">hello.world</field>
+            <field name="model">hello.world</field>
+            <field name="info">Hello World Model</field>
+        </record>
+
+        <!-- Define the fields for the model -->
+        <record id="field_hello_world_name" model="ir.model.fields">
+            <field name="model_id" ref="model_hello_world"/>
+            <field name="name">name</field>
+            <field name="field_description">Message</field>
+            <field name="ttype">char</field>
+            <field name="default">Hello World!</field>
+        </record>
+
+        <record id="field_hello_world_description" model="ir.model.fields">
+            <field name="model_id" ref="model_hello_world"/>
+            <field name="name">description</field>
+            <field name="field_description">Description</field>
+            <field name="ttype">text</field>
+            <field name="default">Welcome to the KPI and Targets application!</field>
+        </record>
+    </data>
+</odoo>
