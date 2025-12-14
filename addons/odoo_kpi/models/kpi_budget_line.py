@@ -15,7 +15,7 @@ class KPIBudgetLine(models.Model):
     # Link to Odoo's budget system
     budget_id = fields.Many2one('crossovered.budget', string='Budget/Forecast',
                                 required=True, ondelete='cascade', index=True)
-    budget_name = fields.Char(related='budget_id.name', string='Budget Name', store=True)
+    budget_name = fields.Char(string='Budget Name', compute='_compute_budget_name', store=True)
 
     # Polymorphic relationship to source
     source_model = fields.Char(string='Source Model', index=True)
@@ -44,6 +44,11 @@ class KPIBudgetLine(models.Model):
 
     notes = fields.Text(string='Notes')
     computed = fields.Boolean(string='Computed', default=False)
+
+    @api.depends('budget_id')
+    def _compute_budget_name(self):
+        for record in self:
+            record.budget_name = record.budget_id.name if record.budget_id else ''
 
     @api.depends('source_model', 'source_id')
     def _compute_source_name(self):
