@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <record id="accounting_community_account_manager" model="res.groups">
-        <field name="name">Accounting Community Manager</field>
-        <field name="category_id" ref="base.module_category_accounting_accounting"/>
-    </record>
-</odoo>
