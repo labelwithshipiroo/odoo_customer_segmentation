@@ -79,6 +79,10 @@ Since 17.0, the "attrs" and "states" attributes are no longer used.
 - Replaced `states` with `invisible` modifiers:
   - `states="draft"` → `invisible="state != 'draft'"`
   - `states="draft,confirmed"` → `invisible="state not in ('draft', 'confirmed')"`
+- Additionally replaced remaining `attrs` attributes with `invisible` and `required` modifiers:
+  - `attrs="{'invisible': [('active', '=', True)]}"` → `invisible="active == True"`
+  - `attrs="{'invisible': [('calculation_method', '!=', 'computed')]}"` → `invisible="calculation_method != 'computed'"`
+  - `attrs="{'invisible': [...], 'required': [...]}"` → separate `invisible="..."` and `required="..."` attributes
 
 **Lesson Learned:**
 - Odoo 17 introduced significant changes to view modifiers.
