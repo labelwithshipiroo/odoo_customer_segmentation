@@ -86,7 +86,8 @@
                     <filter string="Period Type" name="group_period" context="{'group_by':'period_type'}"/>
                     <filter string="Source" name="group_source" context="{'group_by':'source_name'}"/>
                 </group>
-            </search>
-        </record>
+             </search>
+         </field>
+     </record>
 
-    </odoo>
+</odoo>
