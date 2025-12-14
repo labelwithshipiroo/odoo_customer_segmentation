@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Extend the res.partner form to add KPI and Targets tab -->
+        <record id="view_partner_form_kpi" model="ir.ui.view">
+            <field name="name">res.partner.form.kpi</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="KPI's and Targets" name="kpi_targets">
+                        <!-- Empty content - placeholder for future functionality -->
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
