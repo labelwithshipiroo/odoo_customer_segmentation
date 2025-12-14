@@ -45,17 +45,17 @@ odoo.define('odoo_addon.reports_table', [], function () {
                 return;
             }
 
-            var html = '<div class="table-responsive">' +
-                '<table class="table table-striped table-bordered">' +
-                '<thead class="thead-dark">' +
-                '<tr>' +
-                '<th>ID</th>' +
-                '<th>Name</th>' +
-                '<th>Country</th>' +
-                '<th>Root Report</th>' +
+            var html = '<div class="overflow-x-auto">' +
+                '<table class="shadcn-table">' +
+                '<thead class="shadcn-table-header">' +
+                '<tr class="shadcn-table-row border-b">' +
+                '<th class="shadcn-table-head">ID</th>' +
+                '<th class="shadcn-table-head">Name</th>' +
+                '<th class="shadcn-table-head">Country</th>' +
+                '<th class="shadcn-table-head">Root Report</th>' +
                 '</tr>' +
                 '</thead>' +
-                '<tbody>';
+                '<tbody class="shadcn-table-body">';
 
             data.reports.forEach(function (report) {
                 var rootReportName = '';
@@ -65,11 +65,13 @@ odoo.define('odoo_addon.reports_table', [], function () {
                     rootReportName = report.root_report_id;
                 }
 
-                html += '<tr>' +
-                    '<td>' + (report.id || '') + '</td>' +
-                    '<td>' + (report.name || '') + '</td>' +
-                    '<td>' + (report.country_id || 'N/A') + '</td>' +
-                    '<td>' + (rootReportName || 'N/A') + '</td>' +
+                html += '<tr class="shadcn-table-row">' +
+                    '<td class="shadcn-table-cell">' + (report.id || '') + '</td>' +
+                    '<td class="shadcn-table-cell">' + (report.name || '') + '</td>' +
+                    '<td class="shadcn-table-cell">' +
+                        '<span class="shadcn-badge shadcn-badge-secondary">' + (report.country_id || 'N/A') + '</span>' +
+                    '</td>' +
+                    '<td class="shadcn-table-cell">' + (rootReportName || 'N/A') + '</td>' +
                     '</tr>';
             });
 
