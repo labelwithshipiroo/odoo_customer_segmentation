@@ -12,6 +12,7 @@
     <menuitem id="menu_kpi_operations" name="Operations" parent="menu_kpi_root" sequence="2"/>
     <menuitem id="menu_kpi_values" name="Actual Values" parent="menu_kpi_operations" sequence="1" action="action_kpi_value"/>
     <menuitem id="menu_kpi_budgets" name="Budget Lines" parent="menu_kpi_operations" sequence="2" action="action_kpi_budget_line"/>
+    <menuitem id="kpi_budget_menu" name="Budgets" parent="menu_kpi_operations" action="kpi_budget_action" sequence="30"/>
 
     <!-- Reporting Menu -->
     <menuitem id="menu_kpi_reporting" name="Reporting" parent="menu_kpi_root" sequence="3"/>

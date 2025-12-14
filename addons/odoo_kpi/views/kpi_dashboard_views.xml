@@ -47,10 +47,4 @@
         </field>
     </record>
 
-    <!-- Action -->
-    <record id="action_kpi_dashboard" model="ir.actions.act_window">
-        <field name="name">KPI Dashboards</field>
-        <field name="res_model">kpi.dashboard</field>
-        <field name="view_mode">list,form</field>
-    </record>
 </odoo>

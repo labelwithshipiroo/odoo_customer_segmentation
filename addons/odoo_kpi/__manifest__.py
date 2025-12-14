@@ -19,6 +19,7 @@
     'data': [
         'security/kpi_security.xml',
         'security/ir.model.access.csv',
+        'views/kpi_actions.xml',
         'views/kpi_menu.xml',
         'views/kpi_budget_views.xml',
         'views/kpi_definition_views.xml',
