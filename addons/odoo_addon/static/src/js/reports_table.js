@@ -53,6 +53,7 @@ odoo.define('odoo_addon.reports_table', [], function () {
                 '<th class="shadcn-table-head">Name</th>' +
                 '<th class="shadcn-table-head">Country</th>' +
                 '<th class="shadcn-table-head">Root Report</th>' +
+                '<th class="shadcn-table-head">Status</th>' +
                 '</tr>' +
                 '</thead>' +
                 '<tbody class="shadcn-table-body">';
@@ -65,6 +66,11 @@ odoo.define('odoo_addon.reports_table', [], function () {
                     rootReportName = report.root_report_id;
                 }
 
+                var statusDropdown = '<select class="status-dropdown shadcn-btn shadcn-btn-secondary" data-report-id="' + (report.id || '') + '">' +
+                    '<option value="active">Active</option>' +
+                    '<option value="not_active">Not Active</option>' +
+                    '</select>';
+
                 html += '<tr class="shadcn-table-row">' +
                     '<td class="shadcn-table-cell">' + (report.id || '') + '</td>' +
                     '<td class="shadcn-table-cell">' + (report.name || '') + '</td>' +
@@ -72,11 +78,43 @@ odoo.define('odoo_addon.reports_table', [], function () {
                         '<span class="shadcn-badge shadcn-badge-secondary">' + (report.country_id || 'N/A') + '</span>' +
                     '</td>' +
                     '<td class="shadcn-table-cell">' + (rootReportName || 'N/A') + '</td>' +
+                    '<td class="shadcn-table-cell">' + statusDropdown + '</td>' +
                     '</tr>';
             });
 
             html += '</tbody></table></div>';
             container.innerHTML = html;
+
+            // Add event listeners for status dropdowns
+            var dropdowns = container.querySelectorAll('.status-dropdown');
+            dropdowns.forEach(function(dropdown) {
+                dropdown.addEventListener('change', function() {
+                    var reportId = this.getAttribute('data-report-id');
+                    var status = this.value;
+
+                    // Send POST request with identifier
+                    fetch('https://192.168.0.212:3002/odoo/reports/status', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            id: reportId,
+                            status: status
+                        })
+                    })
+                    .then(function(response) {
+                        if (response.ok) {
+                            console.log('Status updated successfully for report ID:', reportId);
+                        } else {
+                            console.error('Failed to update status for report ID:', reportId);
+                        }
+                    })
+                    .catch(function(error) {
+                        console.error('Error updating status for report ID:', reportId, error);
+                    });
+                });
+            });
         };
 
         var renderErrorMessage = function(message, container) {
