@@ -1,17 +1,17 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_kpi_budget_user,kpi.budget user,model_kpi_budget,base.group_user,1,0,0,0
-access_kpi_budget_manager,kpi.budget manager,model_kpi_budget,kpi.group_kpi_manager,1,1,1,1
+access_kpi_budget_manager,kpi.budget manager,model_kpi_budget,base.group_user,1,1,1,1
 access_kpi_definition_user,kpi.definition user,model_kpi_definition,base.group_user,1,0,0,0
-access_kpi_definition_manager,kpi.definition manager,model_kpi_definition,kpi.group_kpi_manager,1,1,1,1
+access_kpi_definition_manager,kpi.definition manager,model_kpi_definition,base.group_user,1,1,1,1
 access_kpi_value_user,kpi.value user,model_kpi_value,base.group_user,1,0,0,0
-access_kpi_value_manager,kpi.value manager,model_kpi_value,kpi.group_kpi_manager,1,1,1,1
+access_kpi_value_manager,kpi.value manager,model_kpi_value,base.group_user,1,1,1,1
 access_kpi_budget_line_user,kpi.budget.line user,model_kpi_budget_line,base.group_user,1,0,0,0
-access_kpi_budget_line_manager,kpi.budget.line manager,model_kpi_budget_line,kpi.group_kpi_manager,1,1,1,1
+access_kpi_budget_line_manager,kpi.budget.line manager,model_kpi_budget_line,base.group_user,1,1,1,1
 access_kpi_target_user,kpi.target user,model_kpi_target,base.group_user,1,0,0,0
-access_kpi_target_manager,kpi.target manager,model_kpi_target,kpi.group_kpi_manager,1,1,1,1
+access_kpi_target_manager,kpi.target manager,model_kpi_target,base.group_user,1,1,1,1
 access_kpi_dashboard_user,kpi.dashboard user,model_kpi_dashboard,base.group_user,1,1,1,1
 access_kpi_widget_user,kpi.widget user,model_kpi_widget,base.group_user,1,1,1,1
 access_kpi_source_user,kpi.source user,model_kpi_source,base.group_user,1,0,0,0
-access_kpi_source_manager,kpi.source manager,model_kpi_source,kpi.group_kpi_manager,1,1,1,1
+access_kpi_source_manager,kpi.source manager,model_kpi_source,base.group_user,1,1,1,1
 access_kpi_formula_line_user,kpi.formula.line user,model_kpi_formula_line,base.group_user,1,0,0,0
-access_kpi_formula_line_manager,kpi.formula.line manager,model_kpi_formula_line,kpi.group_kpi_manager,1,1,1,1
+access_kpi_formula_line_manager,kpi.formula.line manager,model_kpi_formula_line,base.group_user,1,1,1,1
