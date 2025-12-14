@@ -13,7 +13,7 @@ class KPIBudgetLine(models.Model):
     kpi_type = fields.Selection(related='kpi_definition_id.kpi_type', string='Type', store=True)
 
     # Link to Odoo's budget system
-    budget_id = fields.Many2one('account.report.budget', string='Budget/Forecast',
+    budget_id = fields.Many2one('crossovered.budget', string='Budget/Forecast',
                                 required=True, ondelete='cascade', index=True)
     budget_name = fields.Char(related='budget_id.name', string='Budget Name', store=True)
 
