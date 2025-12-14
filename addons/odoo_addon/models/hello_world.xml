@@ -14,7 +14,6 @@
             <field name="name">x_name</field>
             <field name="field_description">Message</field>
             <field name="ttype">char</field>
-            <field name="default">Hello World!</field>
         </record>
 
         <record id="field_x_hello_world_description" model="ir.model.fields">
@@ -22,7 +21,6 @@
             <field name="name">x_description</field>
             <field name="field_description">Description</field>
             <field name="ttype">text</field>
-            <field name="default">Welcome to the KPI and Targets application!</field>
         </record>
     </data>
 </odoo>
