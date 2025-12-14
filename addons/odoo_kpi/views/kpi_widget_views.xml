@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_kpi_widget_tree" model="ir.ui.view">
+        <field name="name">kpi.widget.tree</field>
+        <field name="model">kpi.widget</field>
+        <field name="arch" type="xml">
+            <tree string="KPI Widgets">
+                <field name="dashboard_id"/>
+                <field name="kpi_definition_id"/>
+                <field name="widget_type"/>
+                <field name="period_type"/>
+                <field name="show_actuals"/>
+                <field name="sequence"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_kpi_widget_form" model="ir.ui.view">
+        <field name="name">kpi.widget.form</field>
+        <field name="model">kpi.widget</field>
+        <field name="arch" type="xml">
+            <form string="KPI Widget">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="dashboard_id"/>
+                            <field name="kpi_definition_id"/>
+                        </group>
+                        <group>
+                            <field name="widget_type"/>
+                            <field name="period_type"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="source_model"/>
+                            <field name="source_id"/>
+                        </group>
+                        <group>
+                            <field name="show_actuals"/>
+                            <field name="sequence"/>
+                        </group>
+                    </group>
+                    <field name="budget_ids" widget="many2many_tags"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

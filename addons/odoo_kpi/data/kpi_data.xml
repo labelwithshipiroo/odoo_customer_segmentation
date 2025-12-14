@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Sample KPI Definitions -->
+        <record id="kpi_revenue" model="kpi.definition">
+            <field name="name">Monthly Revenue</field>
+            <field name="code">REV001</field>
+            <field name="description">Total monthly revenue from all sources</field>
+            <field name="kpi_type">monetary</field>
+            <field name="unit_of_measure">€</field>
+            <field name="calculation_method">direct</field>
+            <field name="aggregation_method">sum</field>
+            <field name="active">True</field>
+            <field name="color">1</field>
+        </record>
+
+        <record id="kpi_profit_margin" model="kpi.definition">
+            <field name="name">Profit Margin</field>
+            <field name="code">MAR001</field>
+            <field name="description">Profit margin percentage</field>
+            <field name="kpi_type">statistical</field>
+            <field name="unit_of_measure">%</field>
+            <field name="calculation_method">computed</field>
+            <field name="formula">(REV001 - COST001) / REV001 * 100</field>
+            <field name="aggregation_method">avg</field>
+            <field name="active">True</field>
+            <field name="color">2</field>
+        </record>
+
+        <record id="kpi_customer_satisfaction" model="kpi.definition">
+            <field name="name">Customer Satisfaction</field>
+            <field name="code">SAT001</field>
+            <field name="description">Average customer satisfaction score</field>
+            <field name="kpi_type">statistical</field>
+            <field name="unit_of_measure">%</field>
+            <field name="calculation_method">direct</field>
+            <field name="aggregation_method">avg</field>
+            <field name="active">True</field>
+            <field name="color">3</field>
+        </record>
+    </data>
+</odoo>

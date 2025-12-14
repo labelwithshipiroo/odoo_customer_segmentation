@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_kpi_value_tree" model="ir.ui.view">
+        <field name="name">kpi.value.tree</field>
+        <field name="model">kpi.value</field>
+        <field name="arch" type="xml">
+            <tree string="KPI Actual Values" editable="bottom">
+                <field name="kpi_definition_id"/>
+                <field name="source_name"/>
+                <field name="period_type"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="value"/>
+                <field name="currency_id" groups="base.group_multi_currency"/>
+                <field name="computed" invisible="1"/>
+                <field name="source_model" invisible="1"/>
+                <field name="source_id" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_kpi_value_form" model="ir.ui.view">
+        <field name="name">kpi.value.form</field>
+        <field name="model">kpi.value</field>
+        <field name="arch" type="xml">
+            <form string="KPI Actual Value">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="kpi_definition_id"/>
+                            <field name="source_model"/>
+                            <field name="source_id"/>
+                            <field name="source_name"/>
+                        </group>
+                        <group>
+                            <field name="period_type"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group>
+                            <field name="value"/>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                        </group>
+                        <group>
+                            <field name="computed"/>
+                            <field name="user_id"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <field name="notes" placeholder="Add any notes or context..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_kpi_value_search" model="ir.ui.view">
+        <field name="name">kpi.value.search</field>
+        <field name="model">kpi.value</field>
+        <field name="arch" type="xml">
+            <search string="Search KPI Values">
+                <field name="kpi_definition_id"/>
+                <field name="source_name"/>
+                <field name="date_from"/>
+
+                <filter string="This Month" name="this_month"
+                        domain="[('date_from', '>=', (context_today() - relativedelta(day=1)).strftime('%%Y-%%m-%%d')),
+                                ('date_from', '<=', (context_today() + relativedelta(day=31)).strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="This Year" name="this_year"
+                        domain="[('date_from', '>=', context_today().strftime('%%Y-01-01')),
+                                ('date_from', '<=', context_today().strftime('%%Y-12-31'))]"/>
+
+                <separator/>
+                <filter string="Computed" name="computed" domain="[('computed', '=', True)]"/>
+                <filter string="Manual" name="manual" domain="[('computed', '=', False)]"/>
+
+                <group expand="0" string="Group By">
+                    <filter string="KPI" name="group_kpi" context="{'group_by':'kpi_definition_id'}"/>
+                    <filter string="Period Type" name="group_period" context="{'group_by':'period_type'}"/>
+                    <filter string="Source" name="group_source" context="{'group_by':'source_name'}"/>
+                </group>
+            </search>
+        </record>
+
+        <!-- Action -->
+        <record id="action_kpi_value" model="ir.actions.act_window">
+            <field name="name">KPI Actual Values</field>
+            <field name="res_model">kpi.value</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </odoo>

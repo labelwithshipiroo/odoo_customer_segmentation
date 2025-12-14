@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_kpi_dashboard_tree" model="ir.ui.view">
+        <field name="name">kpi.dashboard.tree</field>
+        <field name="model">kpi.dashboard</field>
+        <field name="arch" type="xml">
+            <tree string="KPI Dashboards">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="is_default"/>
+                <field name="shared"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_kpi_dashboard_form" model="ir.ui.view">
+        <field name="name">kpi.dashboard.form</field>
+        <field name="model">kpi.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="KPI Dashboard">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group>
+                            <field name="is_default"/>
+                            <field name="shared"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <field name="widget_ids">
+                        <tree editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="kpi_definition_id"/>
+                            <field name="widget_type"/>
+                            <field name="period_type"/>
+                            <field name="show_actuals"/>
+                        </tree>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_kpi_dashboard" model="ir.actions.act_window">
+        <field name="name">KPI Dashboards</field>
+        <field name="res_model">kpi.dashboard</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
