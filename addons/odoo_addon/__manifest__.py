@@ -12,7 +12,6 @@
         'sale',
     ],
     'data': [
-        'models/hello_world.xml',
         'views/hello_world_views.xml',
         'views/hello_world_menu.xml',
         'views/res_partner_views.xml',
