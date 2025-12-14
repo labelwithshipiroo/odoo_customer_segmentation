@@ -70,8 +70,8 @@
                 <field name="budget_name"/>
                 <field name="source_name"/>
                 <field name="date_from"/>
-                <filter string="This Month" name="this_month" domain="[('date_from', '>=', (context_today() - relativedelta(day=1)).strftime('%%Y-%%m-%%d')), ('date_from', '<=', (context_today() + relativedelta(day=31)).strftime('%%Y-%%m-%%d'))]"/>
-                <filter string="This Year" name="this_year" domain="[('date_from', '>=', context_today().strftime('%%Y-01-01')), ('date_from', '<=', context_today().strftime('%%Y-12-31'))]"/>
+                <filter string="This Month" name="this_month" domain="[('date_from', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%%Y-%%m-%%d')), ('date_from', '&lt;=', (context_today() + relativedelta(day=31)).strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="This Year" name="this_year" domain="[('date_from', '&gt;=', context_today().strftime('%%Y-01-01')), ('date_from', '&lt;=', context_today().strftime('%%Y-12-31'))]"/>
                 <group expand="0" string="Group By">
                     <filter string="KPI" name="group_kpi" context="{'group_by':'kpi_definition_id'}"/>
                     <filter string="Budget" name="group_budget" context="{'group_by':'budget_id'}"/>

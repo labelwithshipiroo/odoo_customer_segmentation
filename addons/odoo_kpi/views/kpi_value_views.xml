@@ -71,11 +71,11 @@
                 <field name="date_from"/>
 
                 <filter string="This Month" name="this_month"
-                        domain="[('date_from', '>=', (context_today() - relativedelta(day=1)).strftime('%%Y-%%m-%%d')),
-                                ('date_from', '<=', (context_today() + relativedelta(day=31)).strftime('%%Y-%%m-%%d'))]"/>
+                        domain="[('date_from', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%%Y-%%m-%%d')),
+                                ('date_from', '&lt;=', (context_today() + relativedelta(day=31)).strftime('%%Y-%%m-%%d'))]"/>
                 <filter string="This Year" name="this_year"
-                        domain="[('date_from', '>=', context_today().strftime('%%Y-01-01')),
-                                ('date_from', '<=', context_today().strftime('%%Y-12-31'))]"/>
+                        domain="[('date_from', '&gt;=', context_today().strftime('%%Y-01-01')),
+                                ('date_from', '&lt;=', context_today().strftime('%%Y-12-31'))]"/>
 
                 <separator/>
                 <filter string="Computed" name="computed" domain="[('computed', '=', True)]"/>
