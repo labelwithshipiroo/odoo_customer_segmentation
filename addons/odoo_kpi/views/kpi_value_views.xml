@@ -5,7 +5,7 @@
         <field name="name">kpi.value.tree</field>
         <field name="model">kpi.value</field>
         <field name="arch" type="xml">
-            <tree string="KPI Actual Values" editable="bottom">
+            <list string="KPI Actual Values" editable="bottom">
                 <field name="kpi_definition_id"/>
                 <field name="source_name"/>
                 <field name="period_type"/>
@@ -16,7 +16,7 @@
                 <field name="computed" invisible="1"/>
                 <field name="source_model" invisible="1"/>
                 <field name="source_id" invisible="1"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -93,6 +93,6 @@
         <record id="action_kpi_value" model="ir.actions.act_window">
             <field name="name">KPI Actual Values</field>
             <field name="res_model">kpi.value</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
         </record>
     </odoo>

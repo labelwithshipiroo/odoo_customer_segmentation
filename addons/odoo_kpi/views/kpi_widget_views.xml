@@ -4,15 +4,16 @@
     <record id="view_kpi_widget_tree" model="ir.ui.view">
         <field name="name">kpi.widget.tree</field>
         <field name="model">kpi.widget</field>
+        <field name="type">list</field>
         <field name="arch" type="xml">
-            <tree string="KPI Widgets">
+            <list string="KPI Widgets">
                 <field name="dashboard_id"/>
                 <field name="kpi_definition_id"/>
                 <field name="widget_type"/>
                 <field name="period_type"/>
                 <field name="show_actuals"/>
                 <field name="sequence"/>
-            </tree>
+            </list>
         </field>
     </record>
 

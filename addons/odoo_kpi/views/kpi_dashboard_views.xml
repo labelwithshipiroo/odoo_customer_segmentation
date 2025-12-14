@@ -5,13 +5,13 @@
         <field name="name">kpi.dashboard.tree</field>
         <field name="model">kpi.dashboard</field>
         <field name="arch" type="xml">
-            <tree string="KPI Dashboards">
+            <list string="KPI Dashboards">
                 <field name="name"/>
                 <field name="user_id"/>
                 <field name="is_default"/>
                 <field name="shared"/>
                 <field name="active"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -34,13 +34,13 @@
                         </group>
                     </group>
                     <field name="widget_ids">
-                        <tree editable="bottom">
+                        <list editable="bottom">
                             <field name="sequence" widget="handle"/>
                             <field name="kpi_definition_id"/>
                             <field name="widget_type"/>
                             <field name="period_type"/>
                             <field name="show_actuals"/>
-                        </tree>
+                        </list>
                     </field>
                 </sheet>
             </form>
@@ -51,6 +51,6 @@
     <record id="action_kpi_dashboard" model="ir.actions.act_window">
         <field name="name">KPI Dashboards</field>
         <field name="res_model">kpi.dashboard</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 </odoo>

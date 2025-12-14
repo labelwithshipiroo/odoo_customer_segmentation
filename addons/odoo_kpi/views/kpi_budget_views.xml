@@ -7,14 +7,14 @@
             <field name="model">kpi.budget</field>
             <field name="type">list</field>
             <field name="arch" type="xml">
-                <tree string="KPI Budgets">
+                <list string="KPI Budgets">
                     <field name="name"/>
                     <field name="date_from"/>
                     <field name="date_to"/>
                     <field name="period_type"/>
                     <field name="state"/>
                     <field name="company_id" groups="base.group_multi_company"/>
-                </tree>
+                </list>
             </field>
         </record>
 
@@ -55,13 +55,13 @@
                         <notebook>
                             <page string="Budget Lines" name="budget_lines">
                                 <field name="budget_line_ids">
-                                    <tree editable="bottom">
+                                    <list editable="bottom">
                                         <field name="kpi_definition_id"/>
                                         <field name="date_from"/>
                                         <field name="date_to"/>
                                         <field name="value"/>
                                         <field name="currency_id" invisible="1"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </page>
                         </notebook>

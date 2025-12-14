@@ -5,7 +5,7 @@
         <field name="name">kpi.target.tree</field>
         <field name="model">kpi.target</field>
         <field name="arch" type="xml">
-            <tree string="KPI Targets">
+            <list string="KPI Targets">
                 <field name="kpi_definition_id"/>
                 <field name="period_type"/>
                 <field name="date_from"/>
@@ -14,7 +14,7 @@
                 <field name="direction"/>
                 <field name="warning_threshold"/>
                 <field name="critical_threshold"/>
-            </tree>
+            </list>
         </field>
     </record>
 

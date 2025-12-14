@@ -5,12 +5,12 @@
         <field name="name">kpi.source.tree</field>
         <field name="model">kpi.source</field>
         <field name="arch" type="xml">
-            <tree string="KPI Sources">
+            <list string="KPI Sources">
                 <field name="kpi_id"/>
                 <field name="source_model"/>
                 <field name="is_global"/>
                 <field name="source_filter"/>
-            </tree>
+            </list>
         </field>
     </record>
 
