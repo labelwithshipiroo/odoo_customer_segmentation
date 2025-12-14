@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Extend the sale order (quotation) form to add KPI and Targets tab -->
+        <record id="view_sale_order_form_kpi" model="ir.ui.view">
+            <field name="name">sale.order.form.kpi</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="KPI's and Targets" name="kpi_targets">
+                        <!-- Empty content - placeholder for future functionality -->
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
