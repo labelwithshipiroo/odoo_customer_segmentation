@@ -5,6 +5,7 @@
         <record id="kpi_budget_tree_view" model="ir.ui.view">
             <field name="name">kpi.budget.tree</field>
             <field name="model">kpi.budget</field>
+            <field name="type">list</field>
             <field name="arch" type="xml">
                 <tree string="KPI Budgets">
                     <field name="name"/>
@@ -94,7 +95,7 @@
         <record id="kpi_budget_action" model="ir.actions.act_window">
             <field name="name">KPI Budgets</field>
             <field name="res_model">kpi.budget</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
             <field name="search_view_id" ref="kpi_budget_search_view"/>
             <field name="help">Create and manage KPI budgets for forecasting and planning.</field>
         </record>
