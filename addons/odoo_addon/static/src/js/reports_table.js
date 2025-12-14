@@ -29,7 +29,7 @@ odoo.define('odoo_addon.reports_table', function (require) {
             // Show loading state
             $container.html('<div class="text-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div><p>Loading reports data...</p></div>');
 
-            fetch('https://localhost:3002/odoo/reports/list', {
+            fetch('https://192.168.0.212:3002/odoo/reports/list', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
