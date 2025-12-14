@@ -22,6 +22,11 @@
         'views/account_move_views.xml',
         'views/sale_order_views.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'odoo_addon/static/src/js/reports_table.js',
+        ],
+    },
     'images': ['static/description/icon.png'],
     'installable': True,
     'application': True,
