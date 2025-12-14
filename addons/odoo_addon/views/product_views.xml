@@ -3,9 +3,9 @@
     <data>
         <!-- Extend the product form to add KPI and Targets tab -->
         <record id="view_product_form_kpi" model="ir.ui.view">
-            <field name="name">product.product.form.kpi</field>
-            <field name="model">product.product</field>
-            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="name">product.template.form.kpi</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//notebook" position="inside">
                     <page string="KPI's and Targets" name="kpi_targets">
