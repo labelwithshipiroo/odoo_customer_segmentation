@@ -20,12 +20,7 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
-                        <group>
-                            <field name="x_name" />
-                        </group>
-                        <group>
-                            <field name="x_description" />
-                        </group>
+
                         <group string="Reports Data">
                             <div class="reports-table-container"
                                 style="width: 100%; min-height: 200px;">
@@ -37,11 +32,15 @@
                                 </div>
                             </div>
                         </group>
-                    </sheet>
-                    <header>
+                        <group>
+                            <field name="x_name" />
+                        </group>
+                        <group>
+                            <field name="x_description" />
+                        </group>
                         <button string="Save" type="object" name="write" class="btn-primary" />
                         <button string="Discard" class="btn-secondary" />
-                    </header>
+                    </sheet>
                 </form>
             </field>
         </record>
