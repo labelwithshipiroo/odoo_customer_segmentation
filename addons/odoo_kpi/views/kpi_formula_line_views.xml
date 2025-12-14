@@ -9,9 +9,9 @@
                 <field name="sequence" widget="handle"/>
                 <field name="operator"/>
                 <field name="operand_type"/>
-                <field name="operand_kpi_id" attrs="{'invisible': [('operand_type', '!=', 'kpi')], 'required': [('operand_type', '=', 'kpi')]}" />
-                <field name="operand_value" attrs="{'invisible': [('operand_type', '!=', 'constant')], 'required': [('operand_type', '=', 'constant')]}" />
-                <field name="operand_field" attrs="{'invisible': [('operand_type', '!=', 'field')], 'required': [('operand_type', '=', 'field')]}" />
+                <field name="operand_kpi_id" invisible="operand_type != 'kpi'" required="operand_type == 'kpi'" />
+                <field name="operand_value" invisible="operand_type != 'constant'" required="operand_type == 'constant'" />
+                <field name="operand_field" invisible="operand_type != 'field'" required="operand_type == 'field'" />
             </list>
         </field>
     </record>

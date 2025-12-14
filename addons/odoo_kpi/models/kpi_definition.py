@@ -58,7 +58,7 @@ class KPIDefinition(models.Model):
             'type': 'ir.actions.act_window',
             'name': f'Values for {self.name}',
             'res_model': 'kpi.value',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('kpi_definition_id', '=', self.id)],
             'context': {'default_kpi_definition_id': self.id},
         }
@@ -68,7 +68,7 @@ class KPIDefinition(models.Model):
             'type': 'ir.actions.act_window',
             'name': f'Budgets for {self.name}',
             'res_model': 'kpi.budget.line',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('kpi_definition_id', '=', self.id)],
             'context': {'default_kpi_definition_id': self.id},
         }

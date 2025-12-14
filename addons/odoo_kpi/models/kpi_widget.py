@@ -31,6 +31,6 @@ class KPIWidget(models.Model):
     ], string='Period Type', default='monthly')
 
     show_actuals = fields.Boolean(string='Show Actuals', default=True)
-    budget_ids = fields.Many2many('account.report.budget', string='Compare Budgets')
+    budget_ids = fields.Many2many('kpi.budget', string='Compare Budgets')
 
     sequence = fields.Integer(string='Sequence', default=10)
