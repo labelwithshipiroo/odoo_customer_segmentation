@@ -1,6 +1,6 @@
 # Errors Encountered and Lessons Learned
 
-This document summarizes the errors encountered during the Odoo module installation process and the fixes applied, along with key learnings for Odoo development.
+This document summarizes the errors encountered during the Odoo 18 module installation process and the fixes applied, along with key learnings for Odoo development.
 
 ## 1. Related Field Reference Error
 
@@ -72,7 +72,7 @@ Since 17.0, the "attrs" and "states" attributes are no longer used.
 ```
 
 **Cause:**
-- Odoo 17 removed the `states` attribute from buttons and fields.
+- Odoo 17+ removed the `states` attribute from buttons and fields.
 - The module used `states="draft"` etc. on buttons.
 
 **Fix Applied:**
@@ -118,4 +118,4 @@ External ID not found in the system: odoo_kpi.kpi_main_menu
 
 6. **Documentation:** Keep track of changes and reasons for future maintenance.
 
-This module is now compatible with Odoo 17 and should install without these errors.
+This module is now compatible with Odoo 17+ (including Odoo 18) and should install without these errors.
