@@ -213,4 +213,27 @@ lxml.etree.XMLSyntaxError: Unescaped '<' not allowed in attributes values
 
 6. **Documentation:** Keep track of changes and reasons for future maintenance.
 
+## 11. Circular Import When Extending External Models
+
+**Error:**
+```
+ImportError: cannot import name 'product_extension' from partially initialized module 'odoo.addons.odoo_kpi.models'
+```
+
+**Cause:**
+- Attempted to create a model extension file (product_extension.py) that imported product model.
+- The product module itself may indirectly depend on odoo_kpi, creating a circular dependency.
+- This happens when trying to extend external models (like product.product) via inheritance in the same module initialization.
+
+**Fix Applied:**
+- Removed the model extension file and computed field approach.
+- Used view inheritance with action buttons instead to display KPI data.
+- Action buttons provide clean navigation to KPI values without requiring model-level relationships.
+
+**Lesson Learned:**
+- Avoid importing external models in model extension files during module initialization.
+- Use view inheritance with action buttons for polymorphic relationships instead of computed fields.
+- When extending external models, prefer XML-based approaches (view inheritance) over Python model extensions to avoid import conflicts.
+- Always keep model dependencies unidirectional when possible.
+
 This module is now compatible with Odoo 17+ (including Odoo 18) and should install without these errors.
