@@ -18,7 +18,7 @@
             <field name="name">x_hello_world.form</field>
             <field name="model">x_hello_world</field>
             <field name="arch" type="xml">
-                <form js_class="reports_table_form">
+                <form>
                     <header>
                         <button string="Save" type="object" name="write" class="btn-primary"/>
                         <button string="Discard" class="btn-secondary"/>
