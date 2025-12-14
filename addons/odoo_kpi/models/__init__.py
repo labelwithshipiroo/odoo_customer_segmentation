@@ -1,3 +1,4 @@
+from . import kpi_budget
 from . import kpi_definition
 from . import kpi_source
 from . import kpi_value

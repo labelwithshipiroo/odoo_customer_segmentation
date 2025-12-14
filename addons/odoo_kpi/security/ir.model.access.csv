@@ -1,4 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_kpi_budget_user,kpi.budget user,model_kpi_budget,base.group_user,1,0,0,0
+access_kpi_budget_manager,kpi.budget manager,model_kpi_budget,kpi.group_kpi_manager,1,1,1,1
 access_kpi_definition_user,kpi.definition user,model_kpi_definition,base.group_user,1,0,0,0
 access_kpi_definition_manager,kpi.definition manager,model_kpi_definition,kpi.group_kpi_manager,1,1,1,1
 access_kpi_value_user,kpi.value user,model_kpi_value,base.group_user,1,0,0,0
