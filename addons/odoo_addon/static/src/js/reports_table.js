@@ -1,7 +1,8 @@
-odoo.define('odoo_addon.reports_table', ['jquery'], function ($) {
+odoo.define('odoo_addon.reports_table', [], function () {
     'use strict';
 
     // Use a simple approach that doesn't depend on specific Odoo modules
+    // jQuery should be available globally in Odoo
     $(document).ready(function() {
         // Check if we're on the x_hello_world form by looking for the container
         var checkForContainer = function() {
