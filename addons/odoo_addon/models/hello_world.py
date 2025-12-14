@@ -11,9 +11,3 @@ class HelloWorld(models.Model):
     def write(self, vals):
         """Override write method to handle saving"""
         return super(HelloWorld, self).write(vals)
-
-    def cancel(self):
-        """Cancel method for discarding changes"""
-        # This method is called when the Discard button is clicked
-        # For a simple model, we don't need to do anything special
-        pass

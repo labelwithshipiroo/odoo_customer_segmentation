@@ -21,7 +21,7 @@
                 <form>
                     <header>
                         <button string="Save" type="object" name="write" class="btn-primary"/>
-                        <button string="Discard" type="object" name="cancel" class="btn-secondary"/>
+                        <button string="Discard" class="btn-secondary"/>
                     </header>
                     <sheet>
                         <group>
