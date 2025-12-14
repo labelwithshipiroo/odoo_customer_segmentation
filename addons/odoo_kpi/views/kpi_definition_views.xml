@@ -36,7 +36,7 @@
 
                     <widget name="web_ribbon" title="Archived"
                             bg_color="bg-danger"
-                            attrs="{'invisible': [('active', '=', True)]}"/>
+                            invisible="active == True"/>
 
                     <group>
                         <group>
@@ -58,7 +58,7 @@
                     </group>
 
                     <notebook>
-                        <page string="Formula" attrs="{'invisible': [('calculation_method', '!=', 'computed')]}">
+                        <page string="Formula" invisible="calculation_method != 'computed'">
                                 <group>
                                     <field name="formula" placeholder="e.g., (REV001 - COST001) / REV001 * 100"/>
                                 </group>
@@ -68,14 +68,14 @@
                                         <field name="operator"/>
                                         <field name="operand_type"/>
                                         <field name="operand_kpi_id"
-                                               attrs="{'invisible': [('operand_type', '!=', 'kpi')],
-                                                       'required': [('operand_type', '=', 'kpi')]}" />
+                                               invisible="operand_type != 'kpi'"
+                                               required="operand_type == 'kpi'" />
                                         <field name="operand_value"
-                                               attrs="{'invisible': [('operand_type', '!=', 'constant')],
-                                                       'required': [('operand_type', '=', 'constant')]}" />
+                                               invisible="operand_type != 'constant'"
+                                               required="operand_type == 'constant'" />
                                         <field name="operand_field"
-                                               attrs="{'invisible': [('operand_type', '!=', 'field')],
-                                                       'required': [('operand_type', '=', 'field')]}" />
+                                               invisible="operand_type != 'field'"
+                                               required="operand_type == 'field'" />
                                     </list>
                                 </field>
                         </page>
