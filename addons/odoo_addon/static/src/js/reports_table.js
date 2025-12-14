@@ -1,31 +1,20 @@
 odoo.define('odoo_addon.reports_table', function (require) {
     'use strict';
 
-    var core = require('web.core');
-
-    // Extend the FormRenderer to add reports functionality for x_hello_world model
-    var FormRenderer = require('web.FormRenderer');
-    FormRenderer.include({
-        /**
-         * @override
-         */
-        start: function () {
-            var self = this;
-            return this._super.apply(this, arguments).then(function () {
-                // Only load reports data for x_hello_world model
-                if (self.state && self.state.model === 'x_hello_world') {
-                    self._loadReportsData();
-                }
-            });
-        },
-
-        _loadReportsData: function () {
-            var self = this;
-            var $container = this.$el.find('.reports-table-container');
-            if ($container.length === 0) {
-                return;
+    // Use a simple approach that doesn't depend on specific Odoo modules
+    $(document).ready(function() {
+        // Check if we're on the x_hello_world form by looking for the container
+        var checkForContainer = function() {
+            var $container = $('.reports-table-container');
+            if ($container.length > 0 && $container.is(':visible')) {
+                loadReportsData($container);
+            } else {
+                // Check again in a short delay
+                setTimeout(checkForContainer, 500);
             }
+        };
 
+        var loadReportsData = function($container) {
             // Show loading state
             $container.html('<div class="text-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div><p>Loading reports data...</p></div>');
 
@@ -42,17 +31,17 @@ odoo.define('odoo_addon.reports_table', function (require) {
                 return response.json();
             })
             .then(function (data) {
-                self._renderReportsTable(data, $container);
+                renderReportsTable(data, $container);
             })
             .catch(function (error) {
                 console.error('Error fetching reports data:', error);
-                self._renderErrorMessage('Failed to load reports data. Please check the console for details.', $container);
+                renderErrorMessage('Failed to load reports data. Please check the console for details.', $container);
             });
-        },
+        };
 
-        _renderReportsTable: function (data, $container) {
+        var renderReportsTable = function(data, $container) {
             if (!data.success || !data.reports) {
-                this._renderErrorMessage('Invalid data format received from API', $container);
+                renderErrorMessage('Invalid data format received from API', $container);
                 return;
             }
 
@@ -86,10 +75,13 @@ odoo.define('odoo_addon.reports_table', function (require) {
 
             html += '</tbody></table></div>';
             $container.html(html);
-        },
+        };
 
-        _renderErrorMessage: function (message, $container) {
+        var renderErrorMessage = function(message, $container) {
             $container.html('<div class="alert alert-danger">' + message + '</div>');
-        },
+        };
+
+        // Start checking for the container
+        checkForContainer();
     });
 });
