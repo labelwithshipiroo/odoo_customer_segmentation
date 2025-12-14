@@ -2,6 +2,8 @@
     'name': 'KPI and Targets',
     'version': '1.0.0',
     'category': 'Extra Tools',
+    'summary': 'Manage KPI and Targets',
+    'description': '',
     'author': 'YannickCuvelie',
     'license': 'LGPL-3',
     'depends': [
@@ -19,6 +21,7 @@
         'views/account_move_views.xml',
         'views/sale_order_views.xml',
     ],
+    'images': ['static/description/icon.png'],
     'installable': True,
     'application': True,
 }
