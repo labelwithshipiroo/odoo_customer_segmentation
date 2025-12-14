@@ -5,6 +5,6 @@
         <menuitem id="menu_kpi_root" name="KPI & Targets" web_icon="odoo_addon,static/description/icon.png"/>
 
         <!-- Hello World Menu Item -->
-        <menuitem id="menu_hello_world" name="Hello World" parent="menu_kpi_root" action="odoo_addon.action_hello_world" sequence="10"/>
+        <menuitem id="menu_hello_world" name="Hello World" parent="menu_kpi_root" action="odoo_addon.action_x_hello_world" sequence="10"/>
     </data>
 </odoo>
