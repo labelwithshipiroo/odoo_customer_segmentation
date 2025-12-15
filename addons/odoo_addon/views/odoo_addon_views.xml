@@ -61,6 +61,15 @@
             <field name="arch" type="xml">
                 <list>
                     <field name="name" />
+                    <div class="grouping-container"
+                        style="width: 100%; min-height: 200px; margin-top: 20px;">
+                        <div class="text-center">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <p>Loading grouping data...</p>
+                        </div>
+                    </div>
                 </list>
             </field>
         </record>
@@ -72,17 +81,6 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
-                        <group>
-                            <div class="grouping-container"
-                                style="width: 100%; min-height: 200px;">
-                                <div class="text-center">
-                                    <div class="spinner-border" role="status">
-                                        <span class="sr-only">Loading...</span>
-                                    </div>
-                                    <p>Loading grouping data...</p>
-                                </div>
-                            </div>
-                        </group>
                         <group>
                             <field name="name" />
                         </group>
