@@ -8,6 +8,7 @@ import { WhiteboardElement } from "./whiteboard_element";
 class OdooBoard extends Component {
     static template = "whiteboard.Board";
     static components = { WhiteboardElement };
+    static props = ["action", "type"];
 
     setup() {
         const rpc = useService("rpc");
