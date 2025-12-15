@@ -58,8 +58,13 @@ export class WhiteboardView extends Component {
      */
     _createWhiteboardApp() {
         const container = this.containerRef.el;
-        if (!container) return;
+        console.log('Container element:', container);
+        if (!container) {
+            console.error('Container element not found, cannot create whiteboard app');
+            return;
+        }
 
+        console.log('Creating WhiteboardApp instance');
         // Initialize whiteboard app
         this.whiteboardApp = new WhiteboardApp(container, {
             boardId: this.state.boardId,
@@ -70,6 +75,7 @@ export class WhiteboardView extends Component {
             autoSave: true,
         });
 
+        console.log('WhiteboardApp created:', this.whiteboardApp);
         // Set up RPC function for the whiteboard
         this.whiteboardApp.setRpc(this._rpc.bind(this));
     }
