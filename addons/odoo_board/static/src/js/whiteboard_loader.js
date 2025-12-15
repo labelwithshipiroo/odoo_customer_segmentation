@@ -22,7 +22,6 @@ export class WhiteboardView extends Component {
         this.orm = useService("orm");
         this.notification = useService("notification");
         this.action = useService("action");
-        this.user = useService("user");
         
         this.state = useState({
             loading: true,
