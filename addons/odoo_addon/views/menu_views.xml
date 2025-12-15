@@ -25,10 +25,13 @@
     </record>
 
     <!-- Account Custom Table Action -->
-    <record id="action_account_table" model="ir.actions.act_url">
+    <record id="action_account_table" model="ir.actions.act_window">
         <field name="name">Account Custom Table</field>
-        <field name="url">/odoo_addon/account_table</field>
-        <field name="target">self</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">x_hello_world</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="odoo_addon.view_account_table_form" />
+        <field name="target">current</field>
     </record>
 
     <menuitem id="menu_hello_world" name="Hello World" parent="menu_kpi_root" action="odoo_addon.action_x_hello_world" sequence="10"/>

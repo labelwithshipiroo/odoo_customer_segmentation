@@ -1,1 +1,1 @@
-from . import test_page, account_table
+from . import test_page

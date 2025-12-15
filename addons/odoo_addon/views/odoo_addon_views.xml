@@ -54,6 +54,39 @@
             <field name="view_id" ref="view_x_hello_world_list" />
         </record>
 
+        <!-- Account Table Form View -->
+        <record id="view_account_table_form" model="ir.ui.view">
+            <field name="name">account.table.form</field>
+            <field name="model">x_hello_world</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <div class="account-table-container"
+                                style="width: 100%; min-height: 200px;">
+                                <div class="text-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    <p>Loading accounts...</p>
+                                </div>
+                            </div>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Account Table Action -->
+        <record id="action_account_table" model="ir.actions.act_window">
+            <field name="name">Account Custom Table</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">x_hello_world</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_account_table_form" />
+            <field name="target">current</field>
+        </record>
+
         <!-- Grouping List View -->
         <record id="view_x_grouping_list" model="ir.ui.view">
             <field name="name">x_grouping.list</field>
