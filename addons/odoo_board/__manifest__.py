@@ -18,6 +18,9 @@
          "web.assets_backend": [
             "odoo_board/static/src/**/*",
         ],
+        "odoo_board.assets": [
+            "odoo_board/static/src/odoo_board/**/*",
+        ],
     },
     "license": "Other proprietary",
     "application": True,
