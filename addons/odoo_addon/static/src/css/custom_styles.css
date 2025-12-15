@@ -363,6 +363,23 @@
     min-height: 100vh !important;
 }
 
+/* Style for the blank test page */
+.test-blank-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: white;
+    margin: 0;
+    padding: 0;
+}
+
+.test-blank-page-container h1 {
+    color: #333;
+    font-size: 2rem;
+    font-weight: normal;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .reports-table-container {
