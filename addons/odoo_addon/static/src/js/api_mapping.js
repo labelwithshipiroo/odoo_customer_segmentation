@@ -1,7 +1,5 @@
-odoo.define('odoo_addon.api_mapping', function (require) {
+odoo.define('odoo_addon.api_mapping', function () {
     "use strict";
-
-    var rpc = require('web.rpc');
 
     function replaceApiMappingField() {
         // Form view: replace input[name="x_api_mapping"] with select populated from external API

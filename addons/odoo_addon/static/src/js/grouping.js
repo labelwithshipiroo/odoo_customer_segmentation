@@ -1,4 +1,4 @@
-odoo.define('odoo_addon.grouping', [], function () {
+odoo.define('odoo_addon.grouping', ['web.rpc'], function (rpc) {
     'use strict';
 
     function initializeGrouping() {
@@ -52,24 +52,11 @@ odoo.define('odoo_addon.grouping', [], function () {
             container.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div><p>Loading grouping data...</p></div>';
 
             // Fetch journal accounts from Odoo
-            fetch('/web/dataset/call_kw', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    jsonrpc: '2.0',
-                    method: 'call',
-                    params: {
-                        model: 'account.account',
-                        method: 'search_read',
-                        args: [[], ['code', 'name']],
-                        kwargs: {}
-                    }
-                })
-            })
-            .then(function (response) {
-                return response.json();
+            rpc.query({
+                model: 'account.account',
+                method: 'search_read',
+                args: [[], ['code', 'name']],
+                kwargs: {}
             })
             .then(function (odooData) {
                 // Fetch unified accounts from API
@@ -83,7 +70,7 @@ odoo.define('odoo_addon.grouping', [], function () {
                     return apiResponse.json();
                 })
                 .then(function (apiData) {
-                    renderGroupingTable(odooData.result, apiData, container);
+                    renderGroupingTable(odooData, apiData, container);
                 });
             })
             .catch(function (error) {
