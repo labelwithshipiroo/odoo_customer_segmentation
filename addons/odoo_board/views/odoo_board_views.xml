@@ -11,9 +11,9 @@
                 <sheet>
                     <group>
                         <field name="name"/>
+                        <field name="description"/>
                         <field name="user_id"/>
-                        <field name="shared"/>
-                        <field name="active"/>
+                        <field name="thumbnail" widget="image"/>
                     </group>
                 </sheet>
             </form>
@@ -25,13 +25,13 @@
         <field name="name">whiteboard.board.list</field>
         <field name="model">whiteboard.board</field>
         <field name="arch" type="xml">
-            <list string="Whiteboards" editable="top">
+            <list string="Whiteboards">
                 <field name="name"/>
+                <field name="description"/>
                 <field name="user_id" readonly="1"/>
-                <field name="shared"/>
+                <field name="element_count" readonly="1"/>
                 <field name="write_date" readonly="1"/>
-                <button name="action_whiteboard_canvas" type="action" string="View" class="btn btn-sm btn-primary"/>
-                <button name="action_whiteboard_canvas" type="action" string="Edit" class="btn btn-sm btn-secondary"/>
+                <button name="action_whiteboard_canvas" type="action" string="Open" class="btn btn-sm btn-primary"/>
             </list>
         </field>
     </record>
