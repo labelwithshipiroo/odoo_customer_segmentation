@@ -4,7 +4,7 @@ odoo.define('odoo_addon.account_mapping', [], function () {
     function replaceApiMappingInList() {
         console.log('Replacing API mapping in list');
         // List view: replace x_api_mapping cells with select populated from external API
-        var cells = document.querySelectorAll('td[data-field="x_api_mapping"]');
+        var cells = document.querySelectorAll('td.o_data_cell[data-field="x_api_mapping"]');
         console.log('Found cells:', cells.length);
         if (!cells.length) {
             return;
