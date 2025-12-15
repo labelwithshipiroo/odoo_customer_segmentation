@@ -54,6 +54,7 @@
         <field name="res_model">x_hello_world</field>
         <field name="view_mode">form</field>
         <field name="view_id" ref="view_account_table_form" />
+        <field name="res_id">1</field>
         <field name="target">current</field>
     </record>
 
