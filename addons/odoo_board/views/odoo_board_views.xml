@@ -5,11 +5,4 @@
         <field name="res_model">whiteboard.board</field>
         <field name="view_mode">list,form</field>
     </record>
-
-    <menuitem id="menu_whiteboard_root"
-              name="Whiteboard"
-              parent=""
-              web_icon="odoo_board,static/description/icon.svg"
-              action="action_whiteboard_boards"
-              sequence="50"/>
 </odoo>
