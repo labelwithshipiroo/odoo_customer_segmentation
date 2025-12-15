@@ -31,7 +31,7 @@
                 <field name="shared"/>
                 <field name="write_date"/>
                 <button name="action_open_canvas" type="object" string="View" class="btn btn-sm btn-primary"/>
-                <button name="%(odoo_board.action_whiteboard_board)d" type="action" string="Edit" class="btn btn-sm btn-secondary" context="{'form_view_ref': 'odoo_board.view_whiteboard_form'}"/>
+                <button name="action_edit_whiteboard" type="object" string="Edit" class="btn btn-sm btn-secondary"/>
             </list>
         </field>
     </record>

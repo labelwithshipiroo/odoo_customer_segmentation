@@ -37,6 +37,19 @@ class Whiteboard(models.Model):
             'context': {'board_id': self.id},
         }
 
+    def action_edit_whiteboard(self):
+        """Open the whiteboard form for editing"""
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Edit Whiteboard',
+            'res_model': 'whiteboard.board',
+            'res_id': self.id,
+            'view_mode': 'form',
+            'view_id': self.env.ref('odoo_board.view_whiteboard_form').id,
+            'target': 'new',
+        }
+
 
 class WhiteboardElement(models.Model):
     _name = 'whiteboard.element'
