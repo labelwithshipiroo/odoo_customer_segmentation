@@ -24,8 +24,16 @@
         <field name="view_mode">list,form</field>
     </record>
 
+    <!-- Account Custom Table Action -->
+    <record id="action_account_table" model="ir.actions.act_url">
+        <field name="name">Account Custom Table</field>
+        <field name="url">/odoo_addon/account_table</field>
+        <field name="target">self</field>
+    </record>
+
     <menuitem id="menu_hello_world" name="Hello World" parent="menu_kpi_root" action="odoo_addon.action_x_hello_world" sequence="10"/>
     <menuitem id="menu_grouping" name="Grouping" parent="menu_kpi_root" action="odoo_addon.action_x_grouping" sequence="20"/>
     <menuitem id="menu_test" name="Test Blank Page" parent="menu_kpi_root" action="odoo_addon.action_test_page_direct" sequence="30"/>
     <menuitem id="menu_accounts" name="Accounts List" parent="menu_kpi_root" action="odoo_addon.action_accounts_list" sequence="40"/>
+    <menuitem id="menu_account_table" name="Account Custom Table" parent="menu_kpi_root" action="odoo_addon.action_account_table" sequence="50"/>
 </odoo>
