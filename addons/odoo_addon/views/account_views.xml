@@ -8,7 +8,7 @@
       <field name="model">account.account</field>
       <field name="inherit_id" ref="account.view_account_list"/>
       <field name="arch" type="xml">
-        <xpath expr="//field[@name='name']" position="after">
+        <xpath expr="//tree" position="inside">
           <field name="x_api_mapping" string="API mapping"/>
         </xpath>
       </field>
