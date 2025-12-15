@@ -118,3 +118,4 @@ class OdooBoard extends Component {
 }
 
 registry.category("lazy_components").add("whiteboard_canvas", OdooBoard);
+registry.category("actions").add("whiteboard_canvas", OdooBoard);
