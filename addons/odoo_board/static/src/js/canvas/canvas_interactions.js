@@ -103,16 +103,24 @@ export class CanvasInteractions {
         }
         
         console.log('Attaching event listeners to container');
-        alert('About to attach mousedown listener');
         
-        // Add test listener to check if events reach container
-        this.container.addEventListener('mousedown', (e) => {
-            alert('TEST: mousedown event reached container! Target: ' + e.target.className);
-        });
+        // Attach listeners to document instead of container to catch all events
+        // This bypasses the pointer-events CSS issue
+        document.addEventListener('mousedown', (e) => {
+            // Check if the click is within our canvas container
+            const rect = this.container.getBoundingClientRect();
+            if (e.clientX >= rect.left && e.clientX <= rect.right &&
+                e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                console.log('Document mousedown detected on canvas');
+                alert('TEST: Document mousedown reached! Will call _onMouseDown');
+                this._onMouseDown(e);
+            }
+        }, true); // Use capture phase
+        console.log('Attached document mousedown listener in capture phase');
         
-        // Mouse events
-        this.container.addEventListener('mousedown', this._onMouseDown);
-        console.log('Attached mousedown listener');
+        // Mouse events on container (backup)
+        this.container.addEventListener('mousedown', this._onMouseDown, true);
+        console.log('Attached container mousedown listener');
         this.container.addEventListener('mousemove', this._onMouseMove);
         console.log('Attached mousemove listener');
         this.container.addEventListener('mouseup', this._onMouseUp);
