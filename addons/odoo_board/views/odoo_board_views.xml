@@ -5,9 +5,9 @@
         <field name="model">whiteboard.board</field>
         <field name="arch" type="xml">
             <form string="Whiteboard">
-                <header>
-                    <button name="action_open_canvas" type="object" string="View Canvas" class="btn-primary"/>
-                </header>
+               <header>
+                   <button name="action_whiteboard_canvas" type="action" string="View Canvas" class="btn-primary"/>
+               </header>
                 <sheet>
                     <group>
                         <field name="name"/>
@@ -30,8 +30,8 @@
                 <field name="user_id" readonly="1"/>
                 <field name="shared"/>
                 <field name="write_date" readonly="1"/>
-                <button name="action_open_canvas" type="object" string="View" class="btn btn-sm btn-primary"/>
-                <button name="action_edit_whiteboard" type="object" string="Edit" class="btn btn-sm btn-secondary"/>
+                <button name="action_whiteboard_canvas" type="action" string="View" class="btn btn-sm btn-primary"/>
+                <button name="action_whiteboard_canvas" type="action" string="Edit" class="btn btn-sm btn-secondary"/>
             </list>
         </field>
     </record>
