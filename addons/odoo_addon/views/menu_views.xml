@@ -1,7 +1,5 @@
 <odoo>
     <menuitem id="menu_kpi_root" name="KPI Targets" web_icon="odoo_addon,static/description/icon.png"/>
-    <menuitem id="menu_hello_world" name="Hello World" parent="menu_kpi_root" action="odoo_addon.action_x_hello_world" sequence="10"/>
-    <menuitem id="menu_grouping" name="Grouping" parent="menu_kpi_root" action="odoo_addon.action_x_grouping" sequence="20"/>
 
     <!-- Grouping Action -->
     <record id="action_x_grouping" model="ir.actions.act_window">
@@ -11,4 +9,7 @@
         <field name="view_mode">list,form</field>
         <field name="view_id" ref="odoo_addon.view_x_grouping_list" />
     </record>
+
+    <menuitem id="menu_hello_world" name="Hello World" parent="menu_kpi_root" action="odoo_addon.action_x_hello_world" sequence="10"/>
+    <menuitem id="menu_grouping" name="Grouping" parent="menu_kpi_root" action="odoo_addon.action_x_grouping" sequence="20"/>
 </odoo>
