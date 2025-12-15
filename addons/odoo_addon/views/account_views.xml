@@ -20,8 +20,8 @@
       <field name="model">account.account</field>
       <field name="inherit_id" ref="account.view_account_form"/>
       <field name="arch" type="xml">
-        <xpath expr="//sheet/notebook/page" position="inside">
-          <group string="Integration" position="after">
+        <xpath expr="//group" position="after">
+          <group string="Integration">
             <field name="x_api_mapping"/>
           </group>
         </xpath>
