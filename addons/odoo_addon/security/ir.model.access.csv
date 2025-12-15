@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_x_hello_world,access_x_hello_world,model_x_hello_world,,1,1,1,1
 access_x_grouping,access_x_grouping,model_x_grouping,,1,1,1,1
+access_unified_account,access_unified_account,model_unified_account,,1,1,1,1
