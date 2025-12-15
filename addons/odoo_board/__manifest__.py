@@ -17,7 +17,6 @@
     'data': [
         'security/ir.model.access.csv',
         'views/odoo_board_views.xml',
-        'views/whiteboard_canvas.xml',
     ],
     'assets': {
          "web.assets_backend": [
