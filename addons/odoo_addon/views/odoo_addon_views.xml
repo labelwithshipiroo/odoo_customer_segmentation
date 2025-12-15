@@ -53,5 +53,53 @@
             <field name="view_mode">list,form</field>
             <field name="view_id" ref="view_x_hello_world_list" />
         </record>
+
+        <!-- Grouping List View -->
+        <record id="view_x_grouping_list" model="ir.ui.view">
+            <field name="name">x_grouping.list</field>
+            <field name="model">x_grouping</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name" />
+                </list>
+            </field>
+        </record>
+
+        <!-- Grouping Form View -->
+        <record id="view_x_grouping_form" model="ir.ui.view">
+            <field name="name">x_grouping.form</field>
+            <field name="model">x_grouping</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <div class="grouping-container"
+                                style="width: 100%; min-height: 200px;">
+                                <div class="text-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    <p>Loading grouping data...</p>
+                                </div>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="name" />
+                        </group>
+                        <button string="Save" type="object" name="write" class="btn-primary" />
+                        <button string="Discard" class="btn-secondary" />
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Grouping Action -->
+        <record id="action_x_grouping" model="ir.actions.act_window">
+            <field name="name">Grouping</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">x_grouping</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="view_x_grouping_list" />
+        </record>
     </data>
 </odoo>

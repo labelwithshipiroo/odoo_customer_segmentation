@@ -26,6 +26,7 @@
         'web.assets_backend': [
             'https://cdn.jsdelivr.net/npm/chart.js',
             'odoo_addon/static/src/js/reports_table.js',
+            'odoo_addon/static/src/js/grouping.js',
             'odoo_addon/static/src/css/custom_styles.css',
         ],
     },
