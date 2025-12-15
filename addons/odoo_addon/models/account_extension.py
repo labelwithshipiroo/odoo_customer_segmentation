@@ -7,14 +7,17 @@ class AccountAccount(models.Model):
 
     x_api_mapping = fields.Many2one('unified.account', string="API Mapping")
 
-    @api.onchange('x_api_mapping')
-    def _onchange_x_api_mapping(self):
-        if self.x_api_mapping:
-            try:
-                requests.post('https://192.168.0.212:3002/odoo/accounts/map', json={
-                    'account_id': self.id,
-                    'unified_id': self.x_api_mapping.api_id,
-                    'account_code': self.code
-                }, timeout=5)
-            except:
-                pass  # Ignore errors
+    def write(self, vals):
+        res = super(AccountAccount, self).write(vals)
+        if 'x_api_mapping' in vals and vals['x_api_mapping']:
+            unified = self.env['unified.account'].browse(vals['x_api_mapping'])
+            if unified:
+                try:
+                    requests.post('https://192.168.0.212:3002/odoo/accounts/map', json={
+                        'account_id': self.id,
+                        'unified_id': unified.api_id,
+                        'account_code': self.code
+                    }, timeout=5)
+                except:
+                    pass  # Ignore errors
+        return res
