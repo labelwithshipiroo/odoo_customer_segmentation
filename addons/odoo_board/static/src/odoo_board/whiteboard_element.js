@@ -3,7 +3,7 @@
 import { Component, useState } from "@odoo/owl";
 
 class WhiteboardElement extends Component {
-    static template = "OdooBoard.Element";
+    static template = "whiteboard.Element";
 
     setup() {
         this.state = useState({

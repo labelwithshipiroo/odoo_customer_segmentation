@@ -6,7 +6,7 @@ import { useService } from "@web/core/utils/hooks";
 import { WhiteboardElement } from "./whiteboard_element";
 
 class OdooBoard extends Component {
-    static template = "OdooBoard.Board";
+    static template = "whiteboard.Board";
     static components = { WhiteboardElement };
     static props = ["action"];
 
