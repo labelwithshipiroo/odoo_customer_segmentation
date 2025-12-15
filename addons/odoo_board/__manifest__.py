@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 {
     'name': "OdooBoard",
-    'summary': "Minimal dashboard addon based on Quickboard view",
+    'summary': 'Collaborative Whiteboard for Odoo',
     'description': """
-        OdooBoard - minimal addon that provides the same top menu/view shell as Quickboard.
-        Grid layout area is intentionally left empty.
+        Whiteboard for Odoo
+        ====================================
+        * Create sticky notes and text boxes
+        * Drag and drop elements
+        * Collaborate in real-time
+        * Save and load whiteboards
     """,
     'author': "Generated",
     'category': 'Productivity',
