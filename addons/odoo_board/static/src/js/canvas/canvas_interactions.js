@@ -100,26 +100,65 @@ export class CanvasInteractions {
             return;
         }
         
-        console.log('Attaching event listeners to canvas wrapper with capture phase');
+        console.log('Attaching event listeners to canvas wrapper');
         
-        // Attach listeners directly to canvasWrapper with CAPTURE phase to catch ALL events
-        this.container.addEventListener('mousedown', this._onMouseDown, true);
-        this.container.addEventListener('mousemove', this._onMouseMove, true);
-        this.container.addEventListener('mouseup', this._onMouseUp, true);
-        this.container.addEventListener('wheel', this._onWheel, { passive: false, capture: true });
-        this.container.addEventListener('contextmenu', this._onContextMenu, true);
-        this.container.addEventListener('dblclick', this._onDoubleClick, true);
-        this.container.addEventListener('dragover', this._onDragOver, true);
-        this.container.addEventListener('drop', this._onDrop, true);
+        // Use wrapper functions to ensure proper context binding
+        const self = this;
+        
+        this.container.addEventListener('mousedown', function(e) {
+            console.log('_onMouseDown wrapper called');
+            self._onMouseDown.call(self, e);
+        }, true);
+        
+        this.container.addEventListener('mousemove', function(e) {
+            self._onMouseMove.call(self, e);
+        }, true);
+        
+        this.container.addEventListener('mouseup', function(e) {
+            self._onMouseUp.call(self, e);
+        }, true);
+        
+        this.container.addEventListener('wheel', function(e) {
+            self._onWheel.call(self, e);
+        }, { passive: false, capture: true });
+        
+        this.container.addEventListener('contextmenu', function(e) {
+            self._onContextMenu.call(self, e);
+        }, true);
+        
+        this.container.addEventListener('dblclick', function(e) {
+            self._onDoubleClick.call(self, e);
+        }, true);
+        
+        this.container.addEventListener('dragover', function(e) {
+            self._onDragOver.call(self, e);
+        }, true);
+        
+        this.container.addEventListener('drop', function(e) {
+            self._onDrop.call(self, e);
+        }, true);
         
         // Keyboard events on document
-        document.addEventListener('keydown', this._onKeyDown);
-        document.addEventListener('keyup', this._onKeyUp);
+        document.addEventListener('keydown', function(e) {
+            self._onKeyDown.call(self, e);
+        });
+        
+        document.addEventListener('keyup', function(e) {
+            self._onKeyUp.call(self, e);
+        });
         
         // Touch events
-        this.container.addEventListener('touchstart', this._onTouchStart, { passive: false, capture: true });
-        this.container.addEventListener('touchmove', this._onTouchMove, { passive: false, capture: true });
-        this.container.addEventListener('touchend', this._onTouchEnd, { capture: true });
+        this.container.addEventListener('touchstart', function(e) {
+            self._onTouchStart.call(self, e);
+        }, { passive: false, capture: true });
+        
+        this.container.addEventListener('touchmove', function(e) {
+            self._onTouchMove.call(self, e);
+        }, { passive: false, capture: true });
+        
+        this.container.addEventListener('touchend', function(e) {
+            self._onTouchEnd.call(self, e);
+        }, { capture: true });
         
         console.log('All event listeners attached to canvas wrapper in capture phase');
     }
