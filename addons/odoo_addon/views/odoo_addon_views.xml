@@ -83,11 +83,19 @@
         </record>
 
 
-        <!-- Test Blank Page Template -->
-        <template id="odoo_addon.test_blank_page_template">
-            <div class="test-blank-page-container">
-                <h1>Hello</h1>
-            </div>
+        <!-- Test Page Template -->
+        <template id="odoo_addon.test_page_template">
+            <t t-call="web.layout">
+                <t t-set-slot="page_content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <h1>Hello</h1>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
         </template>
 
     </data>
