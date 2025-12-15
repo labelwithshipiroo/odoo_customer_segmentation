@@ -34,6 +34,24 @@ const quickboardService = {
                 if (rpc && typeof rpc.rpc === "function") {
                     return await rpc.rpc(path, params);
                 }
+                // Fallback: attempt a direct fetch to the endpoint (some deployments expose simple HTTP handlers)
+                if (typeof fetch !== "undefined") {
+                    try {
+                        const url = path.startsWith("/") ? path : `/${path}`;
+                        const resp = await fetch(url, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(params || {}),
+                            credentials: "same-origin",
+                        });
+                        if (!resp.ok) {
+                            throw new Error(`Fetch rpc fallback failed: ${resp.status} ${resp.statusText}`);
+                        }
+                        return await resp.json();
+                    } catch (e) {
+                        console.error("fetch fallback failed", e);
+                    }
+                }
                 throw new Error("Unsupported rpc service shape");
             } catch (err) {
                 console.error("callRpc failed", err);
