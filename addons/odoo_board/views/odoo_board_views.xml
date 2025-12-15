@@ -55,6 +55,17 @@
                         </div>
                     </t>
                 </templates>
+                <div class="o_kanban_view o_whiteboard_kanban_view">
+                    <div class="o_view_nocontent" invisible="not search_disable_custom_filters">
+                        <div class="o_view_nocontent_smiling_face">
+                            <p class="o_view_nocontent_empty_folder">No whiteboards found</p>
+                            <p>Create your first whiteboard to start collaborating!</p>
+                        </div>
+                        <div class="o_view_nocontent_buttons">
+                            <button type="button" class="btn btn-primary" name="action_open_board" context="{'default_name': 'New Whiteboard'}">Create Whiteboard</button>
+                        </div>
+                    </div>
+                </div>
             </kanban>
         </field>
     </record>
@@ -154,20 +165,10 @@
     <!-- Menu Items -->
     <menuitem id="menu_whiteboard_root"
               name="Whiteboard"
+              parent=""
               web_icon="odoo_board,static/description/icon.svg"
-              sequence="50"/>
-              
-    <menuitem id="menu_whiteboard_boards"
-              name="My Boards"
-              parent="menu_whiteboard_root"
               action="action_whiteboard_boards"
-              sequence="10"/>
-              
-    <menuitem id="menu_whiteboard_new"
-              name="New Board"
-              parent="menu_whiteboard_root"
-              action="action_whiteboard_view"
-              sequence="5"/>
+              sequence="50"/>
 
     <!-- Whiteboard Element Views (Admin) -->
     <record id="view_whiteboard_element_list" model="ir.ui.view">
