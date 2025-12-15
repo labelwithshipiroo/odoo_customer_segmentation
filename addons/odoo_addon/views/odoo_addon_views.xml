@@ -84,7 +84,7 @@
 
 
         <!-- Test Blank Page Template -->
-        <template id="test_blank_page_template">
+        <template id="odoo_addon.test_blank_page_template">
             <div class="test-blank-page-container">
                 <h1>Hello</h1>
             </div>

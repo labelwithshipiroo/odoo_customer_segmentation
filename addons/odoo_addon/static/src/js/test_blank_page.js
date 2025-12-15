@@ -5,7 +5,7 @@ odoo.define('odoo_addon.test_blank_page', function (require) {
     var core = require('web.core');
 
     var TestBlankPage = AbstractAction.extend({
-        template: 'test_blank_page_template',
+        template: 'odoo_addon.test_blank_page_template',
 
         init: function (parent, action) {
             this._super.apply(this, arguments);
