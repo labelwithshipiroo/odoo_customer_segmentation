@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <form string="Whiteboard">
                <header>
-                   <button name="action_whiteboard_canvas" type="action" string="View Canvas" class="btn-primary"/>
+                   <button name="odoo_board.action_whiteboard_canvas" type="action" string="View Canvas" class="btn-primary"/>
                </header>
                 <sheet>
                     <group>
@@ -31,7 +31,7 @@
                 <field name="user_id" readonly="1"/>
                 <field name="element_count" readonly="1"/>
                 <field name="write_date" readonly="1"/>
-                <button name="action_whiteboard_canvas" type="action" string="Open" class="btn btn-sm btn-primary"/>
+                <button name="odoo_board.action_whiteboard_canvas" type="action" string="Open" class="btn btn-sm btn-primary"/>
             </list>
         </field>
     </record>
