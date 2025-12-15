@@ -218,45 +218,59 @@ export class CanvasInteractions {
      * @param {MouseEvent} e
      */
     _handleLeftClick(e) {
+        console.log('_handleLeftClick called, currentTool:', this.currentTool);
         const canvasPoint = this.canvas.screenToCanvas(this.pointer.startX, this.pointer.startY);
+        console.log('Canvas point:', canvasPoint);
         
         // Check if clicking on an element
         const target = this._getElementAtPoint(canvasPoint);
         const targetElement = target?.element;
         const hitType = target?.hitType;
+        console.log('Target at point:', { targetElement: targetElement?.id, hitType });
         
         switch (this.currentTool) {
             case TOOLS.SELECT:
+                console.log('Handling SELECT tool click');
                 this._handleSelectToolClick(e, targetElement, hitType, canvasPoint);
                 break;
                 
             case TOOLS.PAN:
+                console.log('Handling PAN tool click');
                 this._startPan();
                 break;
                 
             case TOOLS.STICKY:
+                console.log('Handling STICKY tool click');
                 this._createElementAtPoint(ELEMENT_TYPES.STICKY, canvasPoint);
                 break;
                 
             case TOOLS.TEXT:
+                console.log('Handling TEXT tool click');
                 this._createElementAtPoint(ELEMENT_TYPES.TEXT, canvasPoint);
                 break;
                 
             case TOOLS.SHAPE:
+                console.log('Handling SHAPE tool click with shapeType:', this.shapeType);
                 this._createElementAtPoint(ELEMENT_TYPES.SHAPE, canvasPoint, { shapeType: this.shapeType });
                 break;
                 
             case TOOLS.FRAME:
+                console.log('Handling FRAME tool click');
                 this._createElementAtPoint(ELEMENT_TYPES.FRAME, canvasPoint);
                 break;
                 
             case TOOLS.CONNECTOR:
+                console.log('Handling CONNECTOR tool click');
                 this._startConnector(canvasPoint, targetElement);
                 break;
                 
             case TOOLS.IMAGE:
+                console.log('Handling IMAGE tool click');
                 this._createImageElement(canvasPoint);
                 break;
+                
+            default:
+                console.log('Unknown tool:', this.currentTool);
         }
     }
 
