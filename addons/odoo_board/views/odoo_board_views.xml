@@ -1,66 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Whiteboard Form View -->
-    <record id="view_whiteboard_form" model="ir.ui.view">
+    <!-- Whiteboard Board Views -->
+    
+    <!-- Tree View -->
+    <record id="view_whiteboard_board_tree" model="ir.ui.view">
+        <field name="name">whiteboard.board.tree</field>
+        <field name="model">whiteboard.board</field>
+        <field name="arch" type="xml">
+            <tree string="Whiteboards">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="create_uid" string="Created By"/>
+                <field name="create_date" string="Created On"/>
+                <field name="write_date" string="Last Modified"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="view_whiteboard_board_kanban" model="ir.ui.view">
+        <field name="name">whiteboard.board.kanban</field>
+        <field name="model">whiteboard.board</field>
+        <field name="arch" type="xml">
+            <kanban class="o_whiteboard_kanban" default_group_by="" sample="1">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="description"/>
+                <field name="thumbnail"/>
+                <field name="write_date"/>
+                <field name="create_uid"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_whiteboard_card">
+                            <div class="o_whiteboard_card_preview">
+                                <t t-if="record.thumbnail.raw_value">
+                                    <img t-att-src="record.thumbnail.raw_value" 
+                                         class="o_whiteboard_thumbnail"
+                                         alt="Board preview"/>
+                                </t>
+                                <t t-else="">
+                                    <div class="o_whiteboard_placeholder">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+                                            <line x1="3" x2="21" y1="9" y2="9"></line>
+                                            <line x1="9" x2="9" y1="21" y2="9"></line>
+                                        </svg>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="o_whiteboard_card_content">
+                                <div class="o_whiteboard_card_header">
+                                    <strong class="o_whiteboard_name">
+                                        <field name="name"/>
+                                    </strong>
+                                </div>
+                                <div class="o_whiteboard_card_footer text-muted small">
+                                    <span>Modified: <field name="write_date" widget="datetime"/></span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_whiteboard_board_form" model="ir.ui.view">
         <field name="name">whiteboard.board.form</field>
         <field name="model">whiteboard.board</field>
         <field name="arch" type="xml">
             <form string="Whiteboard">
                 <header>
-                    <button name="action_open_canvas" type="object" string="View Canvas" class="btn-primary"/>
+                    <button name="action_open_board" string="Open Board" type="object" class="btn-primary"/>
                 </header>
                 <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Board Name"/>
+                        </h1>
+                    </div>
                     <group>
-                        <field name="name"/>
-                        <field name="user_id"/>
-                        <field name="shared"/>
-                        <field name="active"/>
+                        <group>
+                            <field name="description" placeholder="Add a description..."/>
+                        </group>
+                        <group>
+                            <field name="create_uid" readonly="1"/>
+                            <field name="create_date" readonly="1"/>
+                            <field name="write_date" readonly="1"/>
+                        </group>
                     </group>
+                    <notebook>
+                        <page string="Preview" name="preview">
+                            <div class="o_whiteboard_form_preview">
+                                <t t-if="record.thumbnail.raw_value">
+                                    <img t-att-src="record.thumbnail.raw_value" 
+                                         class="o_whiteboard_form_thumbnail"
+                                         alt="Board preview"/>
+                                </t>
+                                <t t-else="">
+                                    <div class="o_whiteboard_form_placeholder">
+                                        <p>No preview available. Click "Open Board" to edit.</p>
+                                    </div>
+                                </t>
+                            </div>
+                        </page>
+                        <page string="Settings" name="settings">
+                            <group>
+                                <field name="board_data" invisible="1"/>
+                                <field name="canvas_state" invisible="1"/>
+                            </group>
+                        </page>
+                    </notebook>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
             </form>
         </field>
     </record>
 
-    <!-- Whiteboard List View -->
-    <record id="view_whiteboard_list" model="ir.ui.view">
-        <field name="name">whiteboard.board.list</field>
+    <!-- Search View -->
+    <record id="view_whiteboard_board_search" model="ir.ui.view">
+        <field name="name">whiteboard.board.search</field>
         <field name="model">whiteboard.board</field>
         <field name="arch" type="xml">
-            <list string="Whiteboards" editable="top">
+            <search string="Search Whiteboards">
                 <field name="name"/>
-                <field name="user_id" readonly="1"/>
-                <field name="shared"/>
-                <field name="write_date" readonly="1"/>
-                <button name="action_open_canvas" type="object" string="View" class="btn btn-sm btn-primary"/>
-                <button name="action_edit_whiteboard" type="object" string="Edit" class="btn btn-sm btn-secondary"/>
-            </list>
+                <field name="description"/>
+                <filter string="My Boards" name="my_boards" domain="[('create_uid', '=', uid)]"/>
+                <filter string="Recent" name="recent" domain="[('write_date', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Created By" name="group_creator" context="{'group_by': 'create_uid'}"/>
+                    <filter string="Created Date" name="group_create_date" context="{'group_by': 'create_date:month'}"/>
+                </group>
+            </search>
         </field>
     </record>
 
-    <!-- Whiteboard Canvas Action -->
-    <record id="action_whiteboard_canvas" model="ir.actions.client">
-        <field name="name">Whiteboard Canvas</field>
-        <field name="tag">whiteboard_canvas</field>
+    <!-- Whiteboard Client Action -->
+    <record id="action_whiteboard_view" model="ir.actions.client">
+        <field name="name">Whiteboard</field>
+        <field name="tag">whiteboard_view</field>
+        <field name="target">fullscreen</field>
     </record>
 
-    <!-- Whiteboard Action -->
-    <record id="action_whiteboard_board" model="ir.actions.act_window">
+    <!-- Action to Open Boards List -->
+    <record id="action_whiteboard_boards" model="ir.actions.act_window">
         <field name="name">Whiteboards</field>
         <field name="res_model">whiteboard.board</field>
-        <field name="view_mode">list</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="context">{'search_default_my_boards': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                Create your first whiteboard
+                Create your first whiteboard!
             </p>
             <p>
-                Start collaborating with sticky notes and text boxes.
+                Collaborate on ideas with an infinite canvas featuring sticky notes, 
+                shapes, connectors, frames, and more.
             </p>
         </field>
     </record>
 
-    <!-- OdooBoard Menu -->
-    <menuitem name="OdooBoard" id="odoo_board.menu_root"
-        web_icon="odoo_board,static/description/icon.svg"/>
-    <menuitem name="OdooBoard" id="odoo_board.menu"
-        parent="odoo_board.menu_root" action="action_whiteboard_board" sequence="1"/>
+    <!-- Menu Items -->
+    <menuitem id="menu_whiteboard_root"
+              name="Whiteboard"
+              web_icon="odoo_board,static/description/icon.svg"
+              sequence="50"/>
+              
+    <menuitem id="menu_whiteboard_boards"
+              name="My Boards"
+              parent="menu_whiteboard_root"
+              action="action_whiteboard_boards"
+              sequence="10"/>
+              
+    <menuitem id="menu_whiteboard_new"
+              name="New Board"
+              parent="menu_whiteboard_root"
+              action="action_whiteboard_view"
+              sequence="5"/>
+
+    <!-- Whiteboard Element Views (Admin) -->
+    <record id="view_whiteboard_element_tree" model="ir.ui.view">
+        <field name="name">whiteboard.element.tree</field>
+        <field name="model">whiteboard.element</field>
+        <field name="arch" type="xml">
+            <tree string="Board Elements">
+                <field name="board_id"/>
+                <field name="element_type"/>
+                <field name="x"/>
+                <field name="y"/>
+                <field name="width"/>
+                <field name="height"/>
+                <field name="z_index"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_whiteboard_elements" model="ir.actions.act_window">
+        <field name="name">Board Elements</field>
+        <field name="res_model">whiteboard.element</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <!-- Settings Menu (Admin) -->
+    <menuitem id="menu_whiteboard_config"
+              name="Configuration"
+              parent="menu_whiteboard_root"
+              groups="base.group_system"
+              sequence="100"/>
+              
+    <menuitem id="menu_whiteboard_elements"
+              name="Board Elements"
+              parent="menu_whiteboard_config"
+              action="action_whiteboard_elements"
+              groups="base.group_system"
+              sequence="10"/>
 
 </odoo>
