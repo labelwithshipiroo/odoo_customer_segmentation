@@ -28,6 +28,7 @@
                 <field name="user_id" readonly="1"/>
                 <field name="element_count" readonly="1"/>
                 <field name="write_date" readonly="1"/>
+                <button name="action_open_board" type="object" string="View" class="btn btn-sm btn-primary"/>
             </list>
         </field>
     </record>
