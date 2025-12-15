@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+
+    <!-- Main Whiteboard Template -->
+    <t t-name="whiteboard.Board" owl="1">
+        <div class="odoo_whiteboard h-100 d-flex flex-column" style="min-height: 100vh;">
+            <!-- Toolbar -->
+            <div class="bg-white border-bottom p-3 d-flex align-items-center gap-2 shadow-sm">
+                <button t-on-click="() => this.selectTool('select')"
+                        t-att-class="'btn btn-sm ' + (state.selectedTool === 'select' ? 'btn-primary' : 'btn-secondary')">
+                    <i class="fa fa-mouse-pointer me-1"/>
+                    <span class="d-none d-md-inline">Select</span>
+                </button>
+                
+                <div class="vr mx-2"/>
+                
+                <button t-on-click="() => this.addElement('sticky')" 
+                        class="btn btn-sm btn-warning">
+                    <i class="fa fa-sticky-note me-1"/>
+                    <span class="d-none d-md-inline">Sticky Note</span>
+                </button>
+                
+                <button t-on-click="() => this.addElement('text')" 
+                        class="btn btn-sm btn-secondary">
+                    <i class="fa fa-font me-1"/>
+                    <span class="d-none d-md-inline">Text Box</span>
+                </button>
+
+                <div class="vr mx-2" t-if="state.selectedElement"/>
+                
+                <t t-if="state.selectedElement">
+                    <button t-on-click="() => this.deleteElement()" 
+                            class="btn btn-sm btn-danger">
+                        <i class="fa fa-trash me-1"/>
+                        <span class="d-none d-md-inline">Delete</span>
+                    </button>
+                    
+                    <div class="d-flex gap-1 ms-2">
+                        <t t-foreach="colors" t-as="color" t-key="color">
+                            <button t-on-click="() => this.changeColor(color)"
+                                    class="btn btn-sm p-0 border"
+                                    t-att-style="'width: 30px; height: 30px; background-color: ' + color"/>
+                        </t>
+                    </div>
+                </t>
+
+                <div class="ms-auto">
+                    <button t-on-click="() => this.saveElements()" 
+                            class="btn btn-sm btn-primary">
+                        <i class="fa fa-save me-1"/>
+                        Save
+                    </button>
+                </div>
+            </div>
+
+            <!-- Canvas -->
+            <div class="flex-grow-1 position-relative overflow-hidden bg-light"
+                 t-ref="canvas"
+                 style="background-image: radial-gradient(circle, #dee2e6 1px, transparent 1px); background-size: 20px 20px;">
+                
+                <t t-foreach="state.elements" t-as="element" t-key="element.id">
+                    <WhiteboardElement 
+                        element="element"
+                        selectedId="state.selectedElement"
+                        onSelect.bind="onSelectElement"
+                        onDragStart.bind="onDragStart"
+                        onUpdateContent.bind="onUpdateContent"/>
+                </t>
+
+                <div t-if="!state.elements.length" 
+                     class="position-absolute top-50 start-50 translate-middle text-center text-muted"
+                     style="pointer-events: none;">
+                    <i class="fa fa-sticky-note fa-3x mb-3 opacity-50"/>
+                    <p class="fs-5">Click "Sticky Note" or "Text Box" to get started</p>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Element Template -->
+    <t t-name="whiteboard.Element" owl="1">
+        <div class="position-absolute shadow hover-shadow-lg transition-all"
+             t-att-class="isSelected ? 'border border-primary border-3' : ''"
+             t-att-style="`left: ${props.element.x}px; top: ${props.element.y}px; width: ${props.element.width}px; height: ${props.element.height}px; background-color: ${props.element.color}; border-radius: ${props.element.type === 'sticky' ? '4px' : '8px'}; cursor: move;`"
+             t-on-mousedown="onMouseDown">
+            
+            <div t-if="props.element.type === 'sticky'"
+                 class="w-100 bg-dark bg-opacity-10 rounded-top"
+                 style="height: 24px; cursor: move;"/>
+            
+            <textarea 
+                t-att-value="props.element.content"
+                t-on-input="onTextChange"
+                t-on-click.stop=""
+                class="w-100 h-100 p-3 border-0 bg-transparent"
+                t-att-style="`font-size: ${props.element.fontSize}px; height: ${props.element.type === 'sticky' ? 'calc(100% - 24px)' : '100%'}; resize: none; outline: none;`"/>
+        </div>
+    </t>
+
+</templates>
