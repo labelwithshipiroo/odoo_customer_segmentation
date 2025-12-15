@@ -9,7 +9,6 @@
     'category': 'Productivity',
     'version': '18.0.1.0.0',
     'depends': ['web'],
-    'external_dependencies': {'python': ['jsonschema']},
     'data': [
         'security/quickboard_security.xml',
         'security/ir.model.access.csv',

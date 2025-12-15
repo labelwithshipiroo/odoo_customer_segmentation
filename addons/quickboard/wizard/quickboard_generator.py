@@ -2,7 +2,8 @@
 import logging
 
 import json
-from jsonschema import validate
+# removed jsonschema dependency, using validator from json_validator_agent
+from .ai.json_validator_agent import minimal_validate as validate
 
 from odoo import _, fields, models
 from odoo.exceptions import ValidationError
