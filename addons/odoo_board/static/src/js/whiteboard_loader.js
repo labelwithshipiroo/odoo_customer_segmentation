@@ -157,6 +157,7 @@ export class WhiteboardView extends Component {
 
             console.log('Whiteboard initialization completed successfully');
             this.state.loading = false;
+            console.log('Final state:', { loading: this.state.loading, error: this.state.error, boardId: this.state.boardId });
         } catch (error) {
             console.error('Failed to initialize whiteboard:', error);
             console.error('Error details:', error.message, error.stack);
