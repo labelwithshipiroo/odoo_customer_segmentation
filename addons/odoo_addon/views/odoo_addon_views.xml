@@ -59,7 +59,9 @@
             <field name="name">x_grouping.list</field>
             <field name="model">x_grouping</field>
             <field name="arch" type="xml">
-                 <p>Loading reports data...</p>
+                <list create="false" edit="false" delete="false">
+                    <!-- No fields - custom content will be added by JavaScript -->
+                </list>
             </field>
         </record>
 
@@ -78,6 +80,41 @@
                     </sheet>
                 </form>
             </field>
+        </record>
+
+        <!-- Test List View -->
+        <record id="view_x_test_list" model="ir.ui.view">
+            <field name="name">x_test.list</field>
+            <field name="model">x_test</field>
+            <field name="arch" type="xml">
+                <list create="false" edit="false" delete="false">
+                    <!-- No fields - custom content will be added by JavaScript -->
+                </list>
+            </field>
+        </record>
+
+        <!-- Test Form View -->
+        <record id="view_x_test_form" model="ir.ui.view">
+            <field name="name">x_test.form</field>
+            <field name="model">x_test</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div style="text-align: center; padding: 50px;">
+                            <h1>Hello</h1>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Test Action -->
+        <record id="action_x_test" model="ir.actions.act_window">
+            <field name="name">Test</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">x_test</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="odoo_addon.view_x_test_form" />
         </record>
 
     </data>
