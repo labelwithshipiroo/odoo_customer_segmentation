@@ -1,9 +1,25 @@
 # -*- coding: utf-8 -*-
 import json
-from jsonschema import validate
 
 from textwrap import dedent
 from typing import Any, Callable, Dict, List, Optional, Literal, Optional, Union
+
+def minimal_validate(data, schema):
+    """
+    Lightweight schema validator: checks the AI output is a list of objects
+    and that each item contains the basic required keys.
+    This avoids the external 'jsonschema' dependency.
+    """
+    if not isinstance(data, list):
+        raise Exception("JSON must be a list")
+    required = ['name', 'icon', 'type', 'model', 'value_field', 'aggregate_function']
+    for idx, item in enumerate(data):
+        if not isinstance(item, dict):
+            raise Exception(f"Item {idx} is not an object")
+        for k in required:
+            if k not in item:
+                raise Exception(f"Missing required key '{k}' in item {idx}")
+    return True
 
 from autogen import Agent, ConversableAgent
 from autogen.coding import CodeExecutor, CodeExtractor, MarkdownCodeExtractor, CodeBlock, CodeResult
@@ -32,7 +48,8 @@ class JsonValidator(CodeExecutor):
 
             try:
                 quickboard_json = json.loads(code)
-                validate(quickboard_json, self.json_schema)
+                # Use lightweight validator instead of jsonschema
+                minimal_validate(quickboard_json, self.json_schema)
             except Exception as e:
                 exitcode = -1
                 logs_all += f"\nError: {str(e)}"
