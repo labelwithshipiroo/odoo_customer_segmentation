@@ -104,25 +104,35 @@ export class CanvasInteractions {
         
         // Use document-level listeners with capture phase to guarantee we catch events
         // This bypasses all pointer-events CSS issues
-        document.addEventListener('mousedown', this._onMouseDown, true);
-        document.addEventListener('mousemove', this._onMouseMove, true);
-        document.addEventListener('mouseup', this._onMouseUp, true);
-        document.addEventListener('wheel', this._onWheel, { passive: false, capture: true });
-        document.addEventListener('contextmenu', this._onContextMenu, true);
-        document.addEventListener('dblclick', this._onDoubleClick, true);
+        const boundMouseDown = (e) => {
+            console.log('Document mousedown captured');
+            this._onMouseDown(e);
+        };
+        const boundMouseMove = (e) => this._onMouseMove(e);
+        const boundMouseUp = (e) => this._onMouseUp(e);
+        const boundWheel = (e) => this._onWheel(e);
+        const boundContextMenu = (e) => this._onContextMenu(e);
+        const boundDoubleClick = (e) => this._onDoubleClick(e);
+        const boundDragOver = (e) => this._onDragOver(e);
+        const boundDrop = (e) => this._onDrop(e);
+        
+        document.addEventListener('mousedown', boundMouseDown, true);
+        document.addEventListener('mousemove', boundMouseMove, true);
+        document.addEventListener('mouseup', boundMouseUp, true);
+        document.addEventListener('wheel', boundWheel, { passive: false, capture: true });
+        document.addEventListener('contextmenu', boundContextMenu, true);
+        document.addEventListener('dblclick', boundDoubleClick, true);
+        document.addEventListener('dragover', boundDragOver, true);
+        document.addEventListener('drop', boundDrop, true);
         
         // Keyboard events
         document.addEventListener('keydown', this._onKeyDown);
         document.addEventListener('keyup', this._onKeyUp);
         
         // Touch events
-        document.addEventListener('touchstart', this._onTouchStart.bind(this), { passive: false, capture: true });
-        document.addEventListener('touchmove', this._onTouchMove.bind(this), { passive: false, capture: true });
-        document.addEventListener('touchend', this._onTouchEnd.bind(this), { capture: true });
-        
-        // Drag and drop
-        document.addEventListener('dragover', this._onDragOver, true);
-        document.addEventListener('drop', this._onDrop, true);
+        document.addEventListener('touchstart', this._onTouchStart, { passive: false, capture: true });
+        document.addEventListener('touchmove', this._onTouchMove, { passive: false, capture: true });
+        document.addEventListener('touchend', this._onTouchEnd, { capture: true });
         
         console.log('All event listeners attached to document in capture phase');
     }
