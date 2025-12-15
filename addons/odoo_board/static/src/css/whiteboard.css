@@ -223,7 +223,6 @@
     position: relative;
     overflow: hidden;
     cursor: grab;
-    pointer-events: auto;
 }
 
 .wb-canvas-wrapper.panning {
@@ -239,7 +238,6 @@
     transform-origin: 0 0;
     width: 100%;
     height: 100%;
-    pointer-events: auto;
 }
 
 /* Canvas Grid Background */
@@ -256,15 +254,6 @@
     opacity: 0.8;
 }
 
-/* Elements Layer */
-.wb-elements-layer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
 
 /* SVG Canvas for connectors */
 .wb-svg-canvas {
@@ -288,7 +277,6 @@
     position: absolute;
     user-select: none;
     transition: box-shadow 0.15s ease;
-    pointer-events: auto;
 }
 
 .wb-element:hover {
