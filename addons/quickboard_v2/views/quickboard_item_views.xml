@@ -71,7 +71,7 @@
     </record>
 
     <!-- Sub Menu item -->
-    <menuitem name="Items" id="quickboard_item_menu_action_window" parent="quickboard.menu_root"
+    <menuitem name="Items" id="quickboard_item_menu_action_window" parent="quickboard_v2.menu_root"
       groups="group_quickboard_user" action="quickboard_item_action_window"/>
   </data>
 </odoo>
