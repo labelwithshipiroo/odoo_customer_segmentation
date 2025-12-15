@@ -5,9 +5,6 @@
         <field name="model">whiteboard.board</field>
         <field name="arch" type="xml">
             <form string="Whiteboard">
-               <header>
-                   <button name="odoo_board.action_whiteboard_canvas" type="action" string="View Canvas" class="btn-primary"/>
-               </header>
                 <sheet>
                     <group>
                         <field name="name"/>
@@ -31,18 +28,8 @@
                 <field name="user_id" readonly="1"/>
                 <field name="element_count" readonly="1"/>
                 <field name="write_date" readonly="1"/>
-                <button name="odoo_board.action_whiteboard_canvas" type="action" string="Open" class="btn btn-sm btn-primary"/>
             </list>
         </field>
-    </record>
-
-    <!-- Whiteboard Canvas Action -->
-    <record id="action_whiteboard_canvas" model="ir.actions.act_window">
-        <field name="name">Whiteboard Canvas</field>
-        <field name="res_model">whiteboard.board</field>
-        <field name="view_mode">form</field>
-        <field name="target">fullscreen</field>
-        <field name="context">{'form_view_ref': 'odoo_board.view_whiteboard_form'}</field>
     </record>
 
     <!-- Whiteboard Action -->
