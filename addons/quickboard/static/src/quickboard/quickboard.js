@@ -40,6 +40,12 @@ class Quickboard extends Component {
         );
 
         onPatched(() => {
+            // Guard GridStack usage — some deployments may not include the library.
+            if (typeof GridStack === "undefined") {
+                console.warn("GridStack not available; quickboard will render without draggable layout.");
+                this.gridRef.current = null;
+                return;
+            }
             this.gridRef.current =
                 this.gridRef.current ||
                 GridStack.init({
@@ -53,16 +59,20 @@ class Quickboard extends Component {
                 const grid = this.gridRef.current;
                 grid.batchUpdate();
                 grid.removeAll(false);
-
+    
                 for (let i = 0; i < this.state.items.length; i++) {
                     const element = document.querySelector(
                         `#grid-stack-item-${this.state.items[i]["id"]}`
                     );
                     if (element) {
-                        grid.makeWidget(element);
+                        try {
+                            grid.makeWidget(element);
+                        } catch (err) {
+                            console.error("GridStack.makeWidget failed for element", element, err);
+                        }
                     }
                 }
-
+    
                 grid.batchUpdate(false);
             }
         });
@@ -77,9 +87,15 @@ class Quickboard extends Component {
     }
 
     onMessage() {
-        this.applyFilter()
+        this.applyFilter();
         let grid = this.gridRef.current;
-        grid.compact();
+        if (grid && typeof grid.compact === "function") {
+            try {
+                grid.compact();
+            } catch (err) {
+                console.warn("Grid compact failed", err);
+            }
+        }
     }
 
     onStartDateChanged(date) {
@@ -91,7 +107,12 @@ class Quickboard extends Component {
     }
 
     saveQuickboard(ev) {
-        let serializedData = this.gridRef.current.save(false);
+        const grid = this.gridRef.current;
+        if (!grid || typeof grid.save !== "function") {
+            console.warn("GridStack not available — layout not saved");
+            return;
+        }
+        let serializedData = grid.save(false);
         this.quickboard.saveLayout(serializedData);
     }
 
@@ -101,17 +122,32 @@ class Quickboard extends Component {
 
     compact(ev) {
         let grid = this.gridRef.current;
-        grid.compact();
+        if (grid && typeof grid.compact === "function") {
+            grid.compact();
+        } else {
+            console.warn("GridStack not available — cannot compact");
+        }
     }
 
     async generateQuickboard(ev) {
-        const cell_width = this.gridRef.current.cellWidth();
-        // DO NOT REMOVE: Without this the getCellHeight will return weird number
-        const h_0 = this.gridRef.current.cellHeight().el.clientHeight;
-        const cell_height = this.gridRef.current.getCellHeight();
-        const screen_width = screen.width;
-        const screen_height = screen.height;
-
+        let cell_width = 1;
+        let cell_height = 1;
+        let screen_width = (typeof screen !== "undefined" && screen.width) || 0;
+        let screen_height = (typeof screen !== "undefined" && screen.height) || 0;
+        const grid = this.gridRef.current;
+        if (grid && typeof grid.cellWidth === "function" && typeof grid.getCellHeight === "function") {
+            try {
+                cell_width = grid.cellWidth();
+                // DO NOT REMOVE: Without this the getCellHeight will return weird number
+                const h_0 = grid.cellHeight().el.clientHeight;
+                cell_height = grid.getCellHeight();
+            } catch (err) {
+                console.warn("Error getting grid cell size, using defaults", err);
+            }
+        } else {
+            console.warn("GridStack not available — using default cell sizes");
+        }
+    
         this.action.doAction(
             {
                 'type': "ir.actions.act_window",
