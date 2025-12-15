@@ -24,7 +24,7 @@ export class WhiteboardView extends Component {
         this.action = useService("action");
         
         this.state = useState({
-            loading: true,
+            loading: false,
             error: null,
             boardId: null,
             boardName: '',
@@ -50,6 +50,9 @@ export class WhiteboardView extends Component {
      * Initialize the whiteboard application
      */
     async _initWhiteboard() {
+        this.state.loading = true;
+        this.state.error = null;
+
         const container = this.containerRef.el;
         if (!container) {
             this.state.error = 'Container not found';
