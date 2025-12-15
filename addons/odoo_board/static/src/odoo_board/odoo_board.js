@@ -2,6 +2,7 @@
 
 import { Component, useState, useRef, onMounted } from "@odoo/owl";
 import { registry } from "@web/core/registry";
+import { useService } from "@web/core/utils/hooks";
 import { WhiteboardElement } from "./whiteboard_element";
 
 class OdooBoard extends Component {
@@ -9,6 +10,8 @@ class OdooBoard extends Component {
     static components = { WhiteboardElement };
 
     setup() {
+        const rpc = useService("rpc");
+        
         this.state = useState({
             elements: [],
             selectedTool: 'select',
@@ -22,7 +25,7 @@ class OdooBoard extends Component {
 
         const boardId = this.props.action.context.board_id;
         if (boardId) {
-            this.env.services.rpc('/web/dataset/call_kw', {
+            rpc('/web/dataset/call_kw', {
                 model: 'whiteboard.board',
                 method: 'get_elements',
                 args: [boardId],
@@ -124,9 +127,10 @@ class OdooBoard extends Component {
     }
 
     saveElements() {
+        const rpc = useService("rpc");
         const boardId = this.props.action.context.board_id;
         if (boardId) {
-            this.env.services.rpc('/web/dataset/call_kw', {
+            rpc('/web/dataset/call_kw', {
                 model: 'whiteboard.board',
                 method: 'save_elements',
                 args: [boardId, this.state.elements],
