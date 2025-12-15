@@ -45,6 +45,13 @@ odoo.define('odoo_addon.reports_table', [], function () {
                 return;
             }
 
+            // Aggregate data for pie chart by country
+            var countryCounts = {};
+            data.reports.forEach(function (report) {
+                var country = report.country_id || 'N/A';
+                countryCounts[country] = (countryCounts[country] || 0) + 1;
+            });
+
             var html = '<div class="overflow-x-auto">' +
                 '<table class="shadcn-table">' +
                 '<thead class="shadcn-table-header">' +
@@ -83,7 +90,17 @@ odoo.define('odoo_addon.reports_table', [], function () {
             });
 
             html += '</tbody></table></div>';
+
+            // Add pie chart container
+            html += '<div class="mt-4">' +
+                '<h3 class="text-lg font-semibold mb-2">Reports by Country</h3>' +
+                '<canvas id="reports-pie-chart" width="400" height="200"></canvas>' +
+                '</div>';
+
             container.innerHTML = html;
+
+            // Render pie chart
+            renderPieChart(countryCounts);
 
             // Add event listeners for status dropdowns
             var dropdowns = container.querySelectorAll('.status-dropdown');
@@ -114,6 +131,52 @@ odoo.define('odoo_addon.reports_table', [], function () {
                         console.error('Error updating status for report ID:', reportId, error);
                     });
                 });
+            });
+        };
+
+        var renderPieChart = function(countryCounts) {
+            var ctx = document.getElementById('reports-pie-chart');
+            if (!ctx) return;
+
+            var labels = Object.keys(countryCounts);
+            var data = Object.values(countryCounts);
+
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: [
+                            '#FF6384',
+                            '#36A2EB',
+                            '#FFCE56',
+                            '#4BC0C0',
+                            '#9966FF',
+                            '#FF9F40'
+                        ],
+                        hoverBackgroundColor: [
+                            '#FF6384',
+                            '#36A2EB',
+                            '#FFCE56',
+                            '#4BC0C0',
+                            '#9966FF',
+                            '#FF9F40'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Reports Distribution by Country'
+                        }
+                    }
+                }
             });
         };
 
