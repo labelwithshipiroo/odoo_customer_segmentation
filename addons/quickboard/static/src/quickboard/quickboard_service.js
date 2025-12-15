@@ -4,8 +4,10 @@ import { registry } from "@web/core/registry";
 import { reactive } from "@odoo/owl";
 
 const quickboardService = {
-    dependencies: ["rpc", "ui"],
-    start(env, { rpc, ui }) {
+    start(env, services) {
+        // prefer injected services, fall back to env.services if not present
+        const rpc = (services && services.rpc) || (env.services && env.services.rpc);
+        const ui = (services && services.ui) || (env.services && env.services.ui);
         const quickboard = reactive({
             items: {},
             isReady: false
