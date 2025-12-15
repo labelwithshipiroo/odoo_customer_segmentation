@@ -346,9 +346,21 @@
     background-color: hsl(var(--muted));
 }
 
-/* Hide control panel for test form only */
-.o_form_view.o_view_controller[data-model="x_test"] .o_control_panel.d-flex.flex-column.gap-3.px-3.pt-2.pb-3 {
+/* Hide all Odoo UI elements for blank test page */
+.form-view.test-blank-page .o_control_panel,
+.form-view.test-blank-page .o_form_sheet_bg,
+.form-view.test-blank-page .o_form_sheet,
+.form-view.test-blank-page .o_form_statusbar,
+.form-view.test-blank-page .o_form_buttons_view,
+.form-view.test-blank-page .o_form_buttons_edit,
+.form-view.test-blank-page .breadcrumb,
+.form-view.test-blank-page .o_view_nocontent {
     display: none !important;
+}
+
+.form-view.test-blank-page {
+    background: white !important;
+    min-height: 100vh !important;
 }
 
 /* Responsive design */
