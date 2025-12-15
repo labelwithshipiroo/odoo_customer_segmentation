@@ -21,7 +21,7 @@ class OdooBoard extends Component {
         this.canvasRef = useRef("canvas");
         this.colors = ['#fef3c7', '#dbeafe', '#dcfce7', '#fce7f3', '#fed7d7', '#e0e7ff'];
 
-        const boardId = this.props.action.context?.board_id;
+        const boardId = this.props.action.context?.board_id || this.props.action.context?.active_id;
         if (boardId) {
             rpc('/web/dataset/call_kw', {
                 model: 'whiteboard.board',
@@ -125,7 +125,7 @@ class OdooBoard extends Component {
     }
 
     saveElements() {
-        const boardId = this.props.action.context?.board_id;
+        const boardId = this.props.action.context?.board_id || this.props.action.context?.active_id;
         if (boardId) {
             rpc('/web/dataset/call_kw', {
                 model: 'whiteboard.board',

@@ -25,7 +25,7 @@
         <field name="name">whiteboard.board.list</field>
         <field name="model">whiteboard.board</field>
         <field name="arch" type="xml">
-            <list string="Whiteboards">
+            <list string="Whiteboards" action="whiteboard_canvas">
                 <field name="name"/>
                 <field name="user_id"/>
                 <field name="shared"/>
