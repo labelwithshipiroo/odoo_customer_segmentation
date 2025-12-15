@@ -247,18 +247,22 @@ export class WhiteboardApp {
         
         // Toolbar events
         this.toolbar?.on('onToolSelect', (tool, options) => {
+            console.log('Toolbar tool select:', tool, options);
             this.interactions.setTool(tool, options);
         });
-        
+
         this.toolbar?.on('onUndo', () => {
+            console.log('Toolbar undo');
             this.canvas.undo();
         });
-        
+
         this.toolbar?.on('onRedo', () => {
+            console.log('Toolbar redo');
             this.canvas.redo();
         });
-        
+
         this.toolbar?.on('onTemplates', () => {
+            console.log('Toolbar templates');
             this.templatePicker.show();
         });
         
