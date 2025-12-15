@@ -100,28 +100,28 @@ export class CanvasInteractions {
             return;
         }
         
-        console.log('Attaching event listeners to canvas wrapper');
+        console.log('Attaching event listeners to canvas wrapper with capture phase');
         
-        // Attach listeners directly to canvasWrapper
-        this.container.addEventListener('mousedown', this._onMouseDown);
-        this.container.addEventListener('mousemove', this._onMouseMove);
-        this.container.addEventListener('mouseup', this._onMouseUp);
-        this.container.addEventListener('wheel', this._onWheel, { passive: false });
-        this.container.addEventListener('contextmenu', this._onContextMenu);
-        this.container.addEventListener('dblclick', this._onDoubleClick);
-        this.container.addEventListener('dragover', this._onDragOver);
-        this.container.addEventListener('drop', this._onDrop);
+        // Attach listeners directly to canvasWrapper with CAPTURE phase to catch ALL events
+        this.container.addEventListener('mousedown', this._onMouseDown, true);
+        this.container.addEventListener('mousemove', this._onMouseMove, true);
+        this.container.addEventListener('mouseup', this._onMouseUp, true);
+        this.container.addEventListener('wheel', this._onWheel, { passive: false, capture: true });
+        this.container.addEventListener('contextmenu', this._onContextMenu, true);
+        this.container.addEventListener('dblclick', this._onDoubleClick, true);
+        this.container.addEventListener('dragover', this._onDragOver, true);
+        this.container.addEventListener('drop', this._onDrop, true);
         
         // Keyboard events on document
         document.addEventListener('keydown', this._onKeyDown);
         document.addEventListener('keyup', this._onKeyUp);
         
         // Touch events
-        this.container.addEventListener('touchstart', this._onTouchStart, { passive: false });
-        this.container.addEventListener('touchmove', this._onTouchMove, { passive: false });
-        this.container.addEventListener('touchend', this._onTouchEnd);
+        this.container.addEventListener('touchstart', this._onTouchStart, { passive: false, capture: true });
+        this.container.addEventListener('touchmove', this._onTouchMove, { passive: false, capture: true });
+        this.container.addEventListener('touchend', this._onTouchEnd, { capture: true });
         
-        console.log('All event listeners attached to canvas wrapper');
+        console.log('All event listeners attached to canvas wrapper in capture phase');
     }
 
     /**
@@ -130,17 +130,17 @@ export class CanvasInteractions {
     destroy() {
         if (!this.container) return;
         
-        this.container.removeEventListener('mousedown', this._onMouseDown);
-        this.container.removeEventListener('mousemove', this._onMouseMove);
-        this.container.removeEventListener('mouseup', this._onMouseUp);
-        this.container.removeEventListener('wheel', this._onWheel);
-        this.container.removeEventListener('contextmenu', this._onContextMenu);
-        this.container.removeEventListener('dblclick', this._onDoubleClick);
-        this.container.removeEventListener('dragover', this._onDragOver);
-        this.container.removeEventListener('drop', this._onDrop);
-        this.container.removeEventListener('touchstart', this._onTouchStart);
-        this.container.removeEventListener('touchmove', this._onTouchMove);
-        this.container.removeEventListener('touchend', this._onTouchEnd);
+        this.container.removeEventListener('mousedown', this._onMouseDown, true);
+        this.container.removeEventListener('mousemove', this._onMouseMove, true);
+        this.container.removeEventListener('mouseup', this._onMouseUp, true);
+        this.container.removeEventListener('wheel', this._onWheel, true);
+        this.container.removeEventListener('contextmenu', this._onContextMenu, true);
+        this.container.removeEventListener('dblclick', this._onDoubleClick, true);
+        this.container.removeEventListener('dragover', this._onDragOver, true);
+        this.container.removeEventListener('drop', this._onDrop, true);
+        this.container.removeEventListener('touchstart', this._onTouchStart, true);
+        this.container.removeEventListener('touchmove', this._onTouchMove, true);
+        this.container.removeEventListener('touchend', this._onTouchEnd, true);
         
         document.removeEventListener('keydown', this._onKeyDown);
         document.removeEventListener('keyup', this._onKeyUp);
