@@ -6,12 +6,12 @@
       <field name="name">quickboard.item.list</field>
       <field name="model">quickboard.item</field>
       <field name="arch" type="xml">
-        <tree string="Quickboard Item">
+        <list string="Quickboard Item">
           <field name="name"/>
           <field name="model_name"/>
           <field name="chart_type"/>
           <field name="type"/>
-        </tree>
+        </list>
       </field>
     </record>
 
@@ -67,7 +67,7 @@
     <record id="quickboard_item_action_window" model="ir.actions.act_window">
       <field name="name">Quickboard Item</field>
       <field name="res_model">quickboard.item</field>
-      <field name="view_mode">tree,form</field>
+      <field name="view_mode">list,form</field>
     </record>
 
     <!-- Sub Menu item -->
