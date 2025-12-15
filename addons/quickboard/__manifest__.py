@@ -19,7 +19,7 @@
     'assets': {
          "web.assets_backend": [
             "quickboard/static/src/**/*",
-            ("remove", "quickboard/static/src/quickboard/**/*")
+            "quickboard/static/src/quickboard/quickboard_service.js",
         ],
         "quickboard.assets": [
             ('include', "web.chartjs_lib"),
