@@ -30,6 +30,7 @@
                 <field name="user_id"/>
                 <field name="shared"/>
                 <field name="write_date"/>
+                <button name="action_open_canvas" type="object" string="View" class="btn btn-sm btn-primary"/>
             </list>
         </field>
     </record>
