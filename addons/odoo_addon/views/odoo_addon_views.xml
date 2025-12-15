@@ -98,7 +98,7 @@
             <field name="name">x_test.form</field>
             <field name="model">x_test</field>
             <field name="arch" type="xml">
-                <form>
+                <form create="false" edit="false" delete="false">
                     <sheet>
                         <div style="text-align: center; padding: 50px;">
                             <h1>Hello</h1>
