@@ -912,24 +912,39 @@ export class CanvasInteractions {
 
     _createElementAtPoint(type, canvasPoint, options = {}) {
         console.log('Creating element:', type, 'at point:', canvasPoint, 'with options:', options);
+        console.log('Canvas:', this.canvas);
+        console.log('Canvas createElement method exists:', typeof this.canvas.createElement);
+
         const defaults = ELEMENT_DEFAULTS[type] || {};
+        console.log('Element defaults:', defaults);
 
-        const element = this.canvas.createElement(type, {
-            x: canvasPoint.x - (defaults.width || 100) / 2,
-            y: canvasPoint.y - (defaults.height || 100) / 2,
-            properties: options
-        });
+        try {
+            const element = this.canvas.createElement(type, {
+                x: canvasPoint.x - (defaults.width || 100) / 2,
+                y: canvasPoint.y - (defaults.height || 100) / 2,
+                properties: options
+            });
 
-        if (element) {
-            console.log('Element created with ID:', element.id);
-            this.canvas.addElement(element);
-            this.canvas.selectElement(element.id);
-            console.log('Element added and selected');
+            console.log('Element created:', element);
 
-            // Switch back to select tool
-            this.setTool(TOOLS.SELECT);
-        } else {
-            console.log('Failed to create element');
+            if (element) {
+                console.log('Element created with ID:', element.id);
+                const addResult = this.canvas.addElement(element);
+                console.log('addElement result:', addResult);
+
+                const selectResult = this.canvas.selectElement(element.id);
+                console.log('selectElement result:', selectResult);
+
+                console.log('Element added and selected');
+
+                // Switch back to select tool
+                this.setTool(TOOLS.SELECT);
+            } else {
+                console.error('createElement returned null/undefined');
+            }
+        } catch (error) {
+            console.error('Error in _createElementAtPoint:', error);
+            console.error('Error stack:', error.stack);
         }
     }
 
