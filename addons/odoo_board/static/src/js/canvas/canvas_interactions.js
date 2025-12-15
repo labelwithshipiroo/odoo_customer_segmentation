@@ -217,8 +217,15 @@ export class CanvasInteractions {
     _onMouseDown(e) {
         // Check if event is within canvas bounds
         const rect = this.container.getBoundingClientRect();
+        console.log('_onMouseDown checking bounds:', {
+            clientX: e.clientX, clientY: e.clientY,
+            rectLeft: rect.left, rectRight: rect.right,
+            rectTop: rect.top, rectBottom: rect.bottom
+        });
+        
         if (e.clientX < rect.left || e.clientX > rect.right ||
             e.clientY < rect.top || e.clientY > rect.bottom) {
+            console.log('Event outside canvas bounds, returning');
             return; // Event is outside canvas
         }
         
