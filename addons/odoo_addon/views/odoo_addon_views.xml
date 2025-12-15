@@ -59,7 +59,7 @@
             <field name="name">x_grouping.list</field>
             <field name="model">x_grouping</field>
             <field name="arch" type="xml">
-                <list>
+                <list create="false" edit="false" delete="false">
                     <field name="name" />
                 </list>
             </field>
