@@ -18,15 +18,15 @@
     ],
     'assets': {
          "web.assets_backend": [
-            "quickboard/static/src/**/*",
-            "quickboard/static/src/quickboard/quickboard_service.js",
+            "quickboard_v2/static/src/**/*",
+            "quickboard_v2/static/src/quickboard/quickboard_service.js",
         ],
-        "quickboard.assets": [
+        "quickboard_v2.assets": [
             ('include', "web.chartjs_lib"),
-            "quickboard/static/lib/gridstack/*",
-            "quickboard/static/lib/spinjs/*",
-            "quickboard/static/src/quickboard/**/*",
-            "quickboard/static/src/css/**/*",
+            "quickboard_v2/static/lib/gridstack/*",
+            "quickboard_v2/static/lib/spinjs/*",
+            "quickboard_v2/static/src/quickboard/**/*",
+            "quickboard_v2/static/src/css/**/*",
         ],
    },
     "license":"Other proprietary",
