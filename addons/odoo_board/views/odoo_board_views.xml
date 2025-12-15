@@ -10,7 +10,7 @@
             <tree string="Whiteboards">
                 <field name="name"/>
                 <field name="description"/>
-                <field name="create_uid" string="Created By"/>
+                <field name="user_id" string="Owner"/>
                 <field name="create_date" string="Created On"/>
                 <field name="write_date" string="Last Modified"/>
             </tree>
@@ -28,7 +28,7 @@
                 <field name="description"/>
                 <field name="thumbnail"/>
                 <field name="write_date"/>
-                <field name="create_uid"/>
+                <field name="user_id"/>
                 <templates>
                     <t t-name="kanban-box">
                         <div class="oe_kanban_global_click o_whiteboard_card">
@@ -85,7 +85,7 @@
                             <field name="description" placeholder="Add a description..."/>
                         </group>
                         <group>
-                            <field name="create_uid" readonly="1"/>
+                            <field name="user_id" readonly="1"/>
                             <field name="create_date" readonly="1"/>
                             <field name="write_date" readonly="1"/>
                         </group>
@@ -129,10 +129,10 @@
             <search string="Search Whiteboards">
                 <field name="name"/>
                 <field name="description"/>
-                <filter string="My Boards" name="my_boards" domain="[('create_uid', '=', uid)]"/>
+                <filter string="My Boards" name="my_boards" domain="[('user_id', '=', uid)]"/>
                 <filter string="Recent" name="recent" domain="[('write_date', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
                 <group expand="0" string="Group By">
-                    <filter string="Created By" name="group_creator" context="{'group_by': 'create_uid'}"/>
+                    <filter string="Owner" name="group_owner" context="{'group_by': 'user_id'}"/>
                     <filter string="Created Date" name="group_create_date" context="{'group_by': 'create_date:month'}"/>
                 </group>
             </search>

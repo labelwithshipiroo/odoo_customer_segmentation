@@ -18,6 +18,15 @@ class WhiteboardBoard(models.Model):
         tracking=True
     )
     description = fields.Text(string='Description')
+
+    # Board owner
+    user_id = fields.Many2one(
+        'res.users',
+        string='Owner',
+        default=lambda self: self.env.user,
+        required=True,
+        tracking=True
+    )
     
     # Store board data as JSON
     board_data = fields.Text(
