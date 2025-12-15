@@ -23,20 +23,6 @@
                     </div>
                 </div>
                 <div class="d-flex my-auto mb-2">
-                    <div class="input-group input-group-sm ms-1 me-1">
-                        <span class="input-group-text d-none d-md-block">Start Date</span>
-                        <div class="form-control">
-                            <DateTimeInput type="'date'" value="state.startDate" placeholder="'Start Date'"
-                                onChange="(d) => this.onStartDateChanged(d)"/>
-                        </div>
-                    </div>
-                    <div class="input-group input-group-sm ms-1 me-1">
-                        <span class="input-group-text d-none d-md-block">End Date</span>
-                        <div class="form-control">
-                            <DateTimeInput type="'date'" value="state.endDate" placeholder="'End Date'"
-                                onChange="(d) => this.onEndDateChanged(d)"/>
-                        </div>
-                    </div>
                     <button id="applyFilter" type="button" class="btn btn-primary">
                         Apply
                     </button>
