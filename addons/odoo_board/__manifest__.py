@@ -20,6 +20,7 @@
     ],
     'assets': {
          "web.assets_backend": [
+            "odoo_board/static/src/odoo_board/odoo_board_loader.js",
             "odoo_board/static/src/odoo_board/odoo_board.js",
             "odoo_board/static/src/odoo_board/whiteboard_element.js",
             "odoo_board/static/src/odoo_board/xml/whiteboard_templates.xml",

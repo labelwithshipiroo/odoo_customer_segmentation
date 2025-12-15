@@ -17,4 +17,4 @@ class OdooBoardLoader extends Component {
     };
 }
 
-registry.category("actions").add("odoo_board", OdooBoardLoader);
+registry.category("actions").add("whiteboard_canvas", OdooBoardLoader);
