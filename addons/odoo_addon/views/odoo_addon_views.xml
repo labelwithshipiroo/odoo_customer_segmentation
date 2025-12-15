@@ -60,6 +60,7 @@
             <field name="model">x_grouping</field>
             <field name="arch" type="xml">
                 <list create="false" edit="false" delete="false">
+                    Hello World List View
                     <!-- No fields - custom content will be added by JavaScript -->
                 </list>
             </field>
