@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Main Whiteboard View Template -->
+    <t t-name="odoo_board.WhiteboardView">
+        <div class="whiteboard-root">
+            <t t-if="state.loading">
+                <div class="whiteboard-loading">
+                    <div class="loading-spinner"></div>
+                    <span>Loading whiteboard...</span>
+                </div>
+            </t>
+            <t t-elif="state.error">
+                <div class="whiteboard-error">
+                    <div class="error-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                    </div>
+                    <h3>Error Loading Board</h3>
+                    <p t-esc="state.error"/>
+                    <button class="btn btn-primary" t-on-click="onBack">Go Back</button>
+                </div>
+            </t>
+            <t t-else="">
+                <div t-ref="container" class="whiteboard-container"></div>
+            </t>
+        </div>
+    </t>
+
+    <!-- Whiteboard Form Widget Template -->
+    <t t-name="odoo_board.WhiteboardFormWidget">
+        <div class="whiteboard-form-widget">
+            <div t-ref="container" class="whiteboard-container" style="height: 600px;"></div>
+        </div>
+    </t>
+
+    <!-- Kanban Preview Template -->
+    <t t-name="odoo_board.WhiteboardKanbanPreview">
+        <div class="whiteboard-kanban-preview">
+            <canvas t-ref="canvas" width="200" height="120"></canvas>
+        </div>
+    </t>
+
+    <!-- Board Card Template for Kanban View -->
+    <t t-name="odoo_board.BoardCard">
+        <div class="board-card">
+            <div class="board-card-preview">
+                <WhiteboardKanbanPreview record="record"/>
+            </div>
+            <div class="board-card-info">
+                <h4 class="board-card-name" t-esc="record.data.name"/>
+                <div class="board-card-meta">
+                    <span class="board-card-date">
+                        <t t-esc="record.data.write_date"/>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>

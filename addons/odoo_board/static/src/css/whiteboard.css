@@ -1,0 +1,1107 @@
+/* ============================================
+   OdooBoard - Professional Whiteboard Styles
+   ============================================ */
+
+/* CSS Variables */
+:root {
+    --wb-primary: #2563eb;
+    --wb-primary-hover: #1d4ed8;
+    --wb-secondary: #64748b;
+    --wb-success: #10b981;
+    --wb-warning: #f59e0b;
+    --wb-danger: #ef4444;
+    --wb-background: #f8fafc;
+    --wb-surface: #ffffff;
+    --wb-border: #e2e8f0;
+    --wb-text: #1e293b;
+    --wb-text-muted: #64748b;
+    --wb-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --wb-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --wb-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    --wb-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    --wb-radius-sm: 4px;
+    --wb-radius: 8px;
+    --wb-radius-lg: 12px;
+    --wb-radius-xl: 16px;
+    --wb-transition: all 0.15s ease;
+    --wb-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --wb-grid-color: #e2e8f0;
+    --wb-grid-size: 20px;
+}
+
+/* Main Container */
+.whiteboard-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--wb-background);
+    font-family: var(--wb-font);
+    overflow: hidden;
+    z-index: 1000;
+}
+
+/* ============================================
+   Toolbar Styles
+   ============================================ */
+.wb-toolbar {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 12px;
+    background: var(--wb-surface);
+    border-radius: var(--wb-radius-lg);
+    box-shadow: var(--wb-shadow-lg);
+    z-index: 100;
+    border: 1px solid var(--wb-border);
+}
+
+.wb-toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.wb-toolbar-divider {
+    width: 1px;
+    height: 32px;
+    background: var(--wb-border);
+    margin: 0 8px;
+}
+
+.wb-toolbar-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    border-radius: var(--wb-radius);
+    color: var(--wb-text);
+    cursor: pointer;
+    transition: var(--wb-transition);
+    position: relative;
+}
+
+.wb-toolbar-btn:hover {
+    background: #f1f5f9;
+}
+
+.wb-toolbar-btn.active {
+    background: #e0e7ff;
+    color: var(--wb-primary);
+}
+
+.wb-toolbar-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.wb-toolbar-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.wb-toolbar-btn .tooltip {
+    position: absolute;
+    bottom: -36px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 6px 10px;
+    background: var(--wb-text);
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: var(--wb-radius-sm);
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--wb-transition);
+    pointer-events: none;
+}
+
+.wb-toolbar-btn:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Secondary Toolbar (Top Right) */
+.wb-toolbar-secondary {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 100;
+}
+
+.wb-toolbar-secondary .wb-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: var(--wb-surface);
+    border: 1px solid var(--wb-border);
+    border-radius: var(--wb-radius);
+    color: var(--wb-text);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--wb-transition);
+    box-shadow: var(--wb-shadow-sm);
+}
+
+.wb-toolbar-secondary .wb-btn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+.wb-toolbar-secondary .wb-btn-primary {
+    background: var(--wb-primary);
+    border-color: var(--wb-primary);
+    color: white;
+}
+
+.wb-toolbar-secondary .wb-btn-primary:hover {
+    background: var(--wb-primary-hover);
+    border-color: var(--wb-primary-hover);
+}
+
+/* Board Name Input */
+.wb-board-name {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 100;
+}
+
+.wb-board-name input {
+    padding: 10px 16px;
+    font-size: 16px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    border-radius: var(--wb-radius);
+    background: var(--wb-surface);
+    color: var(--wb-text);
+    min-width: 200px;
+    box-shadow: var(--wb-shadow-sm);
+    transition: var(--wb-transition);
+}
+
+.wb-board-name input:hover {
+    border-color: var(--wb-border);
+}
+
+.wb-board-name input:focus {
+    outline: none;
+    border-color: var(--wb-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* ============================================
+   Canvas Styles
+   ============================================ */
+.wb-canvas-wrapper {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    cursor: grab;
+}
+
+.wb-canvas-wrapper.panning {
+    cursor: grabbing;
+}
+
+.wb-canvas-wrapper.drawing {
+    cursor: crosshair;
+}
+
+.wb-canvas {
+    position: absolute;
+    transform-origin: 0 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Canvas Grid Background */
+.wb-canvas-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    pointer-events: none;
+    background-image: 
+        radial-gradient(circle, var(--wb-grid-color) 1px, transparent 1px);
+    background-size: var(--wb-grid-size) var(--wb-grid-size);
+    opacity: 0.8;
+}
+
+/* SVG Canvas for connectors */
+.wb-svg-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.wb-svg-canvas path {
+    pointer-events: stroke;
+}
+
+/* ============================================
+   Element Base Styles
+   ============================================ */
+.wb-element {
+    position: absolute;
+    user-select: none;
+    transition: box-shadow 0.15s ease;
+}
+
+.wb-element:hover {
+    z-index: 10;
+}
+
+.wb-element.selected {
+    z-index: 100;
+}
+
+.wb-element.dragging {
+    opacity: 0.9;
+    z-index: 1000;
+}
+
+/* Selection Box */
+.wb-element .selection-box {
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border: 2px solid var(--wb-primary);
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.wb-element.selected .selection-box {
+    opacity: 1;
+}
+
+/* Resize Handles */
+.wb-resize-handle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: white;
+    border: 2px solid var(--wb-primary);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    z-index: 10;
+}
+
+.wb-element.selected .wb-resize-handle {
+    opacity: 1;
+}
+
+.wb-resize-handle.nw { top: -5px; left: -5px; cursor: nw-resize; }
+.wb-resize-handle.n { top: -5px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
+.wb-resize-handle.ne { top: -5px; right: -5px; cursor: ne-resize; }
+.wb-resize-handle.e { top: 50%; right: -5px; transform: translateY(-50%); cursor: e-resize; }
+.wb-resize-handle.se { bottom: -5px; right: -5px; cursor: se-resize; }
+.wb-resize-handle.s { bottom: -5px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
+.wb-resize-handle.sw { bottom: -5px; left: -5px; cursor: sw-resize; }
+.wb-resize-handle.w { top: 50%; left: -5px; transform: translateY(-50%); cursor: w-resize; }
+
+/* Rotation Handle */
+.wb-rotate-handle {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 2px solid var(--wb-primary);
+    border-radius: 50%;
+    cursor: grab;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wb-element.selected .wb-rotate-handle {
+    opacity: 1;
+}
+
+.wb-rotate-handle::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 1px;
+    height: 10px;
+    background: var(--wb-primary);
+    transform: translateX(-50%);
+}
+
+/* ============================================
+   Sticky Note Styles
+   ============================================ */
+.wb-sticky-note {
+    min-width: 180px;
+    min-height: 120px;
+    border-radius: 4px;
+    box-shadow: var(--wb-shadow);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.wb-sticky-note-header {
+    height: 28px;
+    background: rgba(0, 0, 0, 0.08);
+    cursor: grab;
+    flex-shrink: 0;
+}
+
+.wb-sticky-note-content {
+    flex: 1;
+    padding: 12px;
+    overflow: hidden;
+}
+
+.wb-sticky-note-content textarea,
+.wb-sticky-note-content .content-editable {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    resize: none;
+    outline: none;
+    font-size: 14px;
+    line-height: 1.5;
+    font-family: var(--wb-font);
+    color: inherit;
+}
+
+/* Sticky Note Colors */
+.wb-sticky-note.color-yellow { background: #fef3c7; color: #92400e; }
+.wb-sticky-note.color-blue { background: #dbeafe; color: #1e40af; }
+.wb-sticky-note.color-green { background: #dcfce7; color: #166534; }
+.wb-sticky-note.color-pink { background: #fce7f3; color: #9d174d; }
+.wb-sticky-note.color-purple { background: #e9d5ff; color: #6b21a8; }
+.wb-sticky-note.color-orange { background: #fed7aa; color: #c2410c; }
+.wb-sticky-note.color-red { background: #fecaca; color: #b91c1c; }
+.wb-sticky-note.color-teal { background: #ccfbf1; color: #0f766e; }
+.wb-sticky-note.color-gray { background: #f1f5f9; color: #475569; }
+
+/* ============================================
+   Text Element Styles
+   ============================================ */
+.wb-text-element {
+    min-width: 100px;
+    min-height: 40px;
+    padding: 8px 12px;
+    cursor: text;
+}
+
+.wb-text-element .content-editable {
+    width: 100%;
+    height: 100%;
+    outline: none;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.wb-text-element .content-editable:empty::before {
+    content: 'Type something...';
+    color: var(--wb-text-muted);
+}
+
+/* ============================================
+   Shape Styles
+   ============================================ */
+.wb-shape {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wb-shape svg {
+    width: 100%;
+    height: 100%;
+}
+
+.wb-shape-rectangle {
+    border-radius: var(--wb-radius);
+}
+
+.wb-shape-rounded-rectangle {
+    border-radius: var(--wb-radius-xl);
+}
+
+.wb-shape-circle {
+    border-radius: 50%;
+}
+
+.wb-shape-diamond {
+    transform: rotate(45deg);
+}
+
+.wb-shape-diamond .wb-shape-content {
+    transform: rotate(-45deg);
+}
+
+.wb-shape-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 80%;
+}
+
+.wb-shape-content .content-editable {
+    outline: none;
+    min-width: 50px;
+}
+
+/* ============================================
+   Frame Styles
+   ============================================ */
+.wb-frame {
+    background: transparent;
+    border: 2px dashed var(--wb-border);
+    border-radius: var(--wb-radius-lg);
+    min-width: 300px;
+    min-height: 200px;
+}
+
+.wb-frame-header {
+    position: absolute;
+    top: -32px;
+    left: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    background: var(--wb-surface);
+    border-radius: var(--wb-radius);
+    box-shadow: var(--wb-shadow-sm);
+}
+
+.wb-frame-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--wb-text);
+    border: none;
+    background: transparent;
+    outline: none;
+    min-width: 80px;
+}
+
+.wb-frame-number {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--wb-text-muted);
+    background: #f1f5f9;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+/* ============================================
+   Connector Styles
+   ============================================ */
+.wb-connector {
+    pointer-events: none;
+}
+
+.wb-connector path {
+    fill: none;
+    stroke: var(--wb-text);
+    stroke-width: 2;
+    pointer-events: stroke;
+    cursor: pointer;
+}
+
+.wb-connector path:hover {
+    stroke-width: 4;
+}
+
+.wb-connector.selected path {
+    stroke: var(--wb-primary);
+}
+
+.wb-connector-endpoint {
+    fill: white;
+    stroke: var(--wb-primary);
+    stroke-width: 2;
+    cursor: move;
+}
+
+/* Arrow markers */
+.wb-connector .arrow-head {
+    fill: var(--wb-text);
+}
+
+.wb-connector.selected .arrow-head {
+    fill: var(--wb-primary);
+}
+
+/* ============================================
+   Image Element Styles
+   ============================================ */
+.wb-image {
+    border-radius: var(--wb-radius);
+    overflow: hidden;
+    box-shadow: var(--wb-shadow);
+}
+
+.wb-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+.wb-image-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: #f8fafc;
+    border: 2px dashed var(--wb-border);
+    border-radius: var(--wb-radius);
+    color: var(--wb-text-muted);
+    cursor: pointer;
+}
+
+.wb-image-placeholder:hover {
+    background: #f1f5f9;
+    border-color: var(--wb-primary);
+}
+
+/* ============================================
+   Selection Rectangle
+   ============================================ */
+.wb-selection-rect {
+    position: absolute;
+    border: 2px solid var(--wb-primary);
+    background: rgba(37, 99, 235, 0.1);
+    pointer-events: none;
+    z-index: 1000;
+}
+
+/* ============================================
+   Minimap Styles
+   ============================================ */
+.wb-minimap {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    width: 200px;
+    height: 140px;
+    background: var(--wb-surface);
+    border: 1px solid var(--wb-border);
+    border-radius: var(--wb-radius);
+    box-shadow: var(--wb-shadow);
+    overflow: hidden;
+    z-index: 100;
+}
+
+.wb-minimap-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.wb-minimap-viewport {
+    position: absolute;
+    border: 2px solid var(--wb-primary);
+    background: rgba(37, 99, 235, 0.1);
+    cursor: move;
+}
+
+/* ============================================
+   Zoom Controls
+   ============================================ */
+.wb-zoom-controls {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    background: var(--wb-surface);
+    border: 1px solid var(--wb-border);
+    border-radius: var(--wb-radius);
+    box-shadow: var(--wb-shadow);
+    z-index: 100;
+}
+
+.wb-zoom-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    border-radius: var(--wb-radius-sm);
+    color: var(--wb-text);
+    cursor: pointer;
+    transition: var(--wb-transition);
+}
+
+.wb-zoom-btn:hover {
+    background: #f1f5f9;
+}
+
+.wb-zoom-level {
+    padding: 0 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--wb-text);
+    min-width: 50px;
+    text-align: center;
+}
+
+/* ============================================
+   Context Menu
+   ============================================ */
+.wb-context-menu {
+    position: fixed;
+    min-width: 200px;
+    background: var(--wb-surface);
+    border: 1px solid var(--wb-border);
+    border-radius: var(--wb-radius);
+    box-shadow: var(--wb-shadow-xl);
+    padding: 8px 0;
+    z-index: 10000;
+}
+
+.wb-context-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    font-size: 14px;
+    color: var(--wb-text);
+    cursor: pointer;
+    transition: var(--wb-transition);
+}
+
+.wb-context-menu-item:hover {
+    background: #f1f5f9;
+}
+
+.wb-context-menu-item.danger {
+    color: var(--wb-danger);
+}
+
+.wb-context-menu-item svg {
+    width: 16px;
+    height: 16px;
+    color: var(--wb-text-muted);
+}
+
+.wb-context-menu-item.danger svg {
+    color: var(--wb-danger);
+}
+
+.wb-context-menu-shortcut {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--wb-text-muted);
+}
+
+.wb-context-menu-divider {
+    height: 1px;
+    background: var(--wb-border);
+    margin: 8px 0;
+}
+
+/* ============================================
+   Properties Panel
+   ============================================ */
+.wb-properties-panel {
+    position: absolute;
+    top: 80px;
+    right: 16px;
+    width: 280px;
+    background: var(--wb-surface);
+    border: 1px solid var(--wb-border);
+    border-radius: var(--wb-radius-lg);
+    box-shadow: var(--wb-shadow-lg);
+    z-index: 100;
+    overflow: hidden;
+}
+
+.wb-properties-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border-bottom: 1px solid var(--wb-border);
+}
+
+.wb-properties-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--wb-text);
+}
+
+.wb-properties-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    border-radius: var(--wb-radius-sm);
+    color: var(--wb-text-muted);
+    cursor: pointer;
+}
+
+.wb-properties-close:hover {
+    background: #f1f5f9;
+    color: var(--wb-text);
+}
+
+.wb-properties-content {
+    padding: 16px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.wb-properties-section {
+    margin-bottom: 20px;
+}
+
+.wb-properties-section:last-child {
+    margin-bottom: 0;
+}
+
+.wb-properties-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--wb-text-muted);
+    margin-bottom: 8px;
+}
+
+.wb-properties-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--wb-border);
+    border-radius: var(--wb-radius);
+    font-size: 14px;
+    color: var(--wb-text);
+    transition: var(--wb-transition);
+}
+
+.wb-properties-input:focus {
+    outline: none;
+    border-color: var(--wb-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Color Picker */
+.wb-color-picker {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+
+.wb-color-swatch {
+    width: 100%;
+    aspect-ratio: 1;
+    border: 2px solid transparent;
+    border-radius: var(--wb-radius);
+    cursor: pointer;
+    transition: var(--wb-transition);
+}
+
+.wb-color-swatch:hover {
+    transform: scale(1.1);
+}
+
+.wb-color-swatch.selected {
+    border-color: var(--wb-text);
+}
+
+/* ============================================
+   Template Picker Modal
+   ============================================ */
+.wb-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.wb-modal {
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    background: var(--wb-surface);
+    border-radius: var(--wb-radius-xl);
+    box-shadow: var(--wb-shadow-xl);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.wb-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--wb-border);
+}
+
+.wb-modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--wb-text);
+}
+
+.wb-modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: transparent;
+    border-radius: var(--wb-radius);
+    color: var(--wb-text-muted);
+    cursor: pointer;
+}
+
+.wb-modal-close:hover {
+    background: #f1f5f9;
+    color: var(--wb-text);
+}
+
+.wb-modal-content {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+}
+
+/* Template Grid */
+.wb-template-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.wb-template-card {
+    background: var(--wb-background);
+    border: 1px solid var(--wb-border);
+    border-radius: var(--wb-radius-lg);
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--wb-transition);
+}
+
+.wb-template-card:hover {
+    border-color: var(--wb-primary);
+    box-shadow: var(--wb-shadow);
+    transform: translateY(-2px);
+}
+
+.wb-template-preview {
+    aspect-ratio: 16 / 10;
+    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--wb-text-muted);
+}
+
+.wb-template-info {
+    padding: 16px;
+}
+
+.wb-template-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--wb-text);
+    margin-bottom: 4px;
+}
+
+.wb-template-description {
+    font-size: 12px;
+    color: var(--wb-text-muted);
+}
+
+/* ============================================
+   Toast Notifications
+   ============================================ */
+.wb-toast-container {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 10000;
+}
+
+.wb-toast {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    background: var(--wb-text);
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: var(--wb-radius);
+    box-shadow: var(--wb-shadow-lg);
+    animation: toast-in 0.3s ease;
+}
+
+@keyframes toast-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.wb-toast.success {
+    background: var(--wb-success);
+}
+
+.wb-toast.error {
+    background: var(--wb-danger);
+}
+
+/* ============================================
+   Loading State
+   ============================================ */
+.wb-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--wb-background);
+    z-index: 1000;
+}
+
+.wb-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--wb-border);
+    border-top-color: var(--wb-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   Responsive Adjustments
+   ============================================ */
+@media (max-width: 768px) {
+    .wb-toolbar {
+        padding: 6px 8px;
+        gap: 2px;
+    }
+    
+    .wb-toolbar-btn {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .wb-toolbar-divider {
+        margin: 0 4px;
+    }
+    
+    .wb-minimap {
+        width: 150px;
+        height: 100px;
+    }
+    
+    .wb-properties-panel {
+        width: 100%;
+        right: 0;
+        top: auto;
+        bottom: 0;
+        border-radius: var(--wb-radius-lg) var(--wb-radius-lg) 0 0;
+        max-height: 50vh;
+    }
+}
+
+/* ============================================
+   Dark Mode (Future Implementation)
+   ============================================ */
+.wb-dark {
+    --wb-background: #0f172a;
+    --wb-surface: #1e293b;
+    --wb-border: #334155;
+    --wb-text: #f1f5f9;
+    --wb-text-muted: #94a3b8;
+    --wb-grid-color: #334155;
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+@media print {
+    .wb-toolbar,
+    .wb-toolbar-secondary,
+    .wb-zoom-controls,
+    .wb-minimap,
+    .wb-properties-panel {
+        display: none !important;
+    }
+    
+    .wb-canvas-wrapper {
+        overflow: visible !important;
+    }
+    
+    .wb-element {
+        box-shadow: none !important;
+    }
+}
