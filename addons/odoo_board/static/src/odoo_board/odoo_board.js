@@ -1,8 +1,6 @@
 /** @odoo-module **/
 
 import { Component, useState, useRef, onMounted } from "@odoo/owl";
-import { registry } from "@web/core/registry";
-import { useService } from "@web/core/utils/hooks";
 import { WhiteboardElement } from "./whiteboard_element";
 
 class OdooBoard extends Component {
@@ -11,8 +9,7 @@ class OdooBoard extends Component {
     static props = ["action"];
 
     setup() {
-        const rpc = useService("rpc");
-        this.rpc = rpc;
+        this.rpc = this.env.services.rpc;
         
         this.state = useState({
             elements: [],
