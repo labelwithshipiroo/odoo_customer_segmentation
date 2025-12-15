@@ -13,25 +13,53 @@ const quickboardService = {
             isReady: false
         });
 
+        // Helper to support multiple rpc service shapes (function or object with query/call)
+        async function callRpc(path, params) {
+            try {
+                if (typeof rpc === "function") {
+                    return await rpc(path, params);
+                }
+                if (rpc && typeof rpc.query === "function") {
+                    // rpc.query expects an object with route + params in some environments
+                    try {
+                        return await rpc.query({ route: path, params });
+                    } catch (e) {
+                        // fallback to calling query with (path, params)
+                        return await rpc.query(path, params);
+                    }
+                }
+                if (rpc && typeof rpc.call === "function") {
+                    return await rpc.call(path, params);
+                }
+                if (rpc && typeof rpc.rpc === "function") {
+                    return await rpc.rpc(path, params);
+                }
+                throw new Error("Unsupported rpc service shape");
+            } catch (err) {
+                console.error("callRpc failed", err);
+                throw err;
+            }
+        }
+
         async function getQuickboardItemDefs() {
             quickboard.isReady = false;
             quickboard.items = {};
-            const updates = await rpc("/quickboard/item_defs",{});
+            const updates = await callRpc("/quickboard/item_defs", {});
             Object.assign(quickboard.items, updates);
             quickboard.isReady = true;
         };
 
         async function getQuickboardItem(itemId, startDate, endDate) {
-            return await rpc("/quickboard/item",{
-                    item_id: itemId,
-                    start_date: startDate.toSQLDate(),
-                    end_date: endDate.toSQLDate()
-                });
+            return await callRpc("/quickboard/item", {
+                item_id: itemId,
+                start_date: startDate.toSQLDate(),
+                end_date: endDate.toSQLDate(),
+            });
         };
 
         async function saveLayout(layout){
-            await rpc("/quickboard/save_layout",{
-                "layout": layout
+            await callRpc("/quickboard/save_layout", {
+                layout: layout
             });
         };
 
