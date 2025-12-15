@@ -24,7 +24,7 @@ class OdooBoard extends Component {
 
         const boardId = this.props.action.context?.board_id;
         if (boardId) {
-            rpc('/web/dataset/call_kw', {
+            this.rpc('/web/dataset/call_kw', {
                 model: 'whiteboard.board',
                 method: 'get_elements',
                 args: [boardId],
