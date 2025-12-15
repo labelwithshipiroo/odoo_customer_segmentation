@@ -24,6 +24,7 @@
             "odoo_board/static/src/odoo_board/odoo_board.js",
             "odoo_board/static/src/odoo_board/whiteboard_element.js",
             "odoo_board/static/src/odoo_board/xml/whiteboard_templates.xml",
+            "odoo_board/static/src/odoo_board/css/whiteboard.css",
         ],
     },
     "license": "Other proprietary",
