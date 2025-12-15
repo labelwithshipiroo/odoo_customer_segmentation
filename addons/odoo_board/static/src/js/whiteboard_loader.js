@@ -47,19 +47,33 @@ export class WhiteboardView extends Component {
     }
 
     /**
+     * Create the whiteboard app instance
+     */
+    _createWhiteboardApp() {
+        const container = this.containerRef.el;
+        if (!container) return;
+
+        // Initialize whiteboard app
+        this.whiteboardApp = new WhiteboardApp(container, {
+            boardId: this.state.boardId,
+            boardName: this.state.boardName,
+            readOnly: false,
+            showMinimap: true,
+            showToolbar: true,
+            autoSave: true,
+        });
+
+        // Set up RPC function for the whiteboard
+        this.whiteboardApp.setRpc(this._rpc.bind(this));
+    }
+
+    /**
      * Initialize the whiteboard application
      */
     async _initWhiteboard() {
         this.state.loading = true;
         this.state.error = null;
 
-        const container = this.containerRef.el;
-        if (!container) {
-            this.state.error = 'Container not found';
-            this.state.loading = false;
-            return;
-        }
-        
         try {
             // If no board ID, create a new board
             if (!this.state.boardId) {
@@ -68,32 +82,31 @@ export class WhiteboardView extends Component {
                 }]);
                 this.state.boardId = newBoardIds[0];
             }
-            
+
             // Load board data
             const boards = await this.orm.read('whiteboard.board', [this.state.boardId], ['name', 'board_data', 'canvas_state']);
-            
+
             if (!boards || boards.length === 0) {
                 this.state.error = 'Board not found';
                 this.state.loading = false;
                 return;
             }
-            
+
             const board = boards[0];
             this.state.boardName = board.name;
-            
-            // Initialize whiteboard app
-            this.whiteboardApp = new WhiteboardApp(container, {
-                boardId: this.state.boardId,
-                boardName: board.name,
-                readOnly: false,
-                showMinimap: true,
-                showToolbar: true,
-                autoSave: true,
-            });
-            
-            // Set up RPC function for the whiteboard
-            this.whiteboardApp.setRpc(this._rpc.bind(this));
-            
+
+            // Update whiteboard app with board info
+            this.whiteboardApp.options.boardId = this.state.boardId;
+            this.whiteboardApp.options.boardName = board.name;
+            this.whiteboardApp.boardId = this.state.boardId;
+            this.whiteboardApp.boardName = board.name;
+
+            // Update name input
+            const nameInput = this.boardNameContainer?.querySelector('input');
+            if (nameInput) {
+                nameInput.value = board.name;
+            }
+
             // Load existing board data
             if (board.board_data) {
                 try {
@@ -107,7 +120,7 @@ export class WhiteboardView extends Component {
                     console.error('Failed to parse board data:', e);
                 }
             }
-            
+
             this.state.loading = false;
         } catch (error) {
             console.error('Failed to initialize whiteboard:', error);
@@ -120,8 +133,9 @@ export class WhiteboardView extends Component {
      * RPC function for the whiteboard app
      */
     async _rpc(route, params) {
-        if (params.model && params.method) {
-            return this.orm.call(params.model, params.method, params.args, params.kwargs);
+        if (route === '/web/dataset/call_kw') {
+            // Handle ORM calls
+            return this.orm.call(params.model, params.method, params.args || [], params.kwargs || {});
         }
         return null;
     }
@@ -208,8 +222,11 @@ export class WhiteboardFormWidget extends Component {
         
         this.whiteboardApp = null;
         
-        onMounted(() => {
-            this._initWhiteboard();
+        onMounted(async () => {
+            // Create whiteboard app first
+            this._createWhiteboardApp();
+            // Then initialize with data
+            await this._initWhiteboard();
         });
         
         onWillUnmount(() => {

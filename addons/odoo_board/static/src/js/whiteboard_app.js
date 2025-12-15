@@ -71,11 +71,6 @@ export class WhiteboardApp {
         this._initComponents();
         this._setupEventHandlers();
         this._setupAutoSave();
-        
-        // Load board data if ID provided
-        if (this.boardId) {
-            this.loadBoard(this.boardId);
-        }
     }
 
     /**

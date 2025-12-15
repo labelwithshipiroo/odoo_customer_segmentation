@@ -117,9 +117,12 @@ class WhiteboardBoard(models.Model):
             'canvasState': canvas_state,
         }
 
-    def save_board_data(self, data):
+    @api.model
+    def save_board_data(self, board_id, data):
         """Save board data from the whiteboard app"""
-        self.ensure_one()
+        board = self.browse(board_id)
+        if not board.exists():
+            return False
         
         values = {}
         
