@@ -15,12 +15,24 @@ odoo.define('odoo_addon.grouping', [], function () {
 
             var listView = document.querySelector('.o_list_view') || document.querySelector('.o_view_controller');
             if (listView && listView.offsetParent !== null) { // Check if visible
+                // Hide standard list view content
+                var standardTable = listView.querySelector('table');
+                if (standardTable) {
+                    standardTable.style.display = 'none';
+                }
+
+                // Hide search bar and other controls
+                var searchBar = listView.querySelector('.o_searchview');
+                if (searchBar) {
+                    searchBar.style.display = 'none';
+                }
+
                 // Create container if it doesn't exist
                 var container = listView.querySelector('.grouping-container');
                 if (!container) {
                     container = document.createElement('div');
                     container.className = 'grouping-container';
-                    container.style.cssText = 'width: 100%; min-height: 200px; margin-top: 20px; padding: 20px;';
+                    container.style.cssText = 'width: 100%; min-height: 200px; padding: 20px;';
                     // Insert at the beginning of the view
                     if (listView.firstChild) {
                         listView.insertBefore(container, listView.firstChild);

@@ -60,7 +60,7 @@
             <field name="model">x_grouping</field>
             <field name="arch" type="xml">
                 <list create="false" edit="false" delete="false">
-                    <field name="name" />
+                    <!-- No fields - custom content will be added by JavaScript -->
                 </list>
             </field>
         </record>
