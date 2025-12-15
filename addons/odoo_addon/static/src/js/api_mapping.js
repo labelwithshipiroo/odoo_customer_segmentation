@@ -1,4 +1,4 @@
-odoo.define('odoo_addon.api_mapping', function () {
+odoo.define('odoo_addon.api_mapping', [], function () {
     "use strict";
 
     function replaceApiMappingField() {
