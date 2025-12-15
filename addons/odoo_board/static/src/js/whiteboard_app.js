@@ -245,6 +245,15 @@ export class WhiteboardApp {
             }
         });
         
+        // GPU-accelerated drag/resize callbacks
+        this.interactions.on('onDragUpdate', (elementId, action, offset) => {
+            this.renderer.handleDragUpdate(elementId, action, offset);
+        });
+        
+        this.interactions.on('onResizeUpdate', (elementId, action, bounds) => {
+            this.renderer.handleResizeUpdate(elementId, action, bounds);
+        });
+        
         // Toolbar events
         this.toolbar?.on('onToolSelect', (tool, options) => {
             this.interactions.setTool(tool, options);

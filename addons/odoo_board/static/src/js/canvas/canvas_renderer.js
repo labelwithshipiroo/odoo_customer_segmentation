@@ -5,6 +5,7 @@ import { ELEMENT_TYPES } from '../utils/constants';
 /**
  * Canvas Renderer
  * Handles rendering of all canvas elements and UI
+ * Optimized for Miro-like smooth performance with GPU acceleration
  */
 export class CanvasRenderer {
     constructor(canvasCore, containerEl) {
@@ -19,9 +20,16 @@ export class CanvasRenderer {
         this.elementsLayer = null;
         this.selectionRectEl = null;
         
+        // Element DOM cache for fast access
+        this._elementDOMCache = new Map();
+        
         // Animation frame
         this.rafId = null;
         this.needsRender = true;
+        
+        // Drag/resize state for GPU-accelerated updates
+        this._dragTransforms = new Map();
+        this._resizeState = null;
         
         // Initialize
         this._initDOM();
@@ -117,14 +125,135 @@ export class CanvasRenderer {
         
         const transform = this.canvas.getTransform();
         
-        // Update canvas transform
-        this.canvasElement.style.transform = `translate(${transform.panX}px, ${transform.panY}px) scale(${transform.zoom})`;
+        // Update canvas transform using GPU-accelerated properties
+        this.canvasElement.style.transform = `translate3d(${transform.panX}px, ${transform.panY}px, 0) scale(${transform.zoom})`;
         
         // Update grid
         this._renderGrid(transform);
         
         // Render elements
         this._renderElements();
+    }
+
+    // ==================== GPU-Accelerated Drag/Resize ====================
+
+    /**
+     * Handle drag updates with GPU-accelerated transforms
+     * Called from canvas_interactions via callback
+     * @param {string} elementId
+     * @param {string} action - 'start', 'move', or 'end'
+     * @param {Object} offset - {x, y} offset
+     */
+    handleDragUpdate(elementId, action, offset) {
+        const domEl = this._getElementDOMCached(elementId);
+        if (!domEl) return;
+        
+        switch (action) {
+            case 'start':
+                // Prepare element for GPU-accelerated dragging
+                domEl.classList.add('wb-dragging');
+                domEl.style.willChange = 'transform';
+                // Disable transitions during drag
+                domEl.style.transition = 'none';
+                this._dragTransforms.set(elementId, { x: 0, y: 0 });
+                break;
+                
+            case 'move':
+                // Apply transform offset (GPU accelerated)
+                this._dragTransforms.set(elementId, offset);
+                const element = this.canvas.getElement(elementId);
+                if (element) {
+                    const rotation = element.rotation || 0;
+                    // Use translate3d for GPU acceleration
+                    domEl.style.transform = `translate3d(${offset.x}px, ${offset.y}px, 0) rotate(${rotation}deg)`;
+                }
+                break;
+                
+            case 'end':
+                // Clear GPU optimization hints
+                domEl.classList.remove('wb-dragging');
+                domEl.style.willChange = '';
+                domEl.style.transition = '';
+                domEl.style.transform = '';
+                this._dragTransforms.delete(elementId);
+                // Force re-render to update position
+                this.requestRender();
+                break;
+        }
+    }
+
+    /**
+     * Handle resize updates with optimized rendering
+     * @param {string} elementId
+     * @param {string} action - 'start', 'resize', or 'end'
+     * @param {Object} bounds - {x, y, width, height}
+     */
+    handleResizeUpdate(elementId, action, bounds) {
+        const domEl = this._getElementDOMCached(elementId);
+        if (!domEl) return;
+        
+        switch (action) {
+            case 'start':
+                domEl.classList.add('wb-resizing');
+                domEl.style.willChange = 'transform, width, height';
+                domEl.style.transition = 'none';
+                this._resizeState = { elementId, originalBounds: { ...bounds } };
+                break;
+                
+            case 'resize':
+                // Apply resize using transforms for smooth updates
+                const original = this._resizeState?.originalBounds;
+                if (original) {
+                    const element = this.canvas.getElement(elementId);
+                    const rotation = element?.rotation || 0;
+                    
+                    // Calculate scale and translation
+                    const scaleX = bounds.width / original.width;
+                    const scaleY = bounds.height / original.height;
+                    const translateX = bounds.x - original.x;
+                    const translateY = bounds.y - original.y;
+                    
+                    // Use transform for GPU-accelerated resize preview
+                    domEl.style.transformOrigin = 'top left';
+                    domEl.style.transform = `translate3d(${translateX}px, ${translateY}px, 0) scale(${scaleX}, ${scaleY}) rotate(${rotation}deg)`;
+                }
+                break;
+                
+            case 'end':
+                domEl.classList.remove('wb-resizing');
+                domEl.style.willChange = '';
+                domEl.style.transition = '';
+                domEl.style.transform = '';
+                domEl.style.transformOrigin = '';
+                this._resizeState = null;
+                // Force re-render with actual dimensions
+                this.requestRender();
+                break;
+        }
+    }
+
+    /**
+     * Get cached DOM element for element ID
+     * @param {string} elementId
+     * @returns {HTMLElement|null}
+     */
+    _getElementDOMCached(elementId) {
+        let domEl = this._elementDOMCache.get(elementId);
+        if (!domEl || !domEl.isConnected) {
+            domEl = this.elementsLayer?.querySelector(`[data-id="${elementId}"]`);
+            if (domEl) {
+                this._elementDOMCache.set(elementId, domEl);
+            }
+        }
+        return domEl;
+    }
+
+    /**
+     * Clear DOM cache for element
+     * @param {string} elementId
+     */
+    clearElementCache(elementId) {
+        this._elementDOMCache.delete(elementId);
     }
 
     /**
@@ -304,6 +433,7 @@ export class CanvasRenderer {
 
     /**
      * Render regular elements
+     * Optimized to minimize DOM operations and support GPU-accelerated transforms
      * @param {Array} elements
      * @param {Set} selectedIds
      */
@@ -320,26 +450,58 @@ export class CanvasRenderer {
         // Sort by z-index
         elements.sort((a, b) => a.zIndex - b.zIndex);
         
+        // Use DocumentFragment for batch DOM insertions
+        const fragment = document.createDocumentFragment();
+        const toAppend = [];
+        
         for (const element of elements) {
             if (!element.visible) continue;
             
             renderedIds.add(element.id);
             const isSelected = selectedIds.has(element.id);
+            const isDragging = this._dragTransforms.has(element.id);
+            const isResizing = this._resizeState?.elementId === element.id;
             
             let domEl = existingEls.get(element.id);
+            
+            // Skip re-render during drag/resize - transforms handle visual updates
+            if ((isDragging || isResizing) && domEl) {
+                // Just update selection state
+                domEl.classList.toggle('selected', isSelected);
+                continue;
+            }
             
             if (!domEl || element.isDirty()) {
                 // Create or update element
                 const html = element.render();
                 
                 if (domEl) {
-                    domEl.outerHTML = html;
-                    domEl = this.elementsLayer.querySelector(`[data-id="${element.id}"]`);
+                    // Update existing element
+                    const temp = document.createElement('div');
+                    temp.innerHTML = html;
+                    const newEl = temp.firstElementChild;
+                    
+                    // Preserve transform if dragging
+                    if (isDragging) {
+                        const offset = this._dragTransforms.get(element.id);
+                        if (offset) {
+                            newEl.style.transform = `translate3d(${offset.x}px, ${offset.y}px, 0)`;
+                        }
+                    }
+                    
+                    domEl.replaceWith(newEl);
+                    domEl = newEl;
+                    
+                    // Update cache
+                    this._elementDOMCache.set(element.id, domEl);
                 } else {
                     const temp = document.createElement('div');
                     temp.innerHTML = html;
                     domEl = temp.firstElementChild;
-                    this.elementsLayer.appendChild(domEl);
+                    toAppend.push(domEl);
+                    
+                    // Cache the new element
+                    this._elementDOMCache.set(element.id, domEl);
                 }
                 
                 element.markClean();
@@ -347,18 +509,21 @@ export class CanvasRenderer {
             
             // Update selection state
             if (domEl) {
-                const wasSelected = domEl.classList.contains('selected');
                 domEl.classList.toggle('selected', isSelected);
-                if (wasSelected !== isSelected) {
-                    console.log('Element', element.id, isSelected ? 'selected' : 'deselected');
-                }
             }
+        }
+        
+        // Batch append new elements
+        if (toAppend.length > 0) {
+            toAppend.forEach(el => fragment.appendChild(el));
+            this.elementsLayer.appendChild(fragment);
         }
         
         // Remove elements that no longer exist
         existingEls.forEach((el, id) => {
             if (!renderedIds.has(id)) {
                 el.remove();
+                this._elementDOMCache.delete(id);
             }
         });
     }
@@ -530,6 +695,9 @@ export class CanvasRenderer {
         this.svgLayer = null;
         this.elementsLayer = null;
         this.selectionRectEl = null;
+        this._elementDOMCache.clear();
+        this._dragTransforms.clear();
+        this._resizeState = null;
     }
 }
 

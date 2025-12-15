@@ -226,6 +226,11 @@
     bottom: 0;
     overflow: hidden;
     cursor: grab;
+    /* Enable GPU compositing for the entire canvas area */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    /* Touch action for better mobile performance */
+    touch-action: none;
 }
 
 .wb-canvas-wrapper.panning {
@@ -241,6 +246,10 @@
     transform-origin: 0 0;
     width: 100%;
     height: 100%;
+    /* GPU acceleration for pan/zoom */
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 /* Canvas Grid Background */
@@ -279,20 +288,57 @@
 .wb-element {
     position: absolute;
     user-select: none;
-    transition: box-shadow 0.15s ease;
+    /* Use transform for GPU acceleration */
+    transform: translateZ(0);
+    /* Optimize for animations - removed transition for better drag performance */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
-.wb-element:hover {
+/* Only apply hover effects when not dragging/resizing */
+.wb-canvas-wrapper:not(.dragging):not(.resizing) .wb-element:hover {
     z-index: 10;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .wb-element.selected {
     z-index: 100;
 }
 
+/* GPU-accelerated dragging state */
+.wb-element.wb-dragging {
+    z-index: 1000 !important;
+    pointer-events: none;
+    /* GPU layer promotion */
+    will-change: transform;
+    /* Disable any transitions during drag */
+    transition: none !important;
+}
+
+/* GPU-accelerated resizing state */
+.wb-element.wb-resizing {
+    z-index: 1000 !important;
+    pointer-events: none;
+    will-change: transform, width, height;
+    transition: none !important;
+}
+
+/* Legacy dragging class */
 .wb-element.dragging {
     opacity: 0.9;
     z-index: 1000;
+}
+
+/* Optimize canvas wrapper during interactions */
+.wb-canvas-wrapper.dragging,
+.wb-canvas-wrapper.resizing {
+    /* Disable pointer events on non-essential elements during drag */
+    cursor: grabbing;
+}
+
+.wb-canvas-wrapper.dragging .wb-element:not(.wb-dragging),
+.wb-canvas-wrapper.resizing .wb-element:not(.wb-resizing) {
+    pointer-events: none;
 }
 
 /* Selection Box */
@@ -306,11 +352,18 @@
     border-radius: inherit;
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.15s ease;
+    /* Faster transition for selection feedback */
+    transition: opacity 0.1s ease;
 }
 
 .wb-element.selected .selection-box {
     opacity: 1;
+}
+
+/* Hide selection UI during drag/resize for cleaner visuals */
+.wb-element.wb-dragging .selection-box,
+.wb-element.wb-resizing .selection-box {
+    opacity: 0.5;
 }
 
 /* Resize Handles */
@@ -322,12 +375,21 @@
     border: 2px solid var(--wb-primary);
     border-radius: 50%;
     opacity: 0;
-    transition: opacity 0.15s ease;
+    transition: opacity 0.1s ease;
     z-index: 10;
+    /* GPU layer for smooth hover */
+    transform: translateZ(0);
 }
 
 .wb-element.selected .wb-resize-handle {
     opacity: 1;
+}
+
+/* Hide resize handles during drag */
+.wb-element.wb-dragging .wb-resize-handle,
+.wb-element.wb-resizing .wb-resize-handle {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .wb-resize-handle.nw { top: -5px; left: -5px; cursor: nw-resize; }
@@ -384,6 +446,9 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    /* GPU optimization */
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
 .wb-sticky-note-header {
@@ -584,6 +649,9 @@
     border-radius: var(--wb-radius);
     overflow: hidden;
     box-shadow: var(--wb-shadow);
+    /* GPU optimization for images */
+    transform: translateZ(0);
+    backface-visibility: hidden;
 }
 
 .wb-image img {
@@ -591,6 +659,8 @@
     height: 100%;
     object-fit: contain;
     pointer-events: none;
+    /* Prevent image from causing repaints */
+    transform: translateZ(0);
 }
 
 .wb-image-placeholder {
@@ -1082,6 +1152,29 @@
         border-radius: var(--wb-radius-lg) var(--wb-radius-lg) 0 0;
         max-height: 50vh;
     }
+}
+
+/* ============================================
+   Performance Optimizations
+   ============================================ */
+
+/* Reduce paint areas during interactions */
+.wb-canvas-wrapper.dragging .wb-canvas-grid,
+.wb-canvas-wrapper.resizing .wb-canvas-grid {
+    /* Reduce grid opacity during drag for better performance */
+    opacity: 0.3;
+}
+
+/* Optimize text rendering during drag */
+.wb-dragging *,
+.wb-resizing * {
+    text-rendering: optimizeSpeed;
+}
+
+/* Disable expensive effects during drag */
+.wb-canvas-wrapper.dragging .wb-element:not(.wb-dragging),
+.wb-canvas-wrapper.resizing .wb-element:not(.wb-resizing) {
+    box-shadow: none !important;
 }
 
 /* ============================================

@@ -6,6 +6,7 @@ import { normalizeRect, getBoundingBox, snapToGrid, calculateResize } from '../u
 /**
  * Canvas Interactions
  * Handles all mouse, touch, and keyboard interactions
+ * Optimized for Miro-like smooth performance
  */
 export class CanvasInteractions {
     constructor(canvasCore, containerEl) {
@@ -33,6 +34,8 @@ export class CanvasInteractions {
             startY: 0,
             currentX: 0,
             currentY: 0,
+            lastX: 0,
+            lastY: 0,
             button: 0
         };
         
@@ -43,7 +46,8 @@ export class CanvasInteractions {
             selectionRect: null,
             connectorStart: null,
             initialPositions: new Map(),
-            initialBounds: null
+            initialBounds: null,
+            dragOffsets: new Map() // Store visual offsets during drag
         };
         
         // Key state
@@ -59,8 +63,16 @@ export class CanvasInteractions {
             onToolChange: null,
             onContextMenu: null,
             onDoubleClick: null,
-            onSelectionRectChange: null
+            onSelectionRectChange: null,
+            onDragUpdate: null, // New callback for optimized drag updates
+            onResizeUpdate: null // New callback for optimized resize updates
         };
+        
+        // Performance optimization
+        this._rafId = null;
+        this._pendingUpdate = null;
+        this._lastMoveTime = 0;
+        this._moveThrottleMs = 0; // No throttle - use RAF instead
         
         // Bind methods
         this._bindMethods();
@@ -87,6 +99,7 @@ export class CanvasInteractions {
 
     /**
      * Initialize event listeners
+     * Optimized with pointer events for better performance
      */
     _initEventListeners() {
         if (!this.container) {
@@ -97,17 +110,37 @@ export class CanvasInteractions {
         // Use wrapper functions to ensure proper context binding
         const self = this;
         
-        this.container.addEventListener('mousedown', function(e) {
-            self._onMouseDown.call(self, e);
-        }, true);
-        
-        this.container.addEventListener('mousemove', function(e) {
-            self._onMouseMove.call(self, e);
-        }, true);
-        
-        this.container.addEventListener('mouseup', function(e) {
-            self._onMouseUp.call(self, e);
-        }, true);
+        // Use pointer events for unified mouse/touch handling with better performance
+        if (window.PointerEvent) {
+            this.container.addEventListener('pointerdown', function(e) {
+                self._onPointerDown.call(self, e);
+            }, { capture: true });
+            
+            this.container.addEventListener('pointermove', function(e) {
+                self._onPointerMove.call(self, e);
+            }, { capture: true, passive: true });
+            
+            this.container.addEventListener('pointerup', function(e) {
+                self._onPointerUp.call(self, e);
+            }, { capture: true });
+            
+            this.container.addEventListener('pointercancel', function(e) {
+                self._onPointerUp.call(self, e);
+            }, { capture: true });
+        } else {
+            // Fallback to mouse events
+            this.container.addEventListener('mousedown', function(e) {
+                self._onMouseDown.call(self, e);
+            }, true);
+            
+            this.container.addEventListener('mousemove', function(e) {
+                self._onMouseMove.call(self, e);
+            }, true);
+            
+            this.container.addEventListener('mouseup', function(e) {
+                self._onMouseUp.call(self, e);
+            }, true);
+        }
         
         this.container.addEventListener('wheel', function(e) {
             self._onWheel.call(self, e);
@@ -138,18 +171,20 @@ export class CanvasInteractions {
             self._onKeyUp.call(self, e);
         });
         
-        // Touch events
-        this.container.addEventListener('touchstart', function(e) {
-            self._onTouchStart.call(self, e);
-        }, { passive: false, capture: true });
-        
-        this.container.addEventListener('touchmove', function(e) {
-            self._onTouchMove.call(self, e);
-        }, { passive: false, capture: true });
-        
-        this.container.addEventListener('touchend', function(e) {
-            self._onTouchEnd.call(self, e);
-        }, { capture: true });
+        // Touch events (fallback)
+        if (!window.PointerEvent) {
+            this.container.addEventListener('touchstart', function(e) {
+                self._onTouchStart.call(self, e);
+            }, { passive: false, capture: true });
+            
+            this.container.addEventListener('touchmove', function(e) {
+                self._onTouchMove.call(self, e);
+            }, { passive: false, capture: true });
+            
+            this.container.addEventListener('touchend', function(e) {
+                self._onTouchEnd.call(self, e);
+            }, { capture: true });
+        }
     }
 
     /**
@@ -223,25 +258,30 @@ export class CanvasInteractions {
         }
     }
 
-    // ==================== Mouse Events ====================
+    // ==================== Pointer Events (Optimized) ====================
 
     /**
-     * Handle mouse down
-     * @param {MouseEvent} e
+     * Handle pointer down - unified mouse/touch handling
+     * @param {PointerEvent} e
      */
-    _onMouseDown(e) {
-        // Check if event is within canvas bounds
+    _onPointerDown(e) {
+        // Capture pointer for smooth tracking outside element
+        this.container.setPointerCapture(e.pointerId);
+        this._activePointerId = e.pointerId;
+        
         const rect = this.container.getBoundingClientRect();
         
         if (e.clientX < rect.left || e.clientX > rect.right ||
             e.clientY < rect.top || e.clientY > rect.bottom) {
-            return; // Event is outside canvas
+            return;
         }
         
         this.pointer.startX = e.clientX - rect.left;
         this.pointer.startY = e.clientY - rect.top;
         this.pointer.currentX = this.pointer.startX;
         this.pointer.currentY = this.pointer.startY;
+        this.pointer.lastX = this.pointer.startX;
+        this.pointer.lastY = this.pointer.startY;
         this.pointer.button = e.button;
         
         // Middle mouse button or space + left click = pan
@@ -251,12 +291,131 @@ export class CanvasInteractions {
             return;
         }
         
-        // Right click handled by context menu
-        if (e.button === 2) {
+        if (e.button === 2) return;
+        
+        if (e.button === 0) {
+            this._handleLeftClick(e);
+        }
+    }
+
+    /**
+     * Handle pointer move - optimized with RAF batching
+     * @param {PointerEvent} e
+     */
+    _onPointerMove(e) {
+        // Only process if this is our tracked pointer
+        if (this._activePointerId !== undefined && e.pointerId !== this._activePointerId) {
             return;
         }
         
-        // Left click
+        const rect = this.container.getBoundingClientRect();
+        this.pointer.currentX = e.clientX - rect.left;
+        this.pointer.currentY = e.clientY - rect.top;
+        
+        // Schedule RAF update instead of immediate processing
+        if (!this._rafId) {
+            this._rafId = requestAnimationFrame(() => {
+                this._processMove();
+                this._rafId = null;
+            });
+        }
+    }
+
+    /**
+     * Process move in animation frame - batched updates
+     */
+    _processMove() {
+        const dx = this.pointer.currentX - this.pointer.startX;
+        const dy = this.pointer.currentY - this.pointer.startY;
+        
+        if (this.state.isPanning) {
+            const frameDx = this.pointer.currentX - this.pointer.lastX;
+            const frameDy = this.pointer.currentY - this.pointer.lastY;
+            this._doPan(frameDx, frameDy);
+            this.pointer.lastX = this.pointer.currentX;
+            this.pointer.lastY = this.pointer.currentY;
+        } else if (this.state.isDragging) {
+            this._doDragOptimized(dx, dy);
+        } else if (this.state.isResizing) {
+            this._doResizeOptimized(dx, dy);
+        } else if (this.state.isRotating) {
+            this._doRotate();
+        } else if (this.state.isSelecting) {
+            this._doSelection();
+        } else if (this.state.isDrawingConnector) {
+            this._doDrawConnector();
+        } else {
+            this._updateHover();
+        }
+    }
+
+    /**
+     * Handle pointer up
+     * @param {PointerEvent} e
+     */
+    _onPointerUp(e) {
+        if (this._activePointerId !== undefined) {
+            try {
+                this.container.releasePointerCapture(this._activePointerId);
+            } catch (err) {
+                // Pointer may have been released already
+            }
+        }
+        this._activePointerId = undefined;
+        
+        // Cancel any pending RAF
+        if (this._rafId) {
+            cancelAnimationFrame(this._rafId);
+            this._rafId = null;
+        }
+        
+        if (this.state.isPanning) {
+            this._endPan();
+        } else if (this.state.isDragging) {
+            this._endDragOptimized();
+        } else if (this.state.isResizing) {
+            this._endResizeOptimized();
+        } else if (this.state.isRotating) {
+            this._endRotate();
+        } else if (this.state.isSelecting) {
+            this._endSelection();
+        } else if (this.state.isDrawingConnector) {
+            this._endConnector();
+        }
+        
+        this._resetState();
+    }
+
+    // ==================== Mouse Events (Fallback) ====================
+
+    /**
+     * Handle mouse down
+     * @param {MouseEvent} e
+     */
+    _onMouseDown(e) {
+        const rect = this.container.getBoundingClientRect();
+        
+        if (e.clientX < rect.left || e.clientX > rect.right ||
+            e.clientY < rect.top || e.clientY > rect.bottom) {
+            return;
+        }
+        
+        this.pointer.startX = e.clientX - rect.left;
+        this.pointer.startY = e.clientY - rect.top;
+        this.pointer.currentX = this.pointer.startX;
+        this.pointer.currentY = this.pointer.startY;
+        this.pointer.lastX = this.pointer.startX;
+        this.pointer.lastY = this.pointer.startY;
+        this.pointer.button = e.button;
+        
+        if (e.button === 1 || (this.keys.space && e.button === 0)) {
+            this._startPan();
+            e.preventDefault();
+            return;
+        }
+        
+        if (e.button === 2) return;
+        
         if (e.button === 0) {
             this._handleLeftClick(e);
         }
@@ -341,7 +500,7 @@ export class CanvasInteractions {
     }
 
     /**
-     * Handle mouse move
+     * Handle mouse move (fallback)
      * @param {MouseEvent} e
      */
     _onMouseMove(e) {
@@ -349,40 +508,32 @@ export class CanvasInteractions {
         this.pointer.currentX = e.clientX - rect.left;
         this.pointer.currentY = e.clientY - rect.top;
         
-        const dx = this.pointer.currentX - this.pointer.startX;
-        const dy = this.pointer.currentY - this.pointer.startY;
-        
-        if (this.state.isPanning) {
-            this._doPan(dx, dy);
-            this.pointer.startX = this.pointer.currentX;
-            this.pointer.startY = this.pointer.currentY;
-        } else if (this.state.isDragging) {
-            this._doDrag(dx, dy);
-        } else if (this.state.isResizing) {
-            this._doResize(dx, dy);
-        } else if (this.state.isRotating) {
-            this._doRotate();
-        } else if (this.state.isSelecting) {
-            this._doSelection();
-        } else if (this.state.isDrawingConnector) {
-            this._doDrawConnector();
-        } else {
-            // Hover detection
-            this._updateHover();
+        // Use RAF batching for smooth updates
+        if (!this._rafId) {
+            this._rafId = requestAnimationFrame(() => {
+                this._processMove();
+                this._rafId = null;
+            });
         }
     }
 
     /**
-     * Handle mouse up
+     * Handle mouse up (fallback)
      * @param {MouseEvent} e
      */
     _onMouseUp(e) {
+        // Cancel any pending RAF
+        if (this._rafId) {
+            cancelAnimationFrame(this._rafId);
+            this._rafId = null;
+        }
+        
         if (this.state.isPanning) {
             this._endPan();
         } else if (this.state.isDragging) {
-            this._endDrag();
+            this._endDragOptimized();
         } else if (this.state.isResizing) {
-            this._endResize();
+            this._endResizeOptimized();
         } else if (this.state.isRotating) {
             this._endRotate();
         } else if (this.state.isSelecting) {
@@ -744,7 +895,7 @@ export class CanvasInteractions {
         this._updateCursor();
     }
 
-    // ==================== Drag Operations ====================
+    // ==================== Drag Operations (Optimized) ====================
 
     _startDrag(canvasPoint) {
         const selected = this.canvas.getSelectedElements();
@@ -752,44 +903,102 @@ export class CanvasInteractions {
 
         this.state.isDragging = true;
         this.context.initialPositions.clear();
+        this.context.dragOffsets.clear();
 
+        // Store initial positions and prepare DOM elements for GPU-accelerated transforms
         for (const element of selected) {
             this.context.initialPositions.set(element.id, {
                 x: element.x,
                 y: element.y
             });
+            this.context.dragOffsets.set(element.id, { x: 0, y: 0 });
+            
+            // Add dragging class and prepare for transform
+            if (this.callbacks.onDragUpdate) {
+                this.callbacks.onDragUpdate(element.id, 'start', { x: 0, y: 0 });
+            }
         }
+        
+        // Add dragging state to container
+        this.container.classList.add('dragging');
     }
 
-    _doDrag(dx, dy) {
+    /**
+     * Optimized drag using CSS transforms for GPU acceleration
+     * Only updates visual transform, doesn't modify element data until end
+     */
+    _doDragOptimized(dx, dy) {
         const scaledDx = dx / this.canvas.transform.zoom;
         const scaledDy = dy / this.canvas.transform.zoom;
         
         for (const element of this.canvas.getSelectedElements()) {
             if (element.locked) continue;
             
-            const initial = this.context.initialPositions.get(element.id);
-            if (initial) {
-                let newX = initial.x + scaledDx;
-                let newY = initial.y + scaledDy;
-                
-                if (this.keys.shift) {
-                    newX = snapToGrid(newX, CANVAS_CONFIG.GRID_SIZE);
-                    newY = snapToGrid(newY, CANVAS_CONFIG.GRID_SIZE);
+            let offsetX = scaledDx;
+            let offsetY = scaledDy;
+            
+            if (this.keys.shift) {
+                const initial = this.context.initialPositions.get(element.id);
+                if (initial) {
+                    const snappedX = snapToGrid(initial.x + scaledDx, CANVAS_CONFIG.GRID_SIZE);
+                    const snappedY = snapToGrid(initial.y + scaledDy, CANVAS_CONFIG.GRID_SIZE);
+                    offsetX = snappedX - initial.x;
+                    offsetY = snappedY - initial.y;
                 }
-                
-                element.setPosition(newX, newY);
+            }
+            
+            // Store visual offset
+            this.context.dragOffsets.set(element.id, { x: offsetX, y: offsetY });
+            
+            // Use callback for optimized DOM updates via transform
+            if (this.callbacks.onDragUpdate) {
+                this.callbacks.onDragUpdate(element.id, 'move', { x: offsetX, y: offsetY });
             }
         }
     }
 
-    _endDrag() {
-        this.state.isDragging = false;
-        this.canvas._recordHistory('Move elements');
-        this.context.initialPositions.clear();
+    /**
+     * Legacy drag method (non-optimized fallback)
+     */
+    _doDrag(dx, dy) {
+        this._doDragOptimized(dx, dy);
     }
 
-    // ==================== Resize Operations ====================
+    /**
+     * End drag - commit final positions to element data
+     */
+    _endDragOptimized() {
+        this.state.isDragging = false;
+        this.container.classList.remove('dragging');
+        
+        // Commit final positions to element data
+        for (const element of this.canvas.getSelectedElements()) {
+            if (element.locked) continue;
+            
+            const offset = this.context.dragOffsets.get(element.id);
+            const initial = this.context.initialPositions.get(element.id);
+            
+            if (offset && initial) {
+                // Update actual element position
+                element.setPosition(initial.x + offset.x, initial.y + offset.y);
+                
+                // Clear transform and notify renderer
+                if (this.callbacks.onDragUpdate) {
+                    this.callbacks.onDragUpdate(element.id, 'end', { x: 0, y: 0 });
+                }
+            }
+        }
+        
+        this.canvas._recordHistory('Move elements');
+        this.context.initialPositions.clear();
+        this.context.dragOffsets.clear();
+    }
+
+    _endDrag() {
+        this._endDragOptimized();
+    }
+
+    // ==================== Resize Operations (Optimized) ====================
 
     _startResize(element, handle) {
         this.state.isResizing = true;
@@ -801,9 +1010,19 @@ export class CanvasInteractions {
             width: element.width,
             height: element.height
         };
+        
+        // Notify for optimized rendering
+        if (this.callbacks.onResizeUpdate) {
+            this.callbacks.onResizeUpdate(element.id, 'start', this.context.initialBounds);
+        }
+        
+        this.container.classList.add('resizing');
     }
 
-    _doResize(dx, dy) {
+    /**
+     * Optimized resize using CSS transforms
+     */
+    _doResizeOptimized(dx, dy) {
         const element = this.context.targetElement;
         if (!element || element.locked) return;
         
@@ -819,15 +1038,45 @@ export class CanvasInteractions {
             this.keys.shift
         );
         
-        element.setPosition(result.x, result.y);
-        element.resize(result.width, result.height);
+        // Store pending resize
+        this.context.pendingResize = result;
+        
+        // Use callback for optimized DOM updates
+        if (this.callbacks.onResizeUpdate) {
+            this.callbacks.onResizeUpdate(element.id, 'resize', result);
+        }
     }
 
-    _endResize() {
+    _doResize(dx, dy) {
+        this._doResizeOptimized(dx, dy);
+    }
+
+    /**
+     * End resize - commit final dimensions
+     */
+    _endResizeOptimized() {
         this.state.isResizing = false;
+        this.container.classList.remove('resizing');
+        
+        const element = this.context.targetElement;
+        if (element && this.context.pendingResize) {
+            const result = this.context.pendingResize;
+            element.setPosition(result.x, result.y);
+            element.resize(result.width, result.height);
+            
+            if (this.callbacks.onResizeUpdate) {
+                this.callbacks.onResizeUpdate(element.id, 'end', result);
+            }
+        }
+        
         this.canvas._recordHistory('Resize element');
         this.context.targetElement = null;
         this.context.initialBounds = null;
+        this.context.pendingResize = null;
+    }
+
+    _endResize() {
+        this._endResizeOptimized();
     }
 
     // ==================== Rotate Operations ====================
