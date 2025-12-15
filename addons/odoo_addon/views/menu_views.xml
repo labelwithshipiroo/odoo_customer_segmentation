@@ -18,5 +18,5 @@
 
     <menuitem id="menu_hello_world" name="Hello World" parent="menu_kpi_root" action="odoo_addon.action_x_hello_world" sequence="10"/>
     <menuitem id="menu_grouping" name="Grouping" parent="menu_kpi_root" action="odoo_addon.action_x_grouping" sequence="20"/>
-    <menuitem id="menu_test" name="Test" parent="menu_kpi_root" action="odoo_addon.action_test_page_direct" sequence="30"/>
+    <menuitem id="menu_test" name="Test Blank Page" parent="menu_kpi_root" action="odoo_addon.action_test_page_direct" sequence="30"/>
 </odoo>
