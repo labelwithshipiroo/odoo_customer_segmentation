@@ -85,16 +85,16 @@ odoo.define('odoo_addon.account_mapping', [], function () {
     // Initialize on DOM ready
     function init() {
         populateUnifiedAccounts();
-        // Add listener for select changes in the list
+        // Add listener for input changes in the list (many2one widget)
         document.addEventListener('change', function(e) {
-            if (e.target.tagName === 'SELECT' && e.target.closest('table.o_list_table')) {
-                var select = e.target;
-                var row = select.closest('tr');
+            if (e.target.tagName === 'INPUT' && e.target.name === 'x_api_mapping' && e.target.closest('table')) {
+                var input = e.target;
+                var row = input.closest('tr');
                 var recordId = row ? row.getAttribute('data-id') : null;
-                if (recordId && select.value) {
-                    console.log('Mapping changed for record', recordId, 'to', select.value);
+                if (recordId && input.value) {
+                    console.log('Mapping changed for record', recordId, 'to', input.value);
                     // Get the unified record id
-                    var unifiedId = select.value;
+                    var unifiedId = input.value;
                     // Get account code from the row
                     var codeCell = row.querySelector('td[data-field="code"]');
                     var accountCode = codeCell ? codeCell.textContent.trim() : '';
