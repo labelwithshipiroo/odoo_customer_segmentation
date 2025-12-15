@@ -16,15 +16,16 @@
         <field name="target">self</field>
     </record>
 
-    <!-- Accounts URL Action -->
-    <record id="action_accounts_page" model="ir.actions.act_url">
-        <field name="name">Accounts</field>
-        <field name="url">/odoo_addon/accounts</field>
-        <field name="target">self</field>
+    <!-- Accounts Action -->
+    <record id="action_accounts_list" model="ir.actions.act_window">
+        <field name="name">Accounts List</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.account</field>
+        <field name="view_mode">list,form</field>
     </record>
 
     <menuitem id="menu_hello_world" name="Hello World" parent="menu_kpi_root" action="odoo_addon.action_x_hello_world" sequence="10"/>
     <menuitem id="menu_grouping" name="Grouping" parent="menu_kpi_root" action="odoo_addon.action_x_grouping" sequence="20"/>
     <menuitem id="menu_test" name="Test Blank Page" parent="menu_kpi_root" action="odoo_addon.action_test_page_direct" sequence="30"/>
-    <menuitem id="menu_accounts" name="Accounts List" parent="menu_kpi_root" action="odoo_addon.action_accounts_page" sequence="40"/>
+    <menuitem id="menu_accounts" name="Accounts List" parent="menu_kpi_root" action="odoo_addon.action_accounts_list" sequence="40"/>
 </odoo>
