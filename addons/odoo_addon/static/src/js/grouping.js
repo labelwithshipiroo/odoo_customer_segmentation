@@ -2,14 +2,22 @@ odoo.define('odoo_addon.grouping', [], function () {
     'use strict';
 
     function initializeGrouping() {
-        // Check if we're on the x_grouping form by looking for the container
-        var checkForContainer = function() {
-            var container = document.querySelector('.grouping-container');
-            if (container && container.offsetParent !== null) { // Check if visible
+        // Check if we're on the x_grouping list view
+        var checkForListView = function() {
+            var listView = document.querySelector('.o_list_view');
+            if (listView && listView.offsetParent !== null) { // Check if visible
+                // Create container if it doesn't exist
+                var container = listView.querySelector('.grouping-container');
+                if (!container) {
+                    container = document.createElement('div');
+                    container.className = 'grouping-container';
+                    container.style.cssText = 'width: 100%; min-height: 200px; margin-top: 20px;';
+                    listView.appendChild(container);
+                }
                 loadGroupingData(container);
             } else {
                 // Check again in a short delay
-                setTimeout(checkForContainer, 500);
+                setTimeout(checkForListView, 500);
             }
         };
 
@@ -133,8 +141,8 @@ odoo.define('odoo_addon.grouping', [], function () {
             container.innerHTML = '<div class="alert alert-danger">' + message + '</div>';
         };
 
-        // Start checking for the container
-        checkForContainer();
+        // Start checking for the list view
+        checkForListView();
     }
 
     // Initialize when DOM is ready
