@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-# odoo_board addon package
+from . import models
