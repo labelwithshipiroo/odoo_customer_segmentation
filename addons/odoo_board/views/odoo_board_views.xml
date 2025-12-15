@@ -34,24 +34,6 @@
         </field>
     </record>
 
-    <!-- Whiteboard Canvas View -->
-    <record id="view_whiteboard_canvas" model="ir.ui.view">
-        <field name="name">whiteboard.board.canvas</field>
-        <field name="model">whiteboard.board</field>
-        <field name="arch" type="xml">
-            <form string="Whiteboard Canvas" js_class="whiteboard_canvas">
-                <sheet>
-                    <div class="oe_title">
-                        <h1>
-                            <field name="name" placeholder="Whiteboard Name..." readonly="0"/>
-                        </h1>
-                    </div>
-                    <field name="elements" invisible="1"/>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
     <!-- Whiteboard Action -->
     <record id="action_whiteboard_board" model="ir.actions.act_window">
         <field name="name">Whiteboards</field>
@@ -65,12 +47,6 @@
                 Start collaborating with sticky notes and text boxes.
             </p>
         </field>
-    </record>
-
-    <!-- Client Action for Whiteboard Canvas -->
-    <record id="action_whiteboard_canvas" model="ir.actions.client">
-        <field name="name">Whiteboard Canvas</field>
-        <field name="tag">whiteboard.board</field>
     </record>
 
     <!-- OdooBoard Menu -->
