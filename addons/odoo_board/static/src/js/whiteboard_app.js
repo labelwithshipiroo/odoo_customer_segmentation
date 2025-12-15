@@ -313,6 +313,11 @@ export class WhiteboardApp {
                 }
             }
         });
+
+        // Debug: check if canvas container receives clicks
+        this.canvasContainer.addEventListener('click', (e) => {
+            console.log('Canvas container clicked at:', e.clientX, e.clientY);
+        });
         
         // Handle frame title input
         this.canvasContainer.addEventListener('change', (e) => {
