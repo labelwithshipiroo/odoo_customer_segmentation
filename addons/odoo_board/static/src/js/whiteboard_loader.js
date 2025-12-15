@@ -18,32 +18,36 @@ export class WhiteboardView extends Component {
     };
     
     setup() {
+        console.log('WhiteboardView setup called');
         this.containerRef = useRef("container");
         this.orm = useService("orm");
         this.notification = useService("notification");
         this.action = useService("action");
-        
+
         this.state = useState({
             loading: false,
             error: null,
             boardId: null,
             boardName: '',
         });
-        
+
         this.whiteboardApp = null;
-        
+
         // Get board ID from action context or params
         const context = this.props.action?.context || {};
         const params = this.props.action?.params || {};
         this.state.boardId = context.active_id || params.board_id || null;
-        
+        console.log('Board ID from props:', this.state.boardId);
+        console.log('Action props:', this.props.action);
+
         onMounted(async () => {
+            console.log('WhiteboardView onMounted called');
             // Create whiteboard app first
             this._createWhiteboardApp();
             // Then initialize with data
             await this._initWhiteboard();
         });
-        
+
         onWillUnmount(() => {
             this._destroyWhiteboard();
         });
