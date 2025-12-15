@@ -10,11 +10,7 @@
             </div>
             <div class="whiteboard-error" invisible="not state.error">
                 <div class="error-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="12" y1="8" x2="12" y2="12"></line>
-                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                    </svg>
+                    <i class="fa fa-exclamation-triangle fa-3x text-danger"/>
                 </div>
                 <h3>Error Loading Board</h3>
                 <p t-esc="state.error"/>
