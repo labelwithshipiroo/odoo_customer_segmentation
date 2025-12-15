@@ -88,7 +88,7 @@ odoo.define('odoo_addon.account_mapping', [], function () {
         // Add listener for input changes in the list (many2one widget)
         document.addEventListener('input', function(e) {
             console.log('input event on', e.target.tagName, e.target.name, e.target.value);
-            if (e.target.tagName === 'INPUT' && e.target.name === 'x_api_mapping' && e.target.closest('table')) {
+            if (e.target.tagName === 'INPUT' && e.target.classList.contains('o-autocomplete--input') && e.target.closest('table')) {
                 var input = e.target;
                 var row = input.closest('tr');
                 var recordId = row ? row.getAttribute('data-id') : null;
