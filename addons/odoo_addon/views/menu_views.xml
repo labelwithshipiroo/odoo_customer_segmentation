@@ -9,21 +9,14 @@
         <field name="view_mode">list,form</field>
     </record>
 
-    <!-- Test Server Action -->
-    <record id="action_test_page_server" model="ir.actions.server">
+    <!-- Test URL Action -->
+    <record id="action_test_page_direct" model="ir.actions.act_url">
         <field name="name">Test</field>
-        <field name="type">ir.actions.server</field>
-        <field name="state">code</field>
-        <field name="code">
-            action = {
-                'type': 'ir.actions.act_url',
-                'url': '/odoo_addon/test_page',
-                'target': 'self',
-            }
-        </field>
+        <field name="url">/odoo_addon/test_page</field>
+        <field name="target">self</field>
     </record>
 
     <menuitem id="menu_hello_world" name="Hello World" parent="menu_kpi_root" action="odoo_addon.action_x_hello_world" sequence="10"/>
     <menuitem id="menu_grouping" name="Grouping" parent="menu_kpi_root" action="odoo_addon.action_x_grouping" sequence="20"/>
-    <menuitem id="menu_test" name="Test" parent="menu_kpi_root" action="odoo_addon.action_test_page_server" sequence="30"/>
+    <menuitem id="menu_test" name="Test" parent="menu_kpi_root" action="odoo_addon.action_test_page_direct" sequence="30"/>
 </odoo>
