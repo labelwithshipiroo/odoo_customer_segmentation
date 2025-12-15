@@ -9,13 +9,8 @@ import { normalizeRect, getBoundingBox, snapToGrid, calculateResize } from '../u
  */
 export class CanvasInteractions {
     constructor(canvasCore, containerEl) {
-        console.log('CanvasInteractions constructor called');
-        alert('CanvasInteractions constructor called with containerEl: ' + (containerEl ? 'EXISTS' : 'NULL'));
         this.canvas = canvasCore;
         this.container = containerEl;
-        
-        console.log('Canvas:', this.canvas);
-        console.log('Container:', this.container);
         
         // Current tool
         this.currentTool = TOOLS.SELECT;
@@ -94,19 +89,15 @@ export class CanvasInteractions {
      * Initialize event listeners
      */
     _initEventListeners() {
-        console.log('_initEventListeners called, container:', this.container);
         if (!this.container) {
-            console.error('Container is null, cannot attach event listeners');
+            console.error('CanvasInteractions: Container is null');
             return;
         }
-        
-        console.log('Attaching event listeners to canvas wrapper');
         
         // Use wrapper functions to ensure proper context binding
         const self = this;
         
         this.container.addEventListener('mousedown', function(e) {
-            console.log('_onMouseDown wrapper called');
             self._onMouseDown.call(self, e);
         }, true);
         
@@ -159,8 +150,6 @@ export class CanvasInteractions {
         this.container.addEventListener('touchend', function(e) {
             self._onTouchEnd.call(self, e);
         }, { capture: true });
-        
-        console.log('All event listeners attached to canvas wrapper in capture phase');
     }
 
     /**
@@ -243,30 +232,20 @@ export class CanvasInteractions {
     _onMouseDown(e) {
         // Check if event is within canvas bounds
         const rect = this.container.getBoundingClientRect();
-        console.log('_onMouseDown checking bounds:', {
-            clientX: e.clientX, clientY: e.clientY,
-            rectLeft: rect.left, rectRight: rect.right,
-            rectTop: rect.top, rectBottom: rect.bottom
-        });
         
         if (e.clientX < rect.left || e.clientX > rect.right ||
             e.clientY < rect.top || e.clientY > rect.bottom) {
-            console.log('Event outside canvas bounds, returning');
             return; // Event is outside canvas
         }
         
-        console.log('_onMouseDown called, button:', e.button, 'target:', e.target);
         this.pointer.startX = e.clientX - rect.left;
         this.pointer.startY = e.clientY - rect.top;
         this.pointer.currentX = this.pointer.startX;
         this.pointer.currentY = this.pointer.startY;
         this.pointer.button = e.button;
         
-        console.log('Pointer:', this.pointer);
-        
         // Middle mouse button or space + left click = pan
         if (e.button === 1 || (this.keys.space && e.button === 0)) {
-            console.log('Starting pan (middle mouse or space+left)');
             this._startPan();
             e.preventDefault();
             return;
@@ -274,13 +253,11 @@ export class CanvasInteractions {
         
         // Right click handled by context menu
         if (e.button === 2) {
-            console.log('Right click, skipping');
             return;
         }
         
         // Left click
         if (e.button === 0) {
-            console.log('Left click, calling _handleLeftClick');
             this._handleLeftClick(e);
         }
     }
@@ -290,59 +267,45 @@ export class CanvasInteractions {
      * @param {MouseEvent} e
      */
     _handleLeftClick(e) {
-        console.log('_handleLeftClick called, currentTool:', this.currentTool);
         const canvasPoint = this.canvas.screenToCanvas(this.pointer.startX, this.pointer.startY);
-        console.log('Canvas point:', canvasPoint);
         
         // Check if clicking on an element
         const target = this._getElementAtPoint(canvasPoint);
         const targetElement = target?.element;
         const hitType = target?.hitType;
-        console.log('Target at point:', { targetElement: targetElement?.id, hitType });
         
         switch (this.currentTool) {
             case TOOLS.SELECT:
-                console.log('Handling SELECT tool click');
                 this._handleSelectToolClick(e, targetElement, hitType, canvasPoint);
                 break;
                 
             case TOOLS.PAN:
-                console.log('Handling PAN tool click');
                 this._startPan();
                 break;
                 
             case TOOLS.STICKY:
-                console.log('Handling STICKY tool click');
                 this._createElementAtPoint(ELEMENT_TYPES.STICKY, canvasPoint);
                 break;
                 
             case TOOLS.TEXT:
-                console.log('Handling TEXT tool click');
                 this._createElementAtPoint(ELEMENT_TYPES.TEXT, canvasPoint);
                 break;
                 
             case TOOLS.SHAPE:
-                console.log('Handling SHAPE tool click with shapeType:', this.shapeType);
                 this._createElementAtPoint(ELEMENT_TYPES.SHAPE, canvasPoint, { shapeType: this.shapeType });
                 break;
                 
             case TOOLS.FRAME:
-                console.log('Handling FRAME tool click');
                 this._createElementAtPoint(ELEMENT_TYPES.FRAME, canvasPoint);
                 break;
                 
             case TOOLS.CONNECTOR:
-                console.log('Handling CONNECTOR tool click');
                 this._startConnector(canvasPoint, targetElement);
                 break;
                 
             case TOOLS.IMAGE:
-                console.log('Handling IMAGE tool click');
                 this._createImageElement(canvasPoint);
                 break;
-                
-            default:
-                console.log('Unknown tool:', this.currentTool);
         }
     }
 
@@ -350,39 +313,27 @@ export class CanvasInteractions {
      * Handle select tool click
      */
     _handleSelectToolClick(e, targetElement, hitType, canvasPoint) {
-        console.log('Select tool click:', { targetElement: targetElement?.id, hitType, canvasPoint, shiftKey: this.keys.shift });
-
         if (hitType === 'resize') {
-            console.log('Starting resize for element:', targetElement.id);
             this._startResize(targetElement, this.context.resizeHandle);
         } else if (hitType === 'rotate') {
-            console.log('Starting rotate for element:', targetElement.id);
             this._startRotate(targetElement);
         } else if (targetElement) {
             // Click on element
-            console.log('Element clicked:', targetElement.id, 'currently selected:', this.canvas.isSelected(targetElement.id));
-
             if (this.keys.shift) {
                 // Toggle selection
                 if (this.canvas.isSelected(targetElement.id)) {
-                    console.log('Deselecting element:', targetElement.id);
                     this.canvas.deselectElement(targetElement.id);
                 } else {
-                    console.log('Adding to selection:', targetElement.id);
                     this.canvas.selectElement(targetElement.id, true);
                 }
             } else if (!this.canvas.isSelected(targetElement.id)) {
-                console.log('Selecting element:', targetElement.id);
                 this.canvas.selectElement(targetElement.id);
             }
 
-            console.log('Current selection after click:', Array.from(this.canvas.getSelectedElements()).map(el => el.id));
             this._startDrag(canvasPoint);
         } else {
             // Click on empty space
-            console.log('Clicked on empty space');
             if (!this.keys.shift) {
-                console.log('Clearing selection');
                 this.canvas.clearSelection();
             }
             this._startSelection(canvasPoint);
@@ -797,7 +748,6 @@ export class CanvasInteractions {
 
     _startDrag(canvasPoint) {
         const selected = this.canvas.getSelectedElements();
-        console.log('Starting drag with selected elements:', selected.map(el => el.id));
         if (selected.length === 0) return;
 
         this.state.isDragging = true;
@@ -834,7 +784,6 @@ export class CanvasInteractions {
     }
 
     _endDrag() {
-        console.log('Ending drag operation');
         this.state.isDragging = false;
         this.canvas._recordHistory('Move elements');
         this.context.initialPositions.clear();
@@ -997,40 +946,19 @@ export class CanvasInteractions {
     // ==================== Element Creation ====================
 
     _createElementAtPoint(type, canvasPoint, options = {}) {
-        console.log('Creating element:', type, 'at point:', canvasPoint, 'with options:', options);
-        console.log('Canvas:', this.canvas);
-        console.log('Canvas createElement method exists:', typeof this.canvas.createElement);
-
         const defaults = ELEMENT_DEFAULTS[type] || {};
-        console.log('Element defaults:', defaults);
 
-        try {
-            const element = this.canvas.createElement(type, {
-                x: canvasPoint.x - (defaults.width || 100) / 2,
-                y: canvasPoint.y - (defaults.height || 100) / 2,
-                properties: options
-            });
+        const element = this.canvas.createElement(type, {
+            x: canvasPoint.x - (defaults.width || 100) / 2,
+            y: canvasPoint.y - (defaults.height || 100) / 2,
+            properties: options
+        });
 
-            console.log('Element created:', element);
-
-            if (element) {
-                console.log('Element created with ID:', element.id);
-                const addResult = this.canvas.addElement(element);
-                console.log('addElement result:', addResult);
-
-                const selectResult = this.canvas.selectElement(element.id);
-                console.log('selectElement result:', selectResult);
-
-                console.log('Element added and selected');
-
-                // Switch back to select tool
-                this.setTool(TOOLS.SELECT);
-            } else {
-                console.error('createElement returned null/undefined');
-            }
-        } catch (error) {
-            console.error('Error in _createElementAtPoint:', error);
-            console.error('Error stack:', error.stack);
+        if (element) {
+            this.canvas.addElement(element);
+            this.canvas.selectElement(element.id);
+            // Switch back to select tool
+            this.setTool(TOOLS.SELECT);
         }
     }
 

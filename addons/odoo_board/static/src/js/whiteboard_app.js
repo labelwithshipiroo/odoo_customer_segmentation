@@ -159,31 +159,16 @@ export class WhiteboardApp {
     * Initialize all components
     */
    _initComponents() {
-       console.log('Initializing components');
-       console.log('canvasContainer:', this.canvasContainer);
-       
        // Canvas core
        this.canvas = new CanvasCore(this.canvasContainer, {
            snapToGrid: false
        });
-       console.log('CanvasCore created');
        
        // Renderer
        this.renderer = new CanvasRenderer(this.canvas, this.canvasContainer);
-       console.log('CanvasRenderer created');
-       console.log('renderer.canvasWrapper:', this.renderer.canvasWrapper);
        
        // Interactions
-       console.log('About to create CanvasInteractions');
-       alert('About to create CanvasInteractions with wrapper: ' + (this.renderer.canvasWrapper ? 'EXISTS' : 'NULL'));
-       try {
-           this.interactions = new CanvasInteractions(this.canvas, this.renderer.canvasWrapper);
-           console.log('CanvasInteractions created successfully');
-           alert('CanvasInteractions created successfully!');
-       } catch (error) {
-           console.error('Error creating CanvasInteractions:', error);
-           alert('ERROR creating CanvasInteractions: ' + error.message);
-       }
+       this.interactions = new CanvasInteractions(this.canvas, this.renderer.canvasWrapper);
         
         // Toolbar
         if (this.options.showToolbar && !this.options.readOnly) {
@@ -217,27 +202,23 @@ export class WhiteboardApp {
     _setupEventHandlers() {
         // Canvas events
         this.canvas.on('onElementsChange', () => {
-            console.log('Canvas elements changed, elements:', this.canvas.getElements().length);
             this.isDirty = true;
             this.renderer.requestRender();
             this.minimap?.update();
         });
 
         this.canvas.on('onSelectionChange', (elements) => {
-            console.log('Canvas selection changed, selected:', elements?.length || 0);
             this.propertiesPanel?.updateSelection(elements);
             this.renderer.requestRender();
         });
 
         this.canvas.on('onTransformChange', (transform) => {
-            console.log('Canvas transform changed, zoom:', transform?.zoom);
             this._renderZoomControls();
             this.renderer.requestRender();
             this.minimap?.update();
         });
 
         this.canvas.on('onHistoryChange', (info) => {
-            console.log('Canvas history changed, canUndo:', info.canUndo, 'canRedo:', info.canRedo);
             this.toolbar?.setHistoryState(info.canUndo, info.canRedo);
         });
         
@@ -266,22 +247,18 @@ export class WhiteboardApp {
         
         // Toolbar events
         this.toolbar?.on('onToolSelect', (tool, options) => {
-            console.log('Toolbar tool select:', tool, options);
             this.interactions.setTool(tool, options);
         });
 
         this.toolbar?.on('onUndo', () => {
-            console.log('Toolbar undo');
             this.canvas.undo();
         });
 
         this.toolbar?.on('onRedo', () => {
-            console.log('Toolbar redo');
             this.canvas.redo();
         });
 
         this.toolbar?.on('onTemplates', () => {
-            console.log('Toolbar templates');
             this.templatePicker.show();
         });
         
@@ -333,11 +310,6 @@ export class WhiteboardApp {
             }
         });
 
-        // Debug: check if canvas container receives clicks
-        this.canvasContainer.addEventListener('click', (e) => {
-            console.log('Canvas container clicked at:', e.clientX, e.clientY);
-        });
-        
         // Handle frame title input
         this.canvasContainer.addEventListener('change', (e) => {
             if (e.target.classList.contains('wb-frame-title')) {

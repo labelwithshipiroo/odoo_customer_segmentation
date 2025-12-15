@@ -256,19 +256,14 @@ export class Toolbar {
      * @param {string} tool
      */
     _selectTool(tool) {
-        console.log('Toolbar _selectTool called with tool:', tool);
-        alert('Sticky button clicked! Selected tool: ' + tool);
         this.currentTool = tool;
         this._updateToolButtons();
         this._hideShapeMenu();
         
-        console.log('Calling onToolSelect callback with tool:', tool, 'shapeType:', tool === TOOLS.SHAPE ? this.currentShapeType : null);
         if (this.callbacks.onToolSelect) {
             this.callbacks.onToolSelect(tool, {
                 shapeType: tool === TOOLS.SHAPE ? this.currentShapeType : null
             });
-        } else {
-            console.log('onToolSelect callback not set');
         }
     }
 
