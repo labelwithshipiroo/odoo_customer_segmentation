@@ -1,20 +1,9 @@
-/** @odoo-module **/
+odoo.define('odoo_board.whiteboard', function (require) {
+    'use strict';
 
-import { registry } from "@web/core/registry";
-import { LazyComponent } from "@web/core/assets";
-import { Component, xml } from "@odoo/owl";
-import { standardActionServiceProps } from "@web/webclient/actions/action_service";
+    var core = require('web.core');
+    var Action = require('web.AbstractAction');
+    var OdooBoard = require('@odoo_board/odoo_board/odoo_board');
 
-class OdooBoardLoader extends Component {
-    static components = { LazyComponent };
-    static template = xml`
-    <LazyComponent bundle="'odoo_board.assets'" Component="'OdooBoard'" props="props"/>
-    `;
-    static props = {
-        ...standardActionServiceProps,
-        props: { type: Object, optional: true },
-        Component: { type: Function, optional: true },
-    };
-}
-
-registry.category("actions").add("whiteboard_canvas", OdooBoardLoader);
+    core.action_registry.add('whiteboard_canvas', OdooBoard);
+});
