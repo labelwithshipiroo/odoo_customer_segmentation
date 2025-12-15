@@ -9,6 +9,15 @@
         <field name="view_mode">list,form</field>
     </record>
 
+    <!-- Test Action -->
+    <record id="action_x_test" model="ir.actions.act_window">
+        <field name="name">Test</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">x_test</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="odoo_addon.view_x_test_form" />
+    </record>
+
     <menuitem id="menu_hello_world" name="Hello World" parent="menu_kpi_root" action="odoo_addon.action_x_hello_world" sequence="10"/>
     <menuitem id="menu_grouping" name="Grouping" parent="menu_kpi_root" action="odoo_addon.action_x_grouping" sequence="20"/>
     <menuitem id="menu_test" name="Test" parent="menu_kpi_root" action="odoo_addon.action_x_test" sequence="30"/>
