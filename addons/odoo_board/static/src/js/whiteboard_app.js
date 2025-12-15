@@ -202,23 +202,27 @@ export class WhiteboardApp {
     _setupEventHandlers() {
         // Canvas events
         this.canvas.on('onElementsChange', () => {
+            console.log('Canvas elements changed, elements:', this.canvas.getElements().length);
             this.isDirty = true;
             this.renderer.requestRender();
             this.minimap?.update();
         });
-        
+
         this.canvas.on('onSelectionChange', (elements) => {
+            console.log('Canvas selection changed, selected:', elements?.length || 0);
             this.propertiesPanel?.updateSelection(elements);
             this.renderer.requestRender();
         });
-        
+
         this.canvas.on('onTransformChange', (transform) => {
+            console.log('Canvas transform changed, zoom:', transform?.zoom);
             this._renderZoomControls();
             this.renderer.requestRender();
             this.minimap?.update();
         });
-        
+
         this.canvas.on('onHistoryChange', (info) => {
+            console.log('Canvas history changed, canUndo:', info.canUndo, 'canRedo:', info.canRedo);
             this.toolbar?.setHistoryState(info.canUndo, info.canRedo);
         });
         
