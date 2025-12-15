@@ -346,6 +346,11 @@
     background-color: hsl(var(--muted));
 }
 
+/* Hide control panel for test form */
+.o_form_view.o_view_controller[data-model="x_test"] .o_control_panel {
+    display: none !important;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .reports-table-container {
