@@ -2,7 +2,7 @@
 <templates xml:space="preserve">
 
     <!-- Main Whiteboard Template -->
-    <t t-name="whiteboard.Board" owl="1">
+    <t t-name="OdooBoard.Board" owl="1">
         <div class="odoo_whiteboard h-100 d-flex flex-column" style="min-height: 100vh;">
             <!-- Toolbar -->
             <div class="bg-white border-bottom p-3 d-flex align-items-center gap-2 shadow-sm">
@@ -78,7 +78,7 @@
     </t>
 
     <!-- Element Template -->
-    <t t-name="whiteboard.Element" owl="1">
+    <t t-name="OdooBoard.Element" owl="1">
         <div class="position-absolute shadow hover-shadow-lg transition-all"
              t-att-class="isSelected ? 'border border-primary border-3' : ''"
              t-att-style="`left: ${props.element.x}px; top: ${props.element.y}px; width: ${props.element.width}px; height: ${props.element.height}px; background-color: ${props.element.color}; border-radius: ${props.element.type === 'sticky' ? '4px' : '8px'}; cursor: move;`"
