@@ -190,6 +190,7 @@ export class CanvasInteractions {
      * @param {MouseEvent} e
      */
     _onMouseDown(e) {
+        console.log('_onMouseDown called, button:', e.button, 'target:', e.target);
         const rect = this.container.getBoundingClientRect();
         this.pointer.startX = e.clientX - rect.left;
         this.pointer.startY = e.clientY - rect.top;
@@ -197,18 +198,25 @@ export class CanvasInteractions {
         this.pointer.currentY = this.pointer.startY;
         this.pointer.button = e.button;
         
+        console.log('Pointer:', this.pointer);
+        
         // Middle mouse button or space + left click = pan
         if (e.button === 1 || (this.keys.space && e.button === 0)) {
+            console.log('Starting pan (middle mouse or space+left)');
             this._startPan();
             e.preventDefault();
             return;
         }
         
         // Right click handled by context menu
-        if (e.button === 2) return;
+        if (e.button === 2) {
+            console.log('Right click, skipping');
+            return;
+        }
         
         // Left click
         if (e.button === 0) {
+            console.log('Left click, calling _handleLeftClick');
             this._handleLeftClick(e);
         }
     }
