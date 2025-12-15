@@ -70,4 +70,16 @@
         <field name="tag">whiteboard.board</field>
     </record>
 
+    <!-- OdooBoard Client Action -->
+    <record model="ir.actions.client" id="odoo_board.action">
+        <field name="name">OdooBoard</field>
+        <field name="tag">odoo_board</field>
+    </record>
+
+    <!-- OdooBoard Menu -->
+    <menuitem name="OdooBoard" id="odoo_board.menu_root"
+        web_icon="odoo_board,static/description/icon.svg"/>
+    <menuitem name="OdooBoard" id="odoo_board.menu"
+        parent="odoo_board.menu_root" action="odoo_board.action" sequence="1"/>
+
 </odoo>
