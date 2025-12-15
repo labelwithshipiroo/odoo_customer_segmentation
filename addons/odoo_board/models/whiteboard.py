@@ -27,6 +27,16 @@ class Whiteboard(models.Model):
         self.elements = json.dumps(elements_data)
         return True
 
+    def action_open_canvas(self):
+        """Open the whiteboard canvas"""
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.client',
+            'name': 'Whiteboard Canvas',
+            'tag': 'whiteboard.board',
+            'context': {'default_board_id': self.id},
+        }
+
 
 class WhiteboardElement(models.Model):
     _name = 'whiteboard.element'

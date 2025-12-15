@@ -5,6 +5,9 @@
         <field name="model">whiteboard.board</field>
         <field name="arch" type="xml">
             <form string="Whiteboard">
+                <header>
+                    <button name="action_open_canvas" type="object" string="View Canvas" class="btn-primary"/>
+                </header>
                 <sheet>
                     <group>
                         <field name="name"/>
@@ -70,16 +73,10 @@
         <field name="tag">whiteboard.board</field>
     </record>
 
-    <!-- OdooBoard Client Action -->
-    <record model="ir.actions.client" id="odoo_board.action">
-        <field name="name">OdooBoard</field>
-        <field name="tag">odoo_board</field>
-    </record>
-
     <!-- OdooBoard Menu -->
     <menuitem name="OdooBoard" id="odoo_board.menu_root"
         web_icon="odoo_board,static/description/icon.svg"/>
     <menuitem name="OdooBoard" id="odoo_board.menu"
-        parent="odoo_board.menu_root" action="odoo_board.action" sequence="1"/>
+        parent="odoo_board.menu_root" action="action_whiteboard_board" sequence="1"/>
 
 </odoo>
