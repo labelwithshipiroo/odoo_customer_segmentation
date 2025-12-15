@@ -37,8 +37,11 @@ export class WhiteboardView extends Component {
         const params = this.props.action?.params || {};
         this.state.boardId = context.active_id || params.board_id || null;
         
-        onMounted(() => {
-            this._initWhiteboard();
+        onMounted(async () => {
+            // Create whiteboard app first
+            this._createWhiteboardApp();
+            // Then initialize with data
+            await this._initWhiteboard();
         });
         
         onWillUnmount(() => {
@@ -219,16 +222,16 @@ export class WhiteboardFormWidget extends Component {
     setup() {
         this.containerRef = useRef("container");
         this.orm = useService("orm");
-        
+
         this.whiteboardApp = null;
-        
+
         onMounted(async () => {
             // Create whiteboard app first
             this._createWhiteboardApp();
             // Then initialize with data
             await this._initWhiteboard();
         });
-        
+
         onWillUnmount(() => {
             if (this.whiteboardApp) {
                 this.whiteboardApp.destroy();
@@ -236,27 +239,41 @@ export class WhiteboardFormWidget extends Component {
         });
     }
 
-    async _initWhiteboard() {
+    /**
+     * Create the whiteboard app instance
+     */
+    _createWhiteboardApp() {
         const container = this.containerRef.el;
         if (!container) return;
-        
-        const boardId = this.props.record?.resId || this.props.id;
-        if (!boardId) return;
-        
-        // Load board data
-        const boards = await this.orm.read('whiteboard.board', [boardId], ['name', 'board_data', 'canvas_state']);
-        
-        if (!boards || boards.length === 0) return;
-        
-        const board = boards[0];
-        
+
+        // Initialize whiteboard app
         this.whiteboardApp = new WhiteboardApp(container, {
-            boardId: boardId,
-            boardName: board.name,
+            boardId: null,
+            boardName: 'Form Widget',
+            readOnly: false,
             showMinimap: true,
             showToolbar: true,
+            autoSave: false,
         });
-        
+    }
+
+    async _initWhiteboard() {
+        const boardId = this.props.record?.resId || this.props.id;
+        if (!boardId || !this.whiteboardApp) return;
+
+        // Load board data
+        const boards = await this.orm.read('whiteboard.board', [boardId], ['name', 'board_data', 'canvas_state']);
+
+        if (!boards || boards.length === 0) return;
+
+        const board = boards[0];
+
+        // Update whiteboard app with board info
+        this.whiteboardApp.options.boardId = boardId;
+        this.whiteboardApp.options.boardName = board.name;
+        this.whiteboardApp.boardId = boardId;
+        this.whiteboardApp.boardName = board.name;
+
         // Load existing board data
         if (board.board_data) {
             try {
