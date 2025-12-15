@@ -74,22 +74,30 @@ export class WhiteboardView extends Component {
      * Initialize the whiteboard application
      */
     async _initWhiteboard() {
+        console.log('Initializing whiteboard...');
         this.state.loading = true;
         this.state.error = null;
 
         try {
+            console.log('Board ID:', this.state.boardId);
+
             // If no board ID, create a new board
             if (!this.state.boardId) {
+                console.log('No board ID, creating new board...');
                 const newBoardIds = await this.orm.create('whiteboard.board', [{
                     name: 'New Board',
                 }]);
                 this.state.boardId = newBoardIds[0];
+                console.log('Created new board with ID:', this.state.boardId);
             }
 
+            console.log('Loading board data for ID:', this.state.boardId);
             // Load board data
             const boards = await this.orm.read('whiteboard.board', [this.state.boardId], ['name', 'board_data', 'canvas_state']);
+            console.log('Board data loaded:', boards);
 
             if (!boards || boards.length === 0) {
+                console.error('Board not found');
                 this.state.error = 'Board not found';
                 this.state.loading = false;
                 return;
@@ -97,12 +105,22 @@ export class WhiteboardView extends Component {
 
             const board = boards[0];
             this.state.boardName = board.name;
+            console.log('Board name:', board.name);
+
+            // Check if whiteboardApp exists
+            if (!this.whiteboardApp) {
+                console.error('WhiteboardApp not initialized');
+                this.state.error = 'Whiteboard app not initialized';
+                this.state.loading = false;
+                return;
+            }
 
             // Update whiteboard app with board info
             this.whiteboardApp.options.boardId = this.state.boardId;
             this.whiteboardApp.options.boardName = board.name;
             this.whiteboardApp.boardId = this.state.boardId;
             this.whiteboardApp.boardName = board.name;
+            console.log('Updated whiteboard app with board info');
 
             // Update name input
             const nameInput = this.boardNameContainer?.querySelector('input');
@@ -112,21 +130,26 @@ export class WhiteboardView extends Component {
 
             // Load existing board data
             if (board.board_data) {
+                console.log('Loading existing board data...');
                 try {
                     const boardData = JSON.parse(board.board_data);
                     const canvasState = board.canvas_state ? JSON.parse(board.canvas_state) : null;
+                    console.log('Parsed board data:', boardData);
                     this.whiteboardApp.canvas.importData({
                         elements: boardData.elements || [],
                         transform: canvasState
                     });
+                    console.log('Imported board data into canvas');
                 } catch (e) {
                     console.error('Failed to parse board data:', e);
                 }
             }
 
+            console.log('Whiteboard initialization completed successfully');
             this.state.loading = false;
         } catch (error) {
             console.error('Failed to initialize whiteboard:', error);
+            console.error('Error details:', error.message, error.stack);
             this.state.error = error.message || 'Failed to load whiteboard';
             this.state.loading = false;
         }
