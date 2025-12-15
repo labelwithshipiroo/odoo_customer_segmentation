@@ -104,6 +104,12 @@ export class CanvasInteractions {
         
         console.log('Attaching event listeners to container');
         alert('About to attach mousedown listener');
+        
+        // Add test listener to check if events reach container
+        this.container.addEventListener('mousedown', (e) => {
+            alert('TEST: mousedown event reached container! Target: ' + e.target.className);
+        });
+        
         // Mouse events
         this.container.addEventListener('mousedown', this._onMouseDown);
         console.log('Attached mousedown listener');
