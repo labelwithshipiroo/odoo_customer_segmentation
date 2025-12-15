@@ -155,20 +155,27 @@ export class WhiteboardApp {
         });
     }
 
-    /**
-     * Initialize all components
-     */
-    _initComponents() {
-        // Canvas core
-        this.canvas = new CanvasCore(this.canvasContainer, {
-            snapToGrid: false
-        });
-        
-        // Renderer
-        this.renderer = new CanvasRenderer(this.canvas, this.canvasContainer);
-        
-        // Interactions
-        this.interactions = new CanvasInteractions(this.canvas, this.renderer.canvasWrapper);
+   /**
+    * Initialize all components
+    */
+   _initComponents() {
+       console.log('Initializing components');
+       console.log('canvasContainer:', this.canvasContainer);
+       
+       // Canvas core
+       this.canvas = new CanvasCore(this.canvasContainer, {
+           snapToGrid: false
+       });
+       console.log('CanvasCore created');
+       
+       // Renderer
+       this.renderer = new CanvasRenderer(this.canvas, this.canvasContainer);
+       console.log('CanvasRenderer created');
+       console.log('renderer.canvasWrapper:', this.renderer.canvasWrapper);
+       
+       // Interactions
+       this.interactions = new CanvasInteractions(this.canvas, this.renderer.canvasWrapper);
+       console.log('CanvasInteractions created');
         
         // Toolbar
         if (this.options.showToolbar && !this.options.readOnly) {
