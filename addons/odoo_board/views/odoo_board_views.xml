@@ -37,9 +37,12 @@
     </record>
 
     <!-- Whiteboard Canvas Action -->
-    <record id="action_whiteboard_canvas" model="ir.actions.client">
+    <record id="action_whiteboard_canvas" model="ir.actions.act_window">
         <field name="name">Whiteboard Canvas</field>
-        <field name="tag">whiteboard_canvas</field>
+        <field name="res_model">whiteboard.board</field>
+        <field name="view_mode">form</field>
+        <field name="target">fullscreen</field>
+        <field name="context">{'form_view_ref': 'odoo_board.view_whiteboard_form'}</field>
     </record>
 
     <!-- Whiteboard Action -->
