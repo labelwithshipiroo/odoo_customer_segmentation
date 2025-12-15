@@ -9,8 +9,13 @@ import { normalizeRect, getBoundingBox, snapToGrid, calculateResize } from '../u
  */
 export class CanvasInteractions {
     constructor(canvasCore, containerEl) {
+        console.log('CanvasInteractions constructor called');
+        alert('CanvasInteractions constructor called with containerEl: ' + (containerEl ? 'EXISTS' : 'NULL'));
         this.canvas = canvasCore;
         this.container = containerEl;
+        
+        console.log('Canvas:', this.canvas);
+        console.log('Container:', this.container);
         
         // Current tool
         this.currentTool = TOOLS.SELECT;
