@@ -83,6 +83,7 @@ odoo.define('odoo_addon.grouping', [], function () {
                     return apiResponse.json();
                 })
                 .then(function (apiData) {
+                    console.log('Unified accounts API response:', apiData);
                     renderGroupingTable(odooData.result, apiData, container);
                 });
             })
