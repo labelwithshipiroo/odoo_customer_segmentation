@@ -72,6 +72,8 @@ odoo.define('odoo_addon.grouping', [], function () {
                 return response.json();
             })
             .then(function (odooData) {
+                console.log('Odoo data:', odooData);
+                console.log('Odoo data received, fetching unified accounts');
                 // Fetch unified accounts from API
                 return fetch('https://192.168.0.212:3002/odoo/accounts/unified', {
                     method: 'GET',
