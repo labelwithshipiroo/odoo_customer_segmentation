@@ -139,3 +139,5 @@ class OdooBoard extends Component {
 }
 
 registry.category("lazy_components").add("OdooBoard", OdooBoard);
+
+export { OdooBoard };

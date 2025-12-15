@@ -1,9 +1,6 @@
-odoo.define('odoo_board.whiteboard', function (require) {
-    'use strict';
+/** @odoo-module **/
 
-    var core = require('web.core');
-    var Action = require('web.AbstractAction');
-    var OdooBoard = require('@odoo_board/odoo_board/odoo_board');
+import { registry } from "@web/core/registry";
+import { OdooBoard } from "./odoo_board";
 
-    core.action_registry.add('whiteboard_canvas', OdooBoard);
-});
+registry.category("actions").add("whiteboard_canvas", OdooBoard);
