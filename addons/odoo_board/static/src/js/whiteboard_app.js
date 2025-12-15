@@ -174,8 +174,16 @@ export class WhiteboardApp {
        console.log('renderer.canvasWrapper:', this.renderer.canvasWrapper);
        
        // Interactions
-       this.interactions = new CanvasInteractions(this.canvas, this.renderer.canvasWrapper);
-       console.log('CanvasInteractions created');
+       console.log('About to create CanvasInteractions');
+       alert('About to create CanvasInteractions with wrapper: ' + (this.renderer.canvasWrapper ? 'EXISTS' : 'NULL'));
+       try {
+           this.interactions = new CanvasInteractions(this.canvas, this.renderer.canvasWrapper);
+           console.log('CanvasInteractions created successfully');
+           alert('CanvasInteractions created successfully!');
+       } catch (error) {
+           console.error('Error creating CanvasInteractions:', error);
+           alert('ERROR creating CanvasInteractions: ' + error.message);
+       }
         
         // Toolbar
         if (this.options.showToolbar && !this.options.readOnly) {
