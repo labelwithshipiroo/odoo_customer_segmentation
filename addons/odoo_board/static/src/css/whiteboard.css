@@ -31,17 +31,16 @@
 
 /* Main Container */
 .whiteboard-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 120px); /* Account for Odoo header */
     display: flex;
     flex-direction: column;
     background: var(--wb-background);
     font-family: var(--wb-font);
     overflow: hidden;
-    z-index: 1000;
+    margin: 0;
+    padding: 0;
 }
 
 /* ============================================

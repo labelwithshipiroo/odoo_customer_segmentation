@@ -75,13 +75,13 @@ class WhiteboardBoard(models.Model):
             record.element_count = count
 
     def action_open_board(self):
-        """Open the whiteboard in fullscreen mode"""
+        """Open the whiteboard in the current window"""
         self.ensure_one()
         return {
             'type': 'ir.actions.client',
             'tag': 'whiteboard_view',
             'name': self.name,
-            'target': 'fullscreen',
+            'target': 'current',
             'context': {
                 'active_id': self.id,
             },
