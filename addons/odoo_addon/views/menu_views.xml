@@ -10,12 +10,12 @@
     </record>
 
     <!-- Test Client Action -->
-    <record id="action_x_test_client" model="ir.actions.client">
+    <record id="action_test_blank_page" model="ir.actions.client">
         <field name="name">Test</field>
         <field name="tag">test_blank_page</field>
     </record>
 
     <menuitem id="menu_hello_world" name="Hello World" parent="menu_kpi_root" action="odoo_addon.action_x_hello_world" sequence="10"/>
     <menuitem id="menu_grouping" name="Grouping" parent="menu_kpi_root" action="odoo_addon.action_x_grouping" sequence="20"/>
-    <menuitem id="menu_test" name="Test" parent="menu_kpi_root" action="odoo_addon.action_x_test_client" sequence="30"/>
+    <menuitem id="menu_test" name="Test" parent="menu_kpi_root" action="odoo_addon.action_test_blank_page" sequence="30"/>
 </odoo>
