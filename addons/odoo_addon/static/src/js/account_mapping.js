@@ -1,34 +1,8 @@
 odoo.define('odoo_addon.account_mapping', [], function () {
     "use strict";
 
-    function replaceApiMappingInList() {
-        console.log('Replacing API mapping in list');
-        // Find the th with "API mapping"
-        var th = Array.from(document.querySelectorAll('th')).find(th => th.textContent.trim() === 'API mapping');
-        if (!th) {
-            console.log('API mapping th not found');
-            return;
-        }
-        var thead = th.closest('thead');
-        var tbody = th.closest('table').querySelector('tbody');
-        if (!tbody) return;
-        var thIndex = Array.from(thead.querySelectorAll('th')).indexOf(th);
-        console.log('API mapping column index:', thIndex);
-        // Get cells in that column
-        var cells = Array.from(tbody.querySelectorAll('tr')).map(tr => tr.children[thIndex]).filter(td => td);
-        console.log('Found cells:', cells.length);
-        if (!cells.length) {
-            return;
-        }
-
-        // Prevent double replacement
-        if (cells[0].dataset.replaced) {
-            return;
-        }
-        cells.forEach(function(cell) {
-            cell.dataset.replaced = '1';
-        });
-
+    function populateUnifiedAccounts() {
+        console.log('Populating unified accounts');
         // Fetch unified accounts options
         fetch('https://192.168.0.212:3002/odoo/accounts/unified', {
             method: 'GET',
@@ -36,6 +10,7 @@ odoo.define('odoo_addon.account_mapping', [], function () {
         })
         .then(function (res) { return res.json(); })
         .then(function (data) {
+            console.log('Unified accounts API response:', data);
             // Expecting data.accounts = [{id, name}, ...] or similar
             var accounts = data && (data.accounts || data);
             if (!Array.isArray(accounts)) {
@@ -43,94 +18,63 @@ odoo.define('odoo_addon.account_mapping', [], function () {
                 return;
             }
 
-            cells.forEach(function(cell) {
-                var currentValue = cell.textContent.trim();
-                var select = document.createElement('select');
-                select.className = 'o_api_mapping_select form-control';
-                var placeholder = document.createElement('option');
-                placeholder.value = '';
-                placeholder.textContent = 'Select unified account';
-                select.appendChild(placeholder);
-
-                accounts.forEach(function (a) {
-                    var opt = document.createElement('option');
-                    opt.value = a.id;
-                    opt.textContent = a.name;
-                    select.appendChild(opt);
-                });
-
-                // Set current value if any
-                if (currentValue) {
-                    select.value = currentValue;
-                }
-
-                // On change: update Odoo record and call external mapping API
-                select.addEventListener('change', function () {
-                    var unifiedId = this.value;
-                    var row = cell.closest('tr');
-                    var recordId = row ? row.getAttribute('data-id') : null;
-                    if (!recordId) {
-                        console.error('Cannot find record ID');
-                        return;
-                    }
-
-                    // Update Odoo record
-                    fetch('/web/dataset/call_kw', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            jsonrpc: '2.0',
-                            method: 'call',
-                            params: {
-                                model: 'account.account',
-                                method: 'write',
-                                args: [[parseInt(recordId)], {'x_api_mapping': unifiedId}],
-                                kwargs: {}
-                            }
-                        })
-                    })
-                    .then(function (res) { return res.json(); })
-                    .then(function (odooData) {
-                        if (odooData.result) {
-                            console.log('Odoo record updated');
-                        } else {
-                            console.error('Failed to update Odoo record', odooData);
+            // For each account, create if not exists
+            accounts.forEach(function (a) {
+                // Use RPC to search if exists
+                fetch('/web/dataset/call_kw', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        jsonrpc: '2.0',
+                        method: 'call',
+                        params: {
+                            model: 'unified.account',
+                            method: 'search_read',
+                            args: [[['api_id', '=', a.id]], ['id']],
+                            kwargs: {}
                         }
                     })
-                    .catch(function (err) {
-                        console.error('Error updating Odoo record', err);
-                    });
-
-                    // Get account code from the row
-                    var codeCell = row.querySelector('td[data-field="code"]');
-                    var accountCode = codeCell ? codeCell.textContent.trim() : '';
-
-                    // Call external API to register mapping
-                    if (unifiedId) {
-                        fetch('https://192.168.0.212:3002/odoo/accounts/map', {
+                })
+                .then(function (res) { return res.json(); })
+                .then(function (searchData) {
+                    if (searchData.result && searchData.result.length > 0) {
+                        // Exists, update name if changed
+                        var existingId = searchData.result[0].id;
+                        fetch('/web/dataset/call_kw', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
-                                account_id: parseInt(recordId),
-                                unified_id: unifiedId,
-                                account_code: accountCode
+                                jsonrpc: '2.0',
+                                method: 'call',
+                                params: {
+                                    model: 'unified.account',
+                                    method: 'write',
+                                    args: [[existingId], {'name': a.name}],
+                                    kwargs: {}
+                                }
                             })
-                        })
-                        .then(function (res) {
-                            if (!res.ok) {
-                                console.error('Mapping API returned error', res.status);
-                            } else {
-                                console.log('Mapping saved to external API');
-                            }
-                        })
-                        .catch(function (err) {
-                            console.error('Error calling mapping API', err);
+                        });
+                    } else {
+                        // Create
+                        fetch('/web/dataset/call_kw', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                jsonrpc: '2.0',
+                                method: 'call',
+                                params: {
+                                    model: 'unified.account',
+                                    method: 'create',
+                                    args: [{'name': a.name, 'api_id': a.id}],
+                                    kwargs: {}
+                                }
+                            })
                         });
                     }
+                })
+                .catch(function (err) {
+                    console.error('Error creating/updating unified account', err);
                 });
-
-                cell.innerHTML = '';
-                cell.appendChild(select);
             });
         })
         .catch(function (err) {
@@ -138,16 +82,9 @@ odoo.define('odoo_addon.account_mapping', [], function () {
         });
     }
 
-    // Initialize on DOM ready and on Odoo view changes
+    // Initialize on DOM ready
     function init() {
-        // Try immediately
-        replaceApiMappingInList();
-
-        // Observe DOM mutations to catch list loads (e.g. switching pages)
-        var observer = new MutationObserver(function () {
-            replaceApiMappingInList();
-        });
-        observer.observe(document.body, { childList: true, subtree: true });
+        populateUnifiedAccounts();
     }
 
     if (document.readyState === 'loading') {

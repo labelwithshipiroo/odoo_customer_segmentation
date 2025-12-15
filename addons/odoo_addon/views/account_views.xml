@@ -8,6 +8,9 @@
       <field name="model">account.account</field>
       <field name="inherit_id" ref="account.view_account_list"/>
       <field name="arch" type="xml">
+        <xpath expr="//list" position="attributes">
+          <attribute name="editable">top</attribute>
+        </xpath>
         <xpath expr="//list" position="inside">
           <field name="x_api_mapping" string="API mapping"/>
         </xpath>
