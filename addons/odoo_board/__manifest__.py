@@ -17,13 +17,13 @@
     'data': [
         'security/ir.model.access.csv',
         'views/odoo_board_views.xml',
-        'views/whiteboard_canvas.xml',
     ],
     'assets': {
          "web.assets_backend": [
             "odoo_board/static/src/odoo_board/odoo_board_loader.js",
             "odoo_board/static/src/odoo_board/odoo_board.js",
             "odoo_board/static/src/odoo_board/whiteboard_element.js",
+            "odoo_board/views/whiteboard_canvas.xml",
             "odoo_board/static/src/odoo_board/xml/whiteboard_templates.xml",
             "odoo_board/static/src/odoo_board/css/whiteboard.css",
         ],
