@@ -29,6 +29,14 @@
     --wb-grid-size: 20px;
 }
 
+/* Root Container */
+.whiteboard-root {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
 /* Main Container */
 .whiteboard-container {
     position: relative;
