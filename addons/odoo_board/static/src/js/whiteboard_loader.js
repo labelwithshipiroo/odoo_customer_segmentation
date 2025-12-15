@@ -63,10 +63,10 @@ export class WhiteboardView extends Component {
         try {
             // If no board ID, create a new board
             if (!this.state.boardId) {
-                const newBoardId = await this.orm.create('whiteboard.board', {
+                const newBoardIds = await this.orm.create('whiteboard.board', [{
                     name: 'New Board',
-                });
-                this.state.boardId = newBoardId;
+                }]);
+                this.state.boardId = newBoardIds[0];
             }
             
             // Load board data
