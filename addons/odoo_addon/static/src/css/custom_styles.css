@@ -346,8 +346,8 @@
     background-color: hsl(var(--muted));
 }
 
-/* Hide control panel for test form */
-.o_control_panel.d-flex.flex-column.gap-3.px-3.pt-2.pb-3 {
+/* Hide control panel for test form only */
+.o_form_view.o_view_controller[data-model="x_test"] .o_control_panel.d-flex.flex-column.gap-3.px-3.pt-2.pb-3 {
     display: none !important;
 }
 
