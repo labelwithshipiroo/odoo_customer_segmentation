@@ -60,16 +60,18 @@
             <field name="model">x_grouping</field>
             <field name="arch" type="xml">
                 <list>
-                    <field name="name" />
-                    <div class="grouping-container"
-                        style="width: 100%; min-height: 200px; margin-top: 20px;">
-                        <div class="text-center">
-                            <div class="spinner-border" role="status">
-                                <span class="sr-only">Loading...</span>
+                    <header>
+                        <div class="grouping-container"
+                            style="width: 100%; min-height: 200px; margin-top: 20px;">
+                            <div class="text-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <p>Loading grouping data...</p>
                             </div>
-                            <p>Loading grouping data...</p>
                         </div>
-                    </div>
+                    </header>
+                    <field name="name" />
                 </list>
             </field>
         </record>
