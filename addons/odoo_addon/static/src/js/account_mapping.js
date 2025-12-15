@@ -85,6 +85,42 @@ odoo.define('odoo_addon.account_mapping', [], function () {
     // Initialize on DOM ready
     function init() {
         populateUnifiedAccounts();
+        // Add listener for select changes in the list
+        document.addEventListener('change', function(e) {
+            if (e.target.tagName === 'SELECT' && e.target.closest('table.o_list_table')) {
+                var select = e.target;
+                var row = select.closest('tr');
+                var recordId = row ? row.getAttribute('data-id') : null;
+                if (recordId && select.value) {
+                    console.log('Mapping changed for record', recordId, 'to', select.value);
+                    // Get the unified record id
+                    var unifiedId = select.value;
+                    // Get account code from the row
+                    var codeCell = row.querySelector('td[data-field="code"]');
+                    var accountCode = codeCell ? codeCell.textContent.trim() : '';
+                    // Call API
+                    fetch('https://192.168.0.212:3002/odoo/accounts/map', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            account_id: parseInt(recordId),
+                            unified_id: unifiedId,
+                            account_code: accountCode
+                        })
+                    })
+                    .then(function (res) {
+                        if (!res.ok) {
+                            console.error('Mapping API returned error', res.status);
+                        } else {
+                            console.log('Mapping saved to external API');
+                        }
+                    })
+                    .catch(function (err) {
+                        console.error('Error calling mapping API', err);
+                    });
+                }
+            }
+        });
     }
 
     if (document.readyState === 'loading') {
