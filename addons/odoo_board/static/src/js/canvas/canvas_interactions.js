@@ -100,63 +100,50 @@ export class CanvasInteractions {
             return;
         }
         
-        console.log('Attaching event listeners to document (capture phase)');
+        console.log('Attaching event listeners to canvas wrapper');
         
-        // Use document-level listeners with capture phase to guarantee we catch events
-        // This bypasses all pointer-events CSS issues
-        const boundMouseDown = (e) => {
-            console.log('Document mousedown captured');
-            this._onMouseDown(e);
-        };
-        const boundMouseMove = (e) => this._onMouseMove(e);
-        const boundMouseUp = (e) => this._onMouseUp(e);
-        const boundWheel = (e) => this._onWheel(e);
-        const boundContextMenu = (e) => this._onContextMenu(e);
-        const boundDoubleClick = (e) => this._onDoubleClick(e);
-        const boundDragOver = (e) => this._onDragOver(e);
-        const boundDrop = (e) => this._onDrop(e);
+        // Attach listeners directly to canvasWrapper
+        this.container.addEventListener('mousedown', this._onMouseDown);
+        this.container.addEventListener('mousemove', this._onMouseMove);
+        this.container.addEventListener('mouseup', this._onMouseUp);
+        this.container.addEventListener('wheel', this._onWheel, { passive: false });
+        this.container.addEventListener('contextmenu', this._onContextMenu);
+        this.container.addEventListener('dblclick', this._onDoubleClick);
+        this.container.addEventListener('dragover', this._onDragOver);
+        this.container.addEventListener('drop', this._onDrop);
         
-        document.addEventListener('mousedown', boundMouseDown, true);
-        document.addEventListener('mousemove', boundMouseMove, true);
-        document.addEventListener('mouseup', boundMouseUp, true);
-        document.addEventListener('wheel', boundWheel, { passive: false, capture: true });
-        document.addEventListener('contextmenu', boundContextMenu, true);
-        document.addEventListener('dblclick', boundDoubleClick, true);
-        document.addEventListener('dragover', boundDragOver, true);
-        document.addEventListener('drop', boundDrop, true);
-        
-        // Keyboard events
+        // Keyboard events on document
         document.addEventListener('keydown', this._onKeyDown);
         document.addEventListener('keyup', this._onKeyUp);
         
         // Touch events
-        document.addEventListener('touchstart', this._onTouchStart, { passive: false, capture: true });
-        document.addEventListener('touchmove', this._onTouchMove, { passive: false, capture: true });
-        document.addEventListener('touchend', this._onTouchEnd, { capture: true });
+        this.container.addEventListener('touchstart', this._onTouchStart, { passive: false });
+        this.container.addEventListener('touchmove', this._onTouchMove, { passive: false });
+        this.container.addEventListener('touchend', this._onTouchEnd);
         
-        console.log('All event listeners attached to document in capture phase');
+        console.log('All event listeners attached to canvas wrapper');
     }
 
     /**
      * Remove event listeners
      */
     destroy() {
-        // Remove document-level listeners
-        document.removeEventListener('mousedown', this._onMouseDown, true);
-        document.removeEventListener('mousemove', this._onMouseMove, true);
-        document.removeEventListener('mouseup', this._onMouseUp, true);
-        document.removeEventListener('wheel', this._onWheel, true);
-        document.removeEventListener('contextmenu', this._onContextMenu, true);
-        document.removeEventListener('dblclick', this._onDoubleClick, true);
-        document.removeEventListener('dragover', this._onDragOver, true);
-        document.removeEventListener('drop', this._onDrop, true);
+        if (!this.container) return;
+        
+        this.container.removeEventListener('mousedown', this._onMouseDown);
+        this.container.removeEventListener('mousemove', this._onMouseMove);
+        this.container.removeEventListener('mouseup', this._onMouseUp);
+        this.container.removeEventListener('wheel', this._onWheel);
+        this.container.removeEventListener('contextmenu', this._onContextMenu);
+        this.container.removeEventListener('dblclick', this._onDoubleClick);
+        this.container.removeEventListener('dragover', this._onDragOver);
+        this.container.removeEventListener('drop', this._onDrop);
+        this.container.removeEventListener('touchstart', this._onTouchStart);
+        this.container.removeEventListener('touchmove', this._onTouchMove);
+        this.container.removeEventListener('touchend', this._onTouchEnd);
         
         document.removeEventListener('keydown', this._onKeyDown);
         document.removeEventListener('keyup', this._onKeyUp);
-        
-        document.removeEventListener('touchstart', this._onTouchStart, true);
-        document.removeEventListener('touchmove', this._onTouchMove, true);
-        document.removeEventListener('touchend', this._onTouchEnd, true);
     }
 
     // ==================== Tool Management ====================
@@ -368,13 +355,7 @@ export class CanvasInteractions {
      * @param {MouseEvent} e
      */
     _onMouseMove(e) {
-        // Check if event is within canvas bounds
         const rect = this.container.getBoundingClientRect();
-        if (e.clientX < rect.left || e.clientX > rect.right ||
-            e.clientY < rect.top || e.clientY > rect.bottom) {
-            return;
-        }
-        
         this.pointer.currentX = e.clientX - rect.left;
         this.pointer.currentY = e.clientY - rect.top;
         
@@ -428,15 +409,9 @@ export class CanvasInteractions {
      * @param {WheelEvent} e
      */
     _onWheel(e) {
-        // Check if event is within canvas bounds
-        const rect = this.container.getBoundingClientRect();
-        if (e.clientX < rect.left || e.clientX > rect.right ||
-            e.clientY < rect.top || e.clientY > rect.bottom) {
-            return;
-        }
-        
         e.preventDefault();
         
+        const rect = this.container.getBoundingClientRect();
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
         
@@ -451,15 +426,9 @@ export class CanvasInteractions {
      * @param {MouseEvent} e
      */
     _onContextMenu(e) {
-        // Check if event is within canvas bounds
-        const rect = this.container.getBoundingClientRect();
-        if (e.clientX < rect.left || e.clientX > rect.right ||
-            e.clientY < rect.top || e.clientY > rect.bottom) {
-            return;
-        }
-        
         e.preventDefault();
         
+        const rect = this.container.getBoundingClientRect();
         const screenX = e.clientX - rect.left;
         const screenY = e.clientY - rect.top;
         const canvasPoint = this.canvas.screenToCanvas(screenX, screenY);
@@ -487,13 +456,7 @@ export class CanvasInteractions {
      * @param {MouseEvent} e
      */
     _onDoubleClick(e) {
-        // Check if event is within canvas bounds
         const rect = this.container.getBoundingClientRect();
-        if (e.clientX < rect.left || e.clientX > rect.right ||
-            e.clientY < rect.top || e.clientY > rect.bottom) {
-            return;
-        }
-        
         const screenX = e.clientX - rect.left;
         const screenY = e.clientY - rect.top;
         const canvasPoint = this.canvas.screenToCanvas(screenX, screenY);
@@ -656,28 +619,16 @@ export class CanvasInteractions {
     // ==================== Drag & Drop ====================
 
     _onDragOver(e) {
-        // Check if event is within canvas bounds
-        const rect = this.container.getBoundingClientRect();
-        if (e.clientX < rect.left || e.clientX > rect.right ||
-            e.clientY < rect.top || e.clientY > rect.bottom) {
-            return;
-        }
         e.preventDefault();
         e.dataTransfer.dropEffect = 'copy';
     }
 
     _onDrop(e) {
-        // Check if event is within canvas bounds
-        const rect = this.container.getBoundingClientRect();
-        if (e.clientX < rect.left || e.clientX > rect.right ||
-            e.clientY < rect.top || e.clientY > rect.bottom) {
-            return;
-        }
-        
         e.preventDefault();
         
         const files = e.dataTransfer.files;
         if (files.length > 0 && files[0].type.startsWith('image/')) {
+            const rect = this.container.getBoundingClientRect();
             const screenX = e.clientX - rect.left;
             const screenY = e.clientY - rect.top;
             const canvasPoint = this.canvas.screenToCanvas(screenX, screenY);
