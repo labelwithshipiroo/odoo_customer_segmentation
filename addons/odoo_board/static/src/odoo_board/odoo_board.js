@@ -20,6 +20,18 @@ class OdooBoard extends Component {
         this.canvasRef = useRef("canvas");
         this.colors = ['#fef3c7', '#dbeafe', '#dcfce7', '#fce7f3', '#fed7d7', '#e0e7ff'];
 
+        const boardId = this.props.action.context.board_id;
+        if (boardId) {
+            this.env.services.rpc('/web/dataset/call_kw', {
+                model: 'whiteboard.board',
+                method: 'get_elements',
+                args: [boardId],
+                kwargs: {}
+            }).then(elements => {
+                this.state.elements = elements;
+            });
+        }
+
         onMounted(() => {
             this.setupCanvas();
         });
@@ -112,8 +124,17 @@ class OdooBoard extends Component {
     }
 
     saveElements() {
-        // TODO: Save to backend
-        console.log('Saving elements:', this.state.elements);
+        const boardId = this.props.action.context.board_id;
+        if (boardId) {
+            this.env.services.rpc('/web/dataset/call_kw', {
+                model: 'whiteboard.board',
+                method: 'save_elements',
+                args: [boardId, this.state.elements],
+                kwargs: {}
+            }).then(() => {
+                console.log('Saved');
+            });
+        }
     }
 }
 

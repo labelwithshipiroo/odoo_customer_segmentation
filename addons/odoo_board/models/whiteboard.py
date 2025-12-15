@@ -33,8 +33,8 @@ class Whiteboard(models.Model):
         return {
             'type': 'ir.actions.client',
             'name': 'Whiteboard Canvas',
-            'tag': 'whiteboard.board',
-            'context': {'default_board_id': self.id},
+            'tag': 'whiteboard_canvas',
+            'context': {'board_id': self.id},
         }
 
 
