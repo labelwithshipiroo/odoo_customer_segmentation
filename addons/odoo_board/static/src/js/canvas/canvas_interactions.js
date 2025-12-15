@@ -264,27 +264,39 @@ export class CanvasInteractions {
      * Handle select tool click
      */
     _handleSelectToolClick(e, targetElement, hitType, canvasPoint) {
+        console.log('Select tool click:', { targetElement: targetElement?.id, hitType, canvasPoint, shiftKey: this.keys.shift });
+
         if (hitType === 'resize') {
+            console.log('Starting resize for element:', targetElement.id);
             this._startResize(targetElement, this.context.resizeHandle);
         } else if (hitType === 'rotate') {
+            console.log('Starting rotate for element:', targetElement.id);
             this._startRotate(targetElement);
         } else if (targetElement) {
             // Click on element
+            console.log('Element clicked:', targetElement.id, 'currently selected:', this.canvas.isSelected(targetElement.id));
+
             if (this.keys.shift) {
                 // Toggle selection
                 if (this.canvas.isSelected(targetElement.id)) {
+                    console.log('Deselecting element:', targetElement.id);
                     this.canvas.deselectElement(targetElement.id);
                 } else {
+                    console.log('Adding to selection:', targetElement.id);
                     this.canvas.selectElement(targetElement.id, true);
                 }
             } else if (!this.canvas.isSelected(targetElement.id)) {
+                console.log('Selecting element:', targetElement.id);
                 this.canvas.selectElement(targetElement.id);
             }
-            
+
+            console.log('Current selection after click:', Array.from(this.canvas.getSelectedElements()).map(el => el.id));
             this._startDrag(canvasPoint);
         } else {
             // Click on empty space
+            console.log('Clicked on empty space');
             if (!this.keys.shift) {
+                console.log('Clearing selection');
                 this.canvas.clearSelection();
             }
             this._startSelection(canvasPoint);
@@ -699,11 +711,12 @@ export class CanvasInteractions {
 
     _startDrag(canvasPoint) {
         const selected = this.canvas.getSelectedElements();
+        console.log('Starting drag with selected elements:', selected.map(el => el.id));
         if (selected.length === 0) return;
-        
+
         this.state.isDragging = true;
         this.context.initialPositions.clear();
-        
+
         for (const element of selected) {
             this.context.initialPositions.set(element.id, {
                 x: element.x,
@@ -735,6 +748,7 @@ export class CanvasInteractions {
     }
 
     _endDrag() {
+        console.log('Ending drag operation');
         this.state.isDragging = false;
         this.canvas._recordHistory('Move elements');
         this.context.initialPositions.clear();
@@ -897,20 +911,25 @@ export class CanvasInteractions {
     // ==================== Element Creation ====================
 
     _createElementAtPoint(type, canvasPoint, options = {}) {
+        console.log('Creating element:', type, 'at point:', canvasPoint, 'with options:', options);
         const defaults = ELEMENT_DEFAULTS[type] || {};
-        
+
         const element = this.canvas.createElement(type, {
             x: canvasPoint.x - (defaults.width || 100) / 2,
             y: canvasPoint.y - (defaults.height || 100) / 2,
             properties: options
         });
-        
+
         if (element) {
+            console.log('Element created with ID:', element.id);
             this.canvas.addElement(element);
             this.canvas.selectElement(element.id);
-            
+            console.log('Element added and selected');
+
             // Switch back to select tool
             this.setTool(TOOLS.SELECT);
+        } else {
+            console.log('Failed to create element');
         }
     }
 

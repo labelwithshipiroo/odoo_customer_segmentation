@@ -347,7 +347,11 @@ export class CanvasRenderer {
             
             // Update selection state
             if (domEl) {
+                const wasSelected = domEl.classList.contains('selected');
                 domEl.classList.toggle('selected', isSelected);
+                if (wasSelected !== isSelected) {
+                    console.log('Element', element.id, isSelected ? 'selected' : 'deselected');
+                }
             }
         }
         

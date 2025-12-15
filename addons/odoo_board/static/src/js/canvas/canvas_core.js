@@ -236,16 +236,22 @@ export class CanvasCore {
      * @param {boolean} addToSelection
      */
     selectElement(elementId, addToSelection = false) {
+        console.log('CanvasCore.selectElement:', elementId, 'addToSelection:', addToSelection);
         if (!addToSelection) {
+            console.log('Clearing selection');
             this.selectedIds.clear();
         }
-        
+
         if (elementId && this.elements.has(elementId)) {
+            console.log('Adding element to selection:', elementId);
             this.selectedIds.add(elementId);
             const element = this.elements.get(elementId);
             element.onSelect();
+        } else {
+            console.log('Element not found or invalid:', elementId);
         }
-        
+
+        console.log('Selection after selectElement:', Array.from(this.selectedIds));
         this._notifySelectionChange();
     }
 
