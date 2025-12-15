@@ -89,29 +89,50 @@ export class CanvasInteractions {
      * Initialize event listeners
      */
     _initEventListeners() {
-        if (!this.container) return;
+        console.log('_initEventListeners called, container:', this.container);
+        if (!this.container) {
+            console.error('Container is null, cannot attach event listeners');
+            return;
+        }
         
+        console.log('Attaching event listeners to container');
         // Mouse events
         this.container.addEventListener('mousedown', this._onMouseDown);
+        console.log('Attached mousedown listener');
         this.container.addEventListener('mousemove', this._onMouseMove);
+        console.log('Attached mousemove listener');
         this.container.addEventListener('mouseup', this._onMouseUp);
+        console.log('Attached mouseup listener');
         this.container.addEventListener('mouseleave', this._onMouseUp);
+        console.log('Attached mouseleave listener');
         this.container.addEventListener('wheel', this._onWheel, { passive: false });
+        console.log('Attached wheel listener');
         this.container.addEventListener('contextmenu', this._onContextMenu);
+        console.log('Attached contextmenu listener');
         this.container.addEventListener('dblclick', this._onDoubleClick);
+        console.log('Attached dblclick listener');
         
         // Drag and drop for images
         this.container.addEventListener('dragover', this._onDragOver);
+        console.log('Attached dragover listener');
         this.container.addEventListener('drop', this._onDrop);
+        console.log('Attached drop listener');
         
         // Keyboard events (on document)
         document.addEventListener('keydown', this._onKeyDown);
+        console.log('Attached keydown listener');
         document.addEventListener('keyup', this._onKeyUp);
+        console.log('Attached keyup listener');
         
         // Touch events
         this.container.addEventListener('touchstart', this._onTouchStart.bind(this), { passive: false });
+        console.log('Attached touchstart listener');
         this.container.addEventListener('touchmove', this._onTouchMove.bind(this), { passive: false });
+        console.log('Attached touchmove listener');
         this.container.addEventListener('touchend', this._onTouchEnd.bind(this));
+        console.log('Attached touchend listener');
+        
+        console.log('All event listeners attached successfully');
     }
 
     /**
