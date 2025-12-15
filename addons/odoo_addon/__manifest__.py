@@ -8,7 +8,6 @@
     'license': 'LGPL-3',
     'depends': [
         'base',
-        'web',
         'contacts',
         'product',
         'account',
@@ -25,6 +24,7 @@
     ],
     'assets': {
         'web.assets_backend': [
+            'web/static/src/js/core/rpc.js',
             'https://cdn.jsdelivr.net/npm/chart.js',
             'odoo_addon/static/src/js/reports_table.js',
             'odoo_addon/static/src/js/grouping.js',
