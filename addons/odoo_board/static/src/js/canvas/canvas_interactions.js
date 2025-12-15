@@ -90,12 +90,15 @@ export class CanvasInteractions {
      */
     _initEventListeners() {
         console.log('_initEventListeners called, container:', this.container);
+        alert('_initEventListeners called! Container: ' + (this.container ? 'EXISTS' : 'NULL'));
         if (!this.container) {
             console.error('Container is null, cannot attach event listeners');
+            alert('ERROR: Container is null!');
             return;
         }
         
         console.log('Attaching event listeners to container');
+        alert('About to attach mousedown listener');
         // Mouse events
         this.container.addEventListener('mousedown', this._onMouseDown);
         console.log('Attached mousedown listener');
