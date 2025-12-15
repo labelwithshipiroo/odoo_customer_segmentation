@@ -4,6 +4,15 @@ odoo.define('odoo_addon.grouping', [], function () {
     function initializeGrouping() {
         // Check if we're on the x_grouping list view
         var checkForListView = function() {
+            // Check if we're on the grouping model by looking at the URL or breadcrumbs
+            var isGroupingView = window.location.href.includes('x_grouping') ||
+                                document.querySelector('[data-model="x_grouping"]') ||
+                                document.querySelector('.breadcrumb-item a[href*="x_grouping"]');
+
+            if (!isGroupingView) {
+                return; // Not on grouping view, don't initialize
+            }
+
             var listView = document.querySelector('.o_list_view') || document.querySelector('.o_view_controller');
             if (listView && listView.offsetParent !== null) { // Check if visible
                 // Create container if it doesn't exist
