@@ -8,10 +8,11 @@ import { WhiteboardElement } from "./whiteboard_element";
 class OdooBoard extends Component {
     static template = "whiteboard.Board";
     static components = { WhiteboardElement };
-    static props = ["action", "type"];
+    static props = ["action"];
 
     setup() {
         const rpc = useService("rpc");
+        this.rpc = rpc;
         
         this.state = useState({
             elements: [],
@@ -24,7 +25,7 @@ class OdooBoard extends Component {
         this.canvasRef = useRef("canvas");
         this.colors = ['#fef3c7', '#dbeafe', '#dcfce7', '#fce7f3', '#fed7d7', '#e0e7ff'];
 
-        const boardId = this.props.action.context.board_id;
+        const boardId = this.props.action.context?.board_id;
         if (boardId) {
             rpc('/web/dataset/call_kw', {
                 model: 'whiteboard.board',
@@ -128,10 +129,9 @@ class OdooBoard extends Component {
     }
 
     saveElements() {
-        const rpc = useService("rpc");
-        const boardId = this.props.action.context.board_id;
+        const boardId = this.props.action.context?.board_id;
         if (boardId) {
-            rpc('/web/dataset/call_kw', {
+            this.rpc('/web/dataset/call_kw', {
                 model: 'whiteboard.board',
                 method: 'save_elements',
                 args: [boardId, this.state.elements],
