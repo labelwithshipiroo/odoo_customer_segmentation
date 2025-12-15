@@ -25,11 +25,11 @@
         <field name="name">whiteboard.board.list</field>
         <field name="model">whiteboard.board</field>
         <field name="arch" type="xml">
-            <list string="Whiteboards" action="odoo_board.action_whiteboard_canvas">
+            <list string="Whiteboards" editable="top">
                 <field name="name"/>
-                <field name="user_id"/>
+                <field name="user_id" readonly="1"/>
                 <field name="shared"/>
-                <field name="write_date"/>
+                <field name="write_date" readonly="1"/>
                 <button name="action_open_canvas" type="object" string="View" class="btn btn-sm btn-primary"/>
                 <button name="action_edit_whiteboard" type="object" string="Edit" class="btn btn-sm btn-secondary"/>
             </list>
