@@ -2,18 +2,18 @@
 <odoo>
     <!-- Whiteboard Board Views -->
     
-    <!-- Tree View -->
-    <record id="view_whiteboard_board_tree" model="ir.ui.view">
-        <field name="name">whiteboard.board.tree</field>
+    <!-- List View -->
+    <record id="view_whiteboard_board_list" model="ir.ui.view">
+        <field name="name">whiteboard.board.list</field>
         <field name="model">whiteboard.board</field>
         <field name="arch" type="xml">
-            <tree string="Whiteboards">
+            <list string="Whiteboards">
                 <field name="name"/>
                 <field name="description"/>
                 <field name="user_id" string="Owner"/>
                 <field name="create_date" string="Created On"/>
                 <field name="write_date" string="Last Modified"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -150,7 +150,7 @@
     <record id="action_whiteboard_boards" model="ir.actions.act_window">
         <field name="name">Whiteboards</field>
         <field name="res_model">whiteboard.board</field>
-        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_mode">kanban,list,form</field>
         <field name="context">{'search_default_my_boards': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -182,11 +182,11 @@
               sequence="5"/>
 
     <!-- Whiteboard Element Views (Admin) -->
-    <record id="view_whiteboard_element_tree" model="ir.ui.view">
-        <field name="name">whiteboard.element.tree</field>
+    <record id="view_whiteboard_element_list" model="ir.ui.view">
+        <field name="name">whiteboard.element.list</field>
         <field name="model">whiteboard.element</field>
         <field name="arch" type="xml">
-            <tree string="Board Elements">
+            <list string="Board Elements">
                 <field name="board_id"/>
                 <field name="element_type"/>
                 <field name="x"/>
@@ -194,7 +194,7 @@
                 <field name="width"/>
                 <field name="height"/>
                 <field name="z_index"/>
-            </tree>
+            </list>
         </field>
     </record>
 
